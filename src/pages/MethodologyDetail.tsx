@@ -9,7 +9,7 @@ const MethodologyDetail = () => {
 
   if (!m) {
     return (
-      <div className="pt-20 min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="font-heading text-2xl font-bold text-primary mb-4">Metodologia não encontrada</h1>
           <Link to="/metodologias">
@@ -21,7 +21,7 @@ const MethodologyDetail = () => {
   }
 
   return (
-    <div className="pt-20">
+    <div>
       <section className="gradient-hero text-primary-foreground py-16 md:py-24">
         <div className="container">
           <Link to="/metodologias" className="inline-flex items-center gap-2 text-sm text-primary-foreground/70 hover:text-primary-foreground mb-6">
