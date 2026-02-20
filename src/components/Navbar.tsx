@@ -52,10 +52,10 @@ const Navbar = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
-      <div className="container flex items-center h-16 md:h-[72px]">
+      <div className="container flex items-center h-[68px] md:h-20">
         {/* Logo - always visible */}
         <Link to="/" className="flex items-center shrink-0 mr-auto">
-          <img src={logo} alt="Green Ledger" className="h-10 md:h-14 w-auto max-w-[180px] md:max-w-[240px] object-contain" />
+          <img src={logo} alt="Green Ledger" className="h-11 md:h-16 w-auto max-w-[200px] md:max-w-[280px] object-contain" />
         </Link>
 
         {/* Desktop nav - aligned right */}
