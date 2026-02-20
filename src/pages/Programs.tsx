@@ -1,68 +1,126 @@
 import { Link } from "react-router-dom";
-import { Leaf, Globe, Zap, ArrowRight, CheckCircle2 } from "lucide-react";
+import { ShieldCheck, FlaskConical, Coins, ArrowRight, FileText, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import AnimatedSection from "@/components/AnimatedSection";
 import SEOHead from "@/components/SEOHead";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 const programs = [
   {
-    id: "afolu", icon: Leaf,
-    title: { pt: "Green Ledger AFOLU", en: "Green Ledger AFOLU", es: "Green Ledger AFOLU" },
-    subtitle: { pt: "Agricultura, Florestas e Outros Usos do Solo", en: "Agriculture, Forestry and Other Land Uses", es: "Agricultura, Bosques y Otros Usos del Suelo" },
-    description: { pt: "Programa abrangente que cobre atividades de redução e remoção de emissões de GEE nos setores agropecuário e florestal, incluindo reflorestamento, restauração de vegetação nativa, sistemas agroflorestais, manejo florestal sustentável e proteção de ecossistemas.", en: "Comprehensive program covering GHG emission reduction and removal activities in agriculture and forestry sectors, including reforestation, native vegetation restoration, agroforestry systems, sustainable forest management and ecosystem protection.", es: "Programa integral que cubre actividades de reducción y remoción de emisiones de GEI en los sectores agropecuario y forestal, incluyendo reforestación, restauración de vegetación nativa, sistemas agroforestales, manejo forestal sostenible y protección de ecosistemas." },
-    scope: {
-      pt: ["Reflorestamento e restauração florestal", "Sistemas agroflorestais (SAFs)", "Redução de desmatamento e degradação (REDD+)", "Manejo florestal sustentável", "Recuperação de áreas degradadas"],
-      en: ["Reforestation and forest restoration", "Agroforestry systems", "Reduced deforestation and degradation (REDD+)", "Sustainable forest management", "Degraded area recovery"],
-      es: ["Reforestación y restauración forestal", "Sistemas agroforestales", "Reducción de deforestación y degradación (REDD+)", "Manejo forestal sostenible", "Recuperación de áreas degradadas"],
+    id: "certificacao",
+    icon: ShieldCheck,
+    title: {
+      pt: "Programa de Certificacao",
+      en: "Certification Program",
+      es: "Programa de Certificacion",
     },
-    eligibility: {
-      pt: ["Áreas com potencial de sequestro ou redução comprovável", "Conformidade com legislação ambiental vigente", "Período mínimo de creditação: 20 anos", "Documentação de posse ou direito de uso da terra"],
-      en: ["Areas with provable sequestration or reduction potential", "Compliance with current environmental legislation", "Minimum crediting period: 20 years", "Land ownership or use rights documentation"],
-      es: ["Áreas con potencial de secuestro o reducción comprobable", "Conformidad con legislación ambiental vigente", "Período mínimo de acreditación: 20 años", "Documentación de posesión o derecho de uso de la tierra"],
+    description: {
+      pt: "Define as regras, os processos e o ciclo de vida para a certificacao de projetos que geram ativos ambientais (creditos de carbono). E o guia mestre de como fazer.",
+      en: "Defines the rules, processes and lifecycle for certifying projects that generate environmental assets (carbon credits). It is the master guide on how to do it.",
+      es: "Define las reglas, los procesos y el ciclo de vida para la certificacion de proyectos que generan activos ambientales (creditos de carbono). Es la guia maestra de como hacer.",
     },
-    methodologies: ["GL-AFOLU-001", "GL-AFOLU-002", "GL-AFOLU-003"],
+    docs: {
+      pt: ["Programa de Certificacao (documento central)", "Manuais e diretrizes tecnicas", "Ferramentas de analise e estruturacao", "Modelos e declaracoes"],
+      en: ["Certification Program (core document)", "Technical manuals and guidelines", "Analysis and structuring tools", "Templates and declarations"],
+      es: ["Programa de Certificacion (documento central)", "Manuales y directrices tecnicas", "Herramientas de analisis y estructuracion", "Modelos y declaraciones"],
+    },
+    link: "/certificacao",
   },
   {
-    id: "soil", icon: Globe,
-    title: { pt: "Green Ledger Soil Carbon", en: "Green Ledger Soil Carbon", es: "Green Ledger Soil Carbon" },
-    subtitle: { pt: "Carbono no Solo", en: "Soil Carbon", es: "Carbono en el Suelo" },
-    description: { pt: "Programa dedicado ao sequestro de carbono orgânico no solo por meio de práticas regenerativas, sistemas de plantio direto, rotação de culturas, integração lavoura-pecuária-floresta (ILPF) e uso de plantas de cobertura.", en: "Program dedicated to soil organic carbon sequestration through regenerative practices, no-till systems, crop rotation, crop-livestock-forestry integration (CLFI) and cover crops.", es: "Programa dedicado al secuestro de carbono orgánico en el suelo mediante prácticas regenerativas, siembra directa, rotación de cultivos, integración labranza-ganadería-bosque y uso de plantas de cobertura." },
-    scope: {
-      pt: ["Plantio direto sobre palha", "Integração Lavoura-Pecuária-Floresta (ILPF)", "Uso de plantas de cobertura", "Rotação e consórcio de culturas", "Manejo conservacionista do solo"],
-      en: ["No-till farming", "Crop-Livestock-Forestry Integration (CLFI)", "Cover crop usage", "Crop rotation and intercropping", "Conservation soil management"],
-      es: ["Siembra directa sobre rastrojo", "Integración Labranza-Ganadería-Bosque", "Uso de plantas de cobertura", "Rotación y asociación de cultivos", "Manejo conservacionista del suelo"],
+    id: "metodologias",
+    icon: FlaskConical,
+    title: {
+      pt: "Programa de Metodologias",
+      en: "Methodologies Program",
+      es: "Programa de Metodologias",
     },
-    eligibility: {
-      pt: ["Áreas com histórico de uso convencional do solo", "Dados de linha de base de carbono no solo disponíveis ou mensuráveis", "Compromisso com monitoramento de longo prazo (mínimo 10 anos)", "Implementação de práticas regenerativas verificáveis"],
-      en: ["Areas with conventional soil use history", "Soil carbon baseline data available or measurable", "Long-term monitoring commitment (minimum 10 years)", "Implementation of verifiable regenerative practices"],
-      es: ["Áreas con historial de uso convencional del suelo", "Datos de línea base de carbono en suelo disponibles o medibles", "Compromiso con monitoreo a largo plazo (mínimo 10 años)", "Implementación de prácticas regenerativas verificables"],
+    description: {
+      pt: "Estabelece o processo para o desenvolvimento, submissao, revisao e aprovacao de novas metodologias de quantificacao, garantindo a robustez tecnica e cientifica.",
+      en: "Establishes the process for developing, submitting, reviewing and approving new quantification methodologies, ensuring technical and scientific robustness.",
+      es: "Establece el proceso para el desarrollo, presentacion, revision y aprobacion de nuevas metodologias de cuantificacion, garantizando la solidez tecnica y cientifica.",
     },
-    methodologies: ["GL-SC-001", "GL-SC-002"],
+    docs: {
+      pt: ["Programa de Metodologias (documento central)", "Ferramentas de estruturacao de metodologia", "Criterios de aceitacao e avaliacao", "Procedimentos de consulta publica"],
+      en: ["Methodologies Program (core document)", "Methodology structuring tools", "Acceptance and evaluation criteria", "Public consultation procedures"],
+      es: ["Programa de Metodologias (documento central)", "Herramientas de estructuracion de metodologia", "Criterios de aceptacion y evaluacion", "Procedimientos de consulta publica"],
+    },
+    link: "/metodologias",
   },
   {
-    id: "energytech", icon: Zap,
-    title: { pt: "Green Ledger Energy & Tech", en: "Green Ledger Energy & Tech", es: "Green Ledger Energy & Tech" },
-    subtitle: { pt: "Energia e Tecnologias Limpas", en: "Energy and Clean Technologies", es: "Energía y Tecnologías Limpias" },
-    description: { pt: "Programa voltado para tecnologias inovadoras que reduzem emissões em diversos setores: biodigestores, energias renováveis, eficiência energética, tratamento de resíduos, substituição de combustíveis fósseis e processos industriais mais limpos.", en: "Program focused on innovative technologies that reduce emissions across sectors: biodigesters, renewable energy, energy efficiency, waste treatment, fossil fuel substitution and cleaner industrial processes.", es: "Programa enfocado en tecnologías innovadoras que reducen emisiones en diversos sectores: biodigestores, energías renovables, eficiencia energética, tratamiento de residuos, sustitución de combustibles fósiles y procesos industriales más limpios." },
-    scope: {
-      pt: ["Biodigestores e tratamento de resíduos", "Substituição de combustíveis fósseis", "Eficiência energética industrial e comercial", "Energias renováveis (solar, eólica, biomassa)", "Otimização de processos e redução de emissões fugitivas"],
-      en: ["Biodigesters and waste treatment", "Fossil fuel substitution", "Industrial and commercial energy efficiency", "Renewable energy (solar, wind, biomass)", "Process optimization and fugitive emission reduction"],
-      es: ["Biodigestores y tratamiento de residuos", "Sustitución de combustibles fósiles", "Eficiencia energética industrial y comercial", "Energías renovables (solar, eólica, biomasa)", "Optimización de procesos y reducción de emisiones fugitivas"],
+    id: "ativos",
+    icon: Coins,
+    title: {
+      pt: "Programa de Ativos",
+      en: "Assets Program",
+      es: "Programa de Activos",
     },
-    eligibility: {
-      pt: ["Adoção de tecnologia comprovadamente superior à prática convencional", "Reduções de emissões mensuráveis e verificáveis", "Conformidade com padrões técnicos e regulatórios", "Dados de operação disponíveis para auditoria"],
-      en: ["Adoption of technology demonstrably superior to conventional practice", "Measurable and verifiable emission reductions", "Compliance with technical and regulatory standards", "Operational data available for auditing"],
-      es: ["Adopción de tecnología demostrablemente superior a la práctica convencional", "Reducciones de emisiones medibles y verificables", "Conformidad con estándares técnicos y regulatorios", "Datos de operación disponibles para auditoría"],
+    description: {
+      pt: "Descreve os principios para a criacao, gestao e registro dos ativos ambientais digitais na plataforma Green Ledger, assegurando sua integridade e rastreabilidade.",
+      en: "Describes the principles for creating, managing and registering digital environmental assets on the Green Ledger platform, ensuring their integrity and traceability.",
+      es: "Describe los principios para la creacion, gestion y registro de los activos ambientales digitales en la plataforma Green Ledger, asegurando su integridad y trazabilidad.",
     },
-    methodologies: ["GL-ET-001", "GL-ET-002"],
+    docs: {
+      pt: ["Programa de Ativos (documento central)", "Politica de integridade de ativos", "Procedimentos do registro", "Processo de tokenizacao"],
+      en: ["Assets Program (core document)", "Asset integrity policy", "Registry procedures", "Tokenization process"],
+      es: ["Programa de Activos (documento central)", "Politica de integridad de activos", "Procedimientos del registro", "Proceso de tokenizacion"],
+    },
+    link: "/registro-publico",
   },
 ];
 
 const ui = {
-  pt: { seoTitle: "Programas de Certificação", seoDesc: "Conheça os programas de certificação da Green Ledger.", badge: "Programas", title: "Programas de Certificação", subtitle: "Programas especializados cobrindo as principais atividades que geram redução ou remoção de emissões de gases de efeito estufa em múltiplos setores.", scope: "Escopo", eligibility: "Elegibilidade", methodologies: "Metodologias Vinculadas", governance: "Governança", govDesc: "Cada programa possui comitê técnico próprio responsável pela aprovação de projetos e revisão periódica de metodologias.", ctaTitle: "Quer registrar um projeto?", ctaDesc: "Entre em contato para saber qual programa se aplica à sua atividade.", ctaBtn: "Fale Conosco" },
-  en: { seoTitle: "Certification Programs", seoDesc: "Learn about Green Ledger's certification programs.", badge: "Programs", title: "Certification Programs", subtitle: "Specialized programs covering the main activities that generate reduction or removal of greenhouse gas emissions across multiple sectors.", scope: "Scope", eligibility: "Eligibility", methodologies: "Linked Methodologies", governance: "Governance", govDesc: "Each program has its own technical committee responsible for project approval and periodic methodology review.", ctaTitle: "Want to register a project?", ctaDesc: "Contact us to find out which program applies to your activity.", ctaBtn: "Contact Us" },
-  es: { seoTitle: "Programas de Certificación", seoDesc: "Conozca los programas de certificación de Green Ledger.", badge: "Programas", title: "Programas de Certificación", subtitle: "Programas especializados que cubren las principales actividades que generan reducción o remoción de emisiones de gases de efecto invernadero en múltiples sectores.", scope: "Alcance", eligibility: "Elegibilidad", methodologies: "Metodologías Vinculadas", governance: "Gobernanza", govDesc: "Cada programa cuenta con un comité técnico propio responsable de la aprobación de proyectos y revisión periódica de metodologías.", ctaTitle: "¿Desea registrar un proyecto?", ctaDesc: "Contáctenos para saber qué programa aplica a su actividad.", ctaBtn: "Contáctenos" },
+  pt: {
+    seoTitle: "Programas Green Ledger",
+    seoDesc: "Conheca os programas da Green Ledger: Certificacao, Metodologias e Ativos.",
+    badge: "Programas",
+    title: "Programas Green Ledger",
+    subtitle: "O roteiro completo para desenvolvedores de projetos",
+    archTitle: "Nossa Arquitetura Documental",
+    archDesc: "A documentacao dos Programas Green Ledger e organizada de forma hierarquica para facilitar o entendimento. Temos tres Programas principais que funcionam como guarda-chuvas, cada um contendo seus proprios documentos auxiliares, como ferramentas, manuais e modelos.",
+    docsIncluded: "Documentos incluidos",
+    learnMore: "Saiba mais",
+    ctaTitle: "Quer registrar um projeto?",
+    ctaDesc: "Entre em contato para saber qual programa se aplica a sua atividade.",
+    ctaBtn: "Fale Conosco",
+    docSection: "Documentacao Vigente",
+    docDesc: "Acesse os documentos essenciais e atualizados para o desenvolvimento do seu projeto na secao de documentacao.",
+    docBtn: "Ver Documentacao",
+  },
+  en: {
+    seoTitle: "Green Ledger Programs",
+    seoDesc: "Learn about Green Ledger programs: Certification, Methodologies and Assets.",
+    badge: "Programs",
+    title: "Green Ledger Programs",
+    subtitle: "The complete roadmap for project developers",
+    archTitle: "Our Document Architecture",
+    archDesc: "The Green Ledger Programs documentation is organized hierarchically for easy understanding. We have three main Programs that work as umbrellas, each containing its own auxiliary documents, such as tools, manuals and templates.",
+    docsIncluded: "Included documents",
+    learnMore: "Learn more",
+    ctaTitle: "Want to register a project?",
+    ctaDesc: "Contact us to find out which program applies to your activity.",
+    ctaBtn: "Contact Us",
+    docSection: "Current Documentation",
+    docDesc: "Access the essential and up-to-date documents for developing your project in the documentation section.",
+    docBtn: "View Documentation",
+  },
+  es: {
+    seoTitle: "Programas Green Ledger",
+    seoDesc: "Conozca los programas de Green Ledger: Certificacion, Metodologias y Activos.",
+    badge: "Programas",
+    title: "Programas Green Ledger",
+    subtitle: "La hoja de ruta completa para desarrolladores de proyectos",
+    archTitle: "Nuestra Arquitectura Documental",
+    archDesc: "La documentacion de los Programas Green Ledger esta organizada de forma jerarquica para facilitar la comprension. Tenemos tres Programas principales que funcionan como paraguas, cada uno con sus propios documentos auxiliares, como herramientas, manuales y modelos.",
+    docsIncluded: "Documentos incluidos",
+    learnMore: "Mas informacion",
+    ctaTitle: "Desea registrar un proyecto?",
+    ctaDesc: "Contactenos para saber que programa aplica a su actividad.",
+    ctaBtn: "Contactenos",
+    docSection: "Documentacion Vigente",
+    docDesc: "Acceda a los documentos esenciales y actualizados para el desarrollo de su proyecto en la seccion de documentacion.",
+    docBtn: "Ver Documentacion",
+  },
 };
 
 const Programs = () => {
@@ -75,74 +133,102 @@ const Programs = () => {
       <SEOHead title={u.seoTitle} description={u.seoDesc} path="/programas" />
 
       <section className="gradient-hero text-primary-foreground py-20 md:py-28">
-        <div className="container">
-          <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-secondary/20 text-accent rounded-full mb-4">{u.badge}</span>
-          <h1 className="font-heading text-4xl md:text-5xl font-bold max-w-3xl">{u.title}</h1>
-          <p className="mt-6 text-primary-foreground/80 max-w-2xl leading-relaxed text-lg">{u.subtitle}</p>
+        <div className="container text-center">
+          <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-secondary/20 text-accent rounded-full mb-4">
+            {u.badge}
+          </span>
+          <h1 className="font-heading text-4xl md:text-5xl font-bold max-w-3xl mx-auto">
+            {u.title}
+          </h1>
+          <p className="mt-6 text-primary-foreground/80 max-w-2xl mx-auto leading-relaxed text-lg">
+            {u.subtitle}
+          </p>
         </div>
       </section>
 
       <section className="py-20">
-        <div className="container space-y-20">
-          {programs.map((p, idx) => (
-            <AnimatedSection key={p.id} delay={idx * 0.08}>
-              <div id={p.id} className="scroll-mt-24">
-                <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
-                  <div className="lg:col-span-3">
-                    <div className="flex items-center gap-3 mb-4">
-                      <p.icon className="w-8 h-8 text-secondary" />
-                      <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{p.subtitle[lang]}</span>
+        <div className="container">
+          <AnimatedSection>
+            <div className="text-center mb-16">
+              <h2 className="font-heading text-3xl md:text-4xl font-bold text-primary mb-4">
+                {u.archTitle}
+              </h2>
+              <p className="text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                {u.archDesc}
+              </p>
+            </div>
+          </AnimatedSection>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {programs.map((p, idx) => (
+              <AnimatedSection key={p.id} delay={idx * 0.1}>
+                <Card className="h-full border-border hover:border-secondary/40 transition-colors duration-300 hover:shadow-lg">
+                  <CardContent className="p-8 flex flex-col h-full">
+                    <div className="w-14 h-14 rounded-xl bg-secondary/10 flex items-center justify-center mb-6">
+                      <p.icon className="w-7 h-7 text-secondary" />
                     </div>
-                    <h2 className="font-heading text-3xl font-bold text-primary mb-4">{p.title[lang]}</h2>
-                    <p className="text-muted-foreground leading-relaxed mb-8">{p.description[lang]}</p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <div>
-                        <h3 className="font-heading font-semibold text-primary mb-3">{u.scope}</h3>
-                        <ul className="space-y-2">
-                          {p.scope[lang].map((s) => (
-                            <li key={s} className="flex items-start gap-2 text-sm text-muted-foreground">
-                              <CheckCircle2 className="w-4 h-4 text-secondary mt-0.5 shrink-0" />{s}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div>
-                        <h3 className="font-heading font-semibold text-primary mb-3">{u.eligibility}</h3>
-                        <ul className="space-y-2">
-                          {p.eligibility[lang].map((e) => (
-                            <li key={e} className="flex items-start gap-2 text-sm text-muted-foreground">
-                              <CheckCircle2 className="w-4 h-4 text-accent-foreground mt-0.5 shrink-0" />{e}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="lg:col-span-2">
-                    <div className="gradient-card rounded-xl p-6 border border-border shadow-card">
-                      <h3 className="font-heading font-semibold text-primary mb-4">{u.methodologies}</h3>
-                      <ul className="space-y-3 mb-6">
-                        {p.methodologies.map((m) => (
-                          <li key={m}><Link to="/metodologias" className="flex items-center gap-2 text-sm text-secondary hover:underline"><ArrowRight className="w-3 h-3" />{m}</Link></li>
+                    <h3 className="font-heading text-xl font-bold text-primary mb-3">
+                      {p.title[lang]}
+                    </h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed mb-6 flex-1">
+                      {p.description[lang]}
+                    </p>
+                    <div className="border-t border-border pt-5">
+                      <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+                        {u.docsIncluded}
+                      </h4>
+                      <ul className="space-y-2 mb-6">
+                        {p.docs[lang].map((doc) => (
+                          <li key={doc} className="flex items-start gap-2 text-sm text-muted-foreground">
+                            <FileText className="w-3.5 h-3.5 text-secondary mt-0.5 shrink-0" />
+                            {doc}
+                          </li>
                         ))}
                       </ul>
-                      <h3 className="font-heading font-semibold text-primary mb-3">{u.governance}</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">{u.govDesc}</p>
+                      <Link to={p.link}>
+                        <Button variant="outline" size="sm" className="w-full gap-2 border-secondary/30 text-secondary hover:bg-secondary/10">
+                          {u.learnMore} <ArrowRight className="w-3.5 h-3.5" />
+                        </Button>
+                      </Link>
                     </div>
-                  </div>
-                </div>
-                {idx < programs.length - 1 && <hr className="mt-20 border-border" />}
-              </div>
-            </AnimatedSection>
-          ))}
+                  </CardContent>
+                </Card>
+              </AnimatedSection>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="py-16 bg-muted/30">
+      <AnimatedSection>
+        <section className="py-16 bg-muted/30">
+          <div className="container text-center">
+            <BookOpen className="w-10 h-10 text-secondary mx-auto mb-4" />
+            <h2 className="font-heading text-2xl font-bold text-primary mb-3">
+              {u.docSection}
+            </h2>
+            <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
+              {u.docDesc}
+            </p>
+            <Link to="/documentacao">
+              <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">
+                {u.docBtn} <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
+        </section>
+      </AnimatedSection>
+
+      <section className="py-16">
         <div className="container text-center">
-          <h2 className="font-heading text-2xl font-bold text-primary mb-4">{u.ctaTitle}</h2>
+          <h2 className="font-heading text-2xl font-bold text-primary mb-4">
+            {u.ctaTitle}
+          </h2>
           <p className="text-muted-foreground mb-6">{u.ctaDesc}</p>
-          <Link to="/contato"><Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">{u.ctaBtn} <ArrowRight className="w-4 h-4" /></Button></Link>
+          <Link to="/contato">
+            <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">
+              {u.ctaBtn} <ArrowRight className="w-4 h-4" />
+            </Button>
+          </Link>
         </div>
       </section>
     </div>
