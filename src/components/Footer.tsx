@@ -25,7 +25,7 @@ const Footer = () => (
           <ul className="space-y-2 text-sm">
             <li><Link to="/documentacao" className="opacity-80 hover:opacity-100 transition-opacity">Documentação</Link></li>
             <li><Link to="/contato" className="opacity-80 hover:opacity-100 transition-opacity">Contato</Link></li>
-            <li><a href="https://app.greenledger.com" target="_blank" rel="noopener noreferrer" className="opacity-80 hover:opacity-100 transition-opacity">Área do Produtor</a></li>
+            <li><a href="https://app.greenledger.com" target="_blank" rel="noopener noreferrer" className="opacity-80 hover:opacity-100 transition-opacity"><li><a href="https://app.greenledger.com" target="_blank" rel="noopener noreferrer" className="opacity-80 hover:opacity-100 transition-opacity">Área do Cliente</a></li></a></li>
           </ul>
         </div>
         <div>

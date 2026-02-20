@@ -32,7 +32,7 @@ const steps = [
 
 const faqs = [
   { q: "O que são créditos de carbono certificados?", a: "São unidades verificadas que representam uma tonelada métrica de CO₂ equivalente removida ou evitada, emitidas por uma certificadora independente seguindo metodologias rigorosas." },
-  { q: "Quem pode registrar um projeto na Green Ledger?", a: "Empresas, produtores rurais, cooperativas, desenvolvedores de projetos e organizações que implementem atividades de redução ou remoção de emissões de gases de efeito estufa." },
+  { q: "Quem pode registrar um projeto na Green Ledger?", a: "Empresas, cooperativas, desenvolvedores de projetos, indústrias e organizações que implementem atividades de redução ou remoção de emissões de gases de efeito estufa em qualquer setor." },
   { q: "Quanto tempo leva o processo de certificação?", a: "O prazo varia conforme a complexidade do projeto, mas tipicamente entre 6 e 12 meses da submissão até a emissão dos primeiros créditos." },
   { q: "As metodologias da Green Ledger são públicas?", a: "Sim. Todas as metodologias aprovadas são publicadas em nosso repositório aberto e passam por revisão pública antes da aprovação." },
   { q: "Quais setores a Green Ledger atende?", a: "Atuamos em diversos setores: agropecuário, florestal, energia, indústria, gestão de resíduos, entre outros. Nossos programas cobrem desde projetos de reflorestamento até tecnologias de eficiência energética." },

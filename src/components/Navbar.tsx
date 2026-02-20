@@ -47,7 +47,7 @@ const Navbar = () => {
           >
             <Button variant="outline" size="sm" className="gap-2 border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground">
               <ExternalLink className="w-4 h-4" />
-              Área do Produtor
+              Área do Cliente
             </Button>
           </a>
         </div>
@@ -86,7 +86,7 @@ const Navbar = () => {
             >
               <Button variant="outline" size="sm" className="w-full gap-2 border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground">
                 <ExternalLink className="w-4 h-4" />
-                Área do Produtor
+                Área do Cliente
               </Button>
             </a>
           </nav>

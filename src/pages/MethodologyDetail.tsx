@@ -71,7 +71,7 @@ const MethodologyDetail = () => {
                 {[
                   "Verificar elegibilidade do projeto conforme critérios da metodologia",
                   "Preparar Documento de Concepção do Projeto (DCP) seguindo o template da Green Ledger",
-                  "Submeter DCP e documentação complementar pelo portal do produtor",
+                  "Submeter DCP e documentação complementar pelo portal do cliente",
                   "Análise de completude e designação de validador/verificador",
                   "Validação técnica e aprovação para monitoramento",
                   "Implementação do plano de monitoramento conforme protocolo MRV",

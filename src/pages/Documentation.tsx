@@ -31,7 +31,7 @@ const docs = [
     items: [
       { title: "Guia do Desenvolvedor de Projetos", version: "v1.0" },
       { title: "Guia de Credenciamento de Auditores", version: "v1.0" },
-      { title: "Manual do Portal do Produtor", version: "v1.0" },
+      { title: "Manual do Portal do Cliente", version: "v1.0" },
       { title: "Guia de Consulta Pública", version: "v1.0" },
     ],
   },
