@@ -8,6 +8,7 @@ import logo from "@/assets/logo-horizontal.png";
 const dropdownLinks = [
   { key: "nav.programas", to: "/programas" },
   { key: "nav.metodologias", to: "/metodologias" },
+  { key: "nav.registro", to: "/registro-publico" },
   { key: "nav.consultas", to: "/consultas" },
   { key: "nav.tarifas", to: "/tarifas" },
   { key: "nav.plataforma", to: "/plataforma" },
