@@ -6,6 +6,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/i18n/LanguageContext";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import ScrollToTop from "./components/ScrollToTop";
+import BackToTop from "./components/BackToTop";
+import Breadcrumbs from "./components/Breadcrumbs";
 import Index from "./pages/Index";
 import Programs from "./pages/Programs";
 import Methodologies from "./pages/Methodologies";
@@ -34,7 +37,9 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <ScrollToTop />
           <Navbar />
+          <Breadcrumbs />
           <main>
             <Routes>
               <Route path="/" element={<Index />} />
@@ -58,6 +63,7 @@ const App = () => (
             </Routes>
           </main>
           <Footer />
+          <BackToTop />
         </BrowserRouter>
       </LanguageProvider>
     </TooltipProvider>
