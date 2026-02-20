@@ -53,7 +53,7 @@ const ProjectDetail = () => {
   return (
     <div className="pt-20">
       {/* Hero */}
-      <section className="gradient-hero text-primary-foreground py-20 md:py-28">
+      <section className="gradient-hero text-primary-foreground py-24 md:py-32">
         <div className="container">
           <Link to="/projetos" className="inline-flex items-center gap-2 text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors mb-10">
             <ArrowLeft className="w-4 h-4" /> {isEn ? "Back to Projects" : "Voltar para Projetos"}

@@ -100,7 +100,7 @@ const MethodologyDetail = () => {
   return (
     <div className="pt-20">
       {/* Hero Banner */}
-      <section className="gradient-hero text-primary-foreground py-20 md:py-28 relative overflow-hidden">
+      <section className="gradient-hero text-primary-foreground py-24 md:py-32 relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('/placeholder.svg')] opacity-5 bg-cover bg-center" />
         <div className="container relative z-10">
           <Link
