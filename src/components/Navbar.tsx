@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import logo from "@/assets/logo-horizontal.png";
 
 const navLinks = [
   { label: "Programas", to: "/programas" },
@@ -19,9 +20,8 @@ const Navbar = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
       <div className="container flex items-center justify-between h-16 md:h-20">
-        <Link to="/" className="flex items-center gap-2 font-heading font-bold text-xl text-primary">
-          <span className="w-8 h-8 rounded-md gradient-hero flex items-center justify-center text-primary-foreground text-sm font-bold">GL</span>
-          Green Ledger
+        <Link to="/" className="flex items-center">
+          <img src={logo} alt="Green Ledger" className="h-8 md:h-10 w-auto" />
         </Link>
 
         {/* Desktop nav */}
