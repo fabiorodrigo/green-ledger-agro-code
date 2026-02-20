@@ -83,21 +83,6 @@ const Index = () => {
             </div>
           </div>
 
-          <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl animate-fade-in-up" style={{ animationDelay: "0.45s" }}>
-            {[
-              { value: 3, label: t("index.stats.programs"), suffix: "" },
-              { value: 7, label: t("index.stats.methodologies"), suffix: "" },
-              { value: 6, label: t("index.stats.steps"), suffix: "" },
-              { value: "100%", label: t("index.stats.transparency"), suffix: "" },
-            ].map((stat) => (
-              <div key={stat.label} className="border-l border-primary-foreground/20 pl-4">
-                <span className="font-heading text-2xl md:text-3xl font-bold text-secondary">
-                  <AnimatedCounter end={stat.value} suffix={stat.suffix} />
-                </span>
-                <p className="text-xs text-primary-foreground/60 mt-1">{stat.label}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
