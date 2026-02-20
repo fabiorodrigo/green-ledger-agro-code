@@ -27,7 +27,7 @@ const i18n = {
     transparencyDesc2: "O documento é atualizado periodicamente e publicado em versões controladas. Consulte abaixo a versão vigente.",
     downloadLabel: "Acessar Tabela de Tarifas",
     docs: [
-      { version: "v1.0", date: "Março/2026", label: "Acessar Tabela de Tarifas em Português (v1.0)", url: "#" },
+      { version: "v1.0", date: "Março/2026", label: "Acessar Tabela de Tarifas em Português (v1.0)", url: "/docs/GL-Tabela-Tarifas-v1.0.pdf" },
     ] as TariffDoc[],
     previousTitle: "Versões Anteriores",
     previousEmpty: "Esta é a primeira versão publicada.",
@@ -56,7 +56,7 @@ const i18n = {
     transparencyDesc2: "The document is updated periodically and published in controlled versions. See the current version below.",
     downloadLabel: "Access Fee Schedule",
     docs: [
-      { version: "v1.0", date: "March/2026", label: "Access Fee Schedule in Portuguese (v1.0)", url: "#" },
+      { version: "v1.0", date: "March/2026", label: "Access Fee Schedule in Portuguese (v1.0)", url: "/docs/GL-Tabela-Tarifas-v1.0.pdf" },
     ] as TariffDoc[],
     previousTitle: "Previous Versions",
     previousEmpty: "This is the first published version.",
@@ -85,7 +85,7 @@ const i18n = {
     transparencyDesc2: "El documento se actualiza periódicamente y se publica en versiones controladas. Consulte a continuación la versión vigente.",
     downloadLabel: "Acceder a Tabla de Tarifas",
     docs: [
-      { version: "v1.0", date: "Marzo/2026", label: "Acceder a Tabla de Tarifas en Portugués (v1.0)", url: "#" },
+      { version: "v1.0", date: "Marzo/2026", label: "Acceder a Tabla de Tarifas en Portugués (v1.0)", url: "/docs/GL-Tabela-Tarifas-v1.0.pdf" },
     ] as TariffDoc[],
     previousTitle: "Versiones Anteriores",
     previousEmpty: "Esta es la primera versión publicada.",
