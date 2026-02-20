@@ -32,7 +32,6 @@ const Navbar = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const langRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdowns on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -46,7 +45,6 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  // Close mobile on route change
   useEffect(() => {
     setMobileOpen(false);
     setDropdownOpen(false);
@@ -54,43 +52,14 @@ const Navbar = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
-      <div className="container flex items-center justify-between h-16 md:h-[72px]">
-        {/* Left side: Language selector + Logo (mobile) */}
-        <div className="flex items-center gap-4">
-          {/* Language selector - Desktop */}
-          <div ref={langRef} className="relative hidden lg:block">
-            <button
-              onClick={() => setLangOpen(!langOpen)}
-              className="flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-secondary transition-colors px-2 py-1.5 rounded-md"
-            >
-              <span className="text-base">{localeFlags[locale]}</span>
-              <span className="uppercase text-xs font-semibold tracking-wide">{locale}</span>
-              <ChevronDown className={`w-3.5 h-3.5 transition-transform ${langOpen ? "rotate-180" : ""}`} />
-            </button>
-            {langOpen && (
-              <div className="absolute top-full left-0 mt-1 bg-background border border-border rounded-lg shadow-elevated py-1 min-w-[160px] z-50">
-                {locales.map((l) => (
-                  <button
-                    key={l}
-                    onClick={() => { setLocale(l); setLangOpen(false); }}
-                    className={`w-full text-left px-4 py-2.5 text-sm flex items-center gap-2.5 hover:bg-muted/50 transition-colors ${locale === l ? "text-secondary font-medium" : "text-foreground"}`}
-                  >
-                    <span className="text-base">{localeFlags[l]}</span>
-                    {localeLabels[l]}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+      <div className="container flex items-center h-16 md:h-[72px]">
+        {/* Logo - always visible */}
+        <Link to="/" className="flex items-center shrink-0 mr-auto">
+          <img src={logo} alt="Green Ledger" className="h-9 md:h-11 w-auto max-w-[160px] md:max-w-[200px] object-contain" />
+        </Link>
 
-          {/* Logo (mobile only) */}
-          <Link to="/" className="lg:hidden flex items-center shrink-0">
-            <img src={logo} alt="Green Ledger" className="h-9 w-auto max-w-[160px] object-contain" />
-          </Link>
-        </div>
-
-        {/* Center: Desktop nav */}
-        <nav className="hidden lg:flex items-center gap-0.5">
+        {/* Desktop nav - aligned right */}
+        <div className="hidden lg:flex items-center gap-1">
           {/* Green Ledger Dropdown */}
           <div
             ref={dropdownRef}
@@ -100,7 +69,7 @@ const Navbar = () => {
           >
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className={`flex items-center gap-1 px-4 py-2 text-sm font-semibold uppercase tracking-wide transition-colors hover:text-secondary ${dropdownOpen ? "text-secondary" : "text-foreground"}`}
+              className={`flex items-center gap-1 px-3 py-2 text-[13px] font-semibold uppercase tracking-wide transition-colors hover:text-secondary ${dropdownOpen ? "text-secondary" : "text-foreground"}`}
             >
               {t("nav.greenledger")}
               <ChevronDown className={`w-3.5 h-3.5 transition-transform ${dropdownOpen ? "rotate-180" : ""}`} />
@@ -125,7 +94,7 @@ const Navbar = () => {
           {/* Direct links */}
           <Link
             to="/projetos"
-            className={`px-4 py-2 text-sm font-semibold uppercase tracking-wide transition-colors hover:text-secondary ${
+            className={`px-3 py-2 text-[13px] font-semibold uppercase tracking-wide transition-colors hover:text-secondary ${
               location.pathname === "/projetos" ? "text-secondary" : "text-foreground"
             }`}
           >
@@ -133,21 +102,48 @@ const Navbar = () => {
           </Link>
           <Link
             to="/comunicados"
-            className={`px-4 py-2 text-sm font-semibold uppercase tracking-wide transition-colors hover:text-secondary ${
+            className={`px-3 py-2 text-[13px] font-semibold uppercase tracking-wide transition-colors hover:text-secondary ${
               location.pathname === "/comunicados" ? "text-secondary" : "text-foreground"
             }`}
           >
             {t("nav.comunicados")}
           </Link>
-        </nav>
 
-        {/* Right: Login CTA */}
-        <div className="hidden lg:flex items-center">
+          {/* Separator */}
+          <div className="w-px h-5 bg-border mx-2" />
+
+          {/* Language selector */}
+          <div ref={langRef} className="relative">
+            <button
+              onClick={() => setLangOpen(!langOpen)}
+              className="flex items-center gap-1.5 text-[13px] font-medium text-muted-foreground hover:text-foreground transition-colors px-2 py-1.5 rounded-md"
+            >
+              <span className="text-sm">{localeFlags[locale]}</span>
+              <span className="uppercase text-xs font-semibold tracking-wide">{locale}</span>
+              <ChevronDown className={`w-3 h-3 transition-transform ${langOpen ? "rotate-180" : ""}`} />
+            </button>
+            {langOpen && (
+              <div className="absolute top-full right-0 mt-1 bg-background border border-border rounded-lg shadow-elevated py-1 min-w-[150px] z-50">
+                {locales.map((l) => (
+                  <button
+                    key={l}
+                    onClick={() => { setLocale(l); setLangOpen(false); }}
+                    className={`w-full text-left px-4 py-2.5 text-sm flex items-center gap-2.5 hover:bg-muted/50 transition-colors ${locale === l ? "text-secondary font-medium" : "text-foreground"}`}
+                  >
+                    <span className="text-sm">{localeFlags[l]}</span>
+                    {localeLabels[l]}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Login CTA */}
           <a
             href="https://app.greenledger.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2 text-sm font-semibold uppercase tracking-wide bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90 transition-colors"
+            className="inline-flex items-center gap-1.5 ml-2 px-5 py-2 text-[13px] font-semibold uppercase tracking-wide bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90 transition-colors"
           >
             {t("nav.login")}
             <ExternalLink className="w-3.5 h-3.5" />
