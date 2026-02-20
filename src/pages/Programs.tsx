@@ -150,15 +150,15 @@ const Programs = () => {
       <SEOHead title={u.seoTitle} description={u.seoDesc} path="/programas" />
 
       {/* Hero */}
-      <section className="gradient-hero text-primary-foreground py-20 md:py-28">
-        <div className="container text-center">
-          <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-secondary/20 text-accent rounded-full mb-4">
+      <section className="gradient-hero text-primary-foreground py-24 md:py-32">
+        <div className="container">
+          <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-secondary/20 text-accent rounded-full mb-6">
             {u.badge}
           </span>
-          <h1 className="font-heading text-4xl md:text-5xl font-bold max-w-3xl mx-auto">
+          <h1 className="font-heading text-4xl md:text-5xl font-bold max-w-3xl">
             {u.title}
           </h1>
-          <p className="mt-6 text-primary-foreground/80 max-w-2xl mx-auto leading-relaxed text-lg">
+          <p className="mt-8 text-primary-foreground/80 max-w-2xl leading-relaxed text-lg">
             {u.subtitle}
           </p>
         </div>
