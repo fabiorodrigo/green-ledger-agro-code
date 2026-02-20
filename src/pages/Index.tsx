@@ -64,11 +64,26 @@ const Index = () => {
                 </Button>
               </Link>
               <Link to="/certificacao">
-                <Button size="lg" variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 text-base px-8">
+                <Button size="lg" variant="hero-outline" className="text-base px-8">
                   Processo de Certificação
                 </Button>
               </Link>
             </div>
+          </div>
+
+          {/* Stats bar */}
+          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl animate-fade-in-up" style={{ animationDelay: "0.45s" }}>
+            {[
+              { value: "3", label: "Programas de Certificação" },
+              { value: "7", label: "Metodologias Aprovadas" },
+              { value: "5", label: "Etapas de Certificação" },
+              { value: "100%", label: "Transparência Pública" },
+            ].map((stat) => (
+              <div key={stat.label} className="border-l border-primary-foreground/20 pl-4">
+                <span className="font-heading text-2xl md:text-3xl font-bold text-secondary">{stat.value}</span>
+                <p className="text-xs text-primary-foreground/60 mt-1">{stat.label}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
