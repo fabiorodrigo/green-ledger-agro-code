@@ -1,15 +1,23 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, FileCheck, ClipboardList, Users, BarChart3 } from "lucide-react";
+import { ArrowRight, FileCheck, ClipboardList, Users, BarChart3, MapPin, ShieldCheck, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/i18n/LanguageContext";
 import AnimatedSection from "@/components/AnimatedSection";
 import SEOHead from "@/components/SEOHead";
+import { projectsData } from "@/data/projectsData";
+
+const statusColors: Record<string, string> = {
+  registered: "bg-yellow-500/10 text-yellow-600 border-yellow-500/30",
+  validated: "bg-blue-500/10 text-blue-600 border-blue-500/30",
+  certified: "bg-secondary/10 text-secondary border-secondary/30",
+};
 
 const ui = {
   pt: {
-    seoTitle: "Projetos", seoDesc: "Conheça o ciclo de certificação e registre seu projeto na Green Ledger.",
-    badge: "Projetos", title: "Projetos", subtitle: "Conheça o ciclo de certificação e saiba como registrar seu projeto na Green Ledger.",
+    seoTitle: "Projetos", seoDesc: "Conheça os projetos certificados e em processo de certificação na Green Ledger.",
+    badge: "Projetos", title: "Projetos", subtitle: "Conheça os projetos certificados e em processo de certificação na Green Ledger.",
     cycleTitle: "Ciclo de Certificação", cta: "Área do Produtor",
+    registeredTitle: "Projetos Registrados", viewProject: "Ver Projeto",
     steps: [
       { icon: ClipboardList, title: "Registro", desc: "O desenvolvedor submete a documentação do projeto (PDD) na plataforma Green Ledger." },
       { icon: FileCheck, title: "Validação", desc: "Um VVB aprovado realiza a análise de elegibilidade e verificação documental." },
@@ -18,9 +26,10 @@ const ui = {
     ],
   },
   en: {
-    seoTitle: "Projects", seoDesc: "Learn about the certification cycle and register your project at Green Ledger.",
-    badge: "Projects", title: "Projects", subtitle: "Learn about the certification cycle and how to register your project at Green Ledger.",
+    seoTitle: "Projects", seoDesc: "Discover certified and in-progress projects at Green Ledger.",
+    badge: "Projects", title: "Projects", subtitle: "Discover certified and in-progress projects at Green Ledger.",
     cycleTitle: "Certification Cycle", cta: "Producer Area",
+    registeredTitle: "Registered Projects", viewProject: "View Project",
     steps: [
       { icon: ClipboardList, title: "Registration", desc: "The developer submits the project documentation (PDD) on the Green Ledger platform." },
       { icon: FileCheck, title: "Validation", desc: "An approved VVB performs eligibility analysis and document verification." },
@@ -29,9 +38,10 @@ const ui = {
     ],
   },
   es: {
-    seoTitle: "Proyectos", seoDesc: "Conozca el ciclo de certificación y registre su proyecto en Green Ledger.",
-    badge: "Proyectos", title: "Proyectos", subtitle: "Conozca el ciclo de certificación y cómo registrar su proyecto en Green Ledger.",
+    seoTitle: "Proyectos", seoDesc: "Conozca los proyectos certificados y en proceso de certificación en Green Ledger.",
+    badge: "Proyectos", title: "Proyectos", subtitle: "Conozca los proyectos certificados y en proceso de certificación en Green Ledger.",
     cycleTitle: "Ciclo de Certificación", cta: "Área del Productor",
+    registeredTitle: "Proyectos Registrados", viewProject: "Ver Proyecto",
     steps: [
       { icon: ClipboardList, title: "Registro", desc: "El desarrollador envía la documentación del proyecto (DDP) en la plataforma Green Ledger." },
       { icon: FileCheck, title: "Validación", desc: "Un VVB aprobado realiza el análisis de elegibilidad y verificación documental." },
@@ -43,6 +53,7 @@ const ui = {
 
 const Projetos = () => {
   const { locale } = useLanguage();
+  const isEn = locale === "en";
   const d = ui[locale as keyof typeof ui] || ui.pt;
 
   return (
@@ -57,13 +68,51 @@ const Projetos = () => {
         </div>
       </section>
 
+      {/* Projects List */}
       <section className="py-20">
+        <div className="container max-w-5xl">
+          <h2 className="font-heading text-3xl font-bold text-primary mb-10">{d.registeredTitle}</h2>
+          <div className="space-y-6">
+            {projectsData.map((p, i) => (
+              <AnimatedSection key={p.slug} delay={i * 0.08}>
+                <Link to={`/projetos/${p.slug}`} className="block">
+                  <div className="bg-card border border-border rounded-xl p-6 md:p-8 hover:shadow-card transition-shadow">
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-3 flex-wrap">
+                          <span className={`inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full border font-medium ${statusColors[p.status]}`}>
+                            <ShieldCheck className="w-3 h-3" />
+                            {isEn ? p.statusLabel.en : p.statusLabel.pt}
+                          </span>
+                          <span className="text-xs text-muted-foreground px-2 py-0.5 bg-muted rounded-full">{p.program}</span>
+                        </div>
+                        <h3 className="font-heading font-semibold text-xl text-primary mb-2">{p.name}</h3>
+                        <div className="flex items-center gap-4 flex-wrap text-sm text-muted-foreground">
+                          <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5" /> {p.location}, {p.state}</span>
+                          <span className="flex items-center gap-1.5"><Building2 className="w-3.5 h-3.5" /> {p.developer.name}</span>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-2">{p.methodology.code} — {isEn ? p.methodology.name : p.methodology.name}</p>
+                      </div>
+                      <Button variant="outline" size="sm" className="gap-2 border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground shrink-0">
+                        {d.viewProject} <ArrowRight className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </Link>
+              </AnimatedSection>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Certification Cycle */}
+      <section className="py-20 bg-muted/30">
         <div className="container max-w-4xl">
           <h2 className="font-heading text-3xl font-bold text-primary mb-10 text-center">{d.cycleTitle}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {d.steps.map((s, i) => (
               <AnimatedSection key={i} delay={i * 0.1}>
-                <div className="gradient-card rounded-xl p-6 border border-border shadow-card">
+                <div className="bg-card rounded-xl p-6 border border-border shadow-card">
                   <s.icon className="w-8 h-8 text-secondary mb-3" />
                   <h3 className="font-heading font-semibold text-primary mb-2">{s.title}</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>

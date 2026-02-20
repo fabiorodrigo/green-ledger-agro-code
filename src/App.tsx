@@ -18,6 +18,7 @@ import Governance from "./pages/Governance";
 import Documentation from "./pages/Documentation";
 import Contact from "./pages/Contact";
 import Projetos from "./pages/Projetos";
+import ProjectDetail from "./pages/ProjectDetail";
 import Comunicados from "./pages/Comunicados";
 import Consultas from "./pages/Consultas";
 import Tarifas from "./pages/Tarifas";
@@ -51,6 +52,7 @@ const App = () => (
               <Route path="/documentacao" element={<Documentation />} />
               <Route path="/contato" element={<Contact />} />
               <Route path="/projetos" element={<Projetos />} />
+              <Route path="/projetos/:slug" element={<ProjectDetail />} />
               <Route path="/comunicados" element={<Comunicados />} />
               <Route path="/consultas" element={<Consultas />} />
               <Route path="/tarifas" element={<Tarifas />} />
