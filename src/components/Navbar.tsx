@@ -56,7 +56,7 @@ const Navbar = () => {
       <div className="container flex items-center h-[68px] md:h-20">
         {/* Logo - always visible */}
         <Link to="/" className="flex items-center shrink-0 mr-auto">
-          <img src={logo} alt="Green Ledger" className="h-11 md:h-16 w-auto max-w-[200px] md:max-w-[280px] object-contain" />
+          <img src={logo} alt="Green Ledger" className="h-14 md:h-20 w-auto max-w-[240px] md:max-w-[320px] object-contain" />
         </Link>
 
         {/* Desktop nav - aligned right */}
