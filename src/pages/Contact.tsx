@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 const Contact = () => (
-  <div className="pt-20">
+  <div>
     <section className="gradient-hero text-primary-foreground py-20 md:py-28">
       <div className="container">
         <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-secondary/20 text-accent rounded-full mb-4">
