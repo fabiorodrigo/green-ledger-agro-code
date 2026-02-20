@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Shield, FileCheck, BarChart3, Users, Leaf, Globe } from "lucide-react";
+import { ArrowRight, Shield, FileCheck, BarChart3, Users, Leaf, Globe, Zap, Factory } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SectionHeading from "@/components/SectionHeading";
 import heroBg from "@/assets/hero-bg.jpg";
@@ -7,7 +7,7 @@ import heroBg from "@/assets/hero-bg.jpg";
 const programs = [
   {
     title: "Green Ledger AFOLU",
-    desc: "Agricultura, Florestas e Outros Usos do Solo. Cobertura integral de atividades de remoção e redução de emissões no setor agropecuário e florestal.",
+    desc: "Agricultura, Florestas e Outros Usos do Solo. Projetos de reflorestamento, restauração, sistemas agroflorestais e proteção florestal.",
     icon: Leaf,
   },
   {
@@ -16,9 +16,9 @@ const programs = [
     icon: Globe,
   },
   {
-    title: "Green Ledger AgroTech",
-    desc: "Metodologias para tecnologias agrícolas inovadoras que reduzem emissões: biodigestores, fertirrigação inteligente e agricultura de precisão.",
-    icon: BarChart3,
+    title: "Green Ledger Energy & Tech",
+    desc: "Tecnologias limpas, eficiência energética, biodigestores, energias renováveis e inovações que reduzem emissões em diversos setores.",
+    icon: Zap,
   },
 ];
 
@@ -32,9 +32,10 @@ const steps = [
 
 const faqs = [
   { q: "O que são créditos de carbono certificados?", a: "São unidades verificadas que representam uma tonelada métrica de CO₂ equivalente removida ou evitada, emitidas por uma certificadora independente seguindo metodologias rigorosas." },
-  { q: "Quem pode registrar um projeto na Green Ledger?", a: "Produtores rurais, cooperativas, empresas do agronegócio e desenvolvedores de projetos que implementem atividades de redução ou remoção de emissões no setor agropecuário." },
+  { q: "Quem pode registrar um projeto na Green Ledger?", a: "Empresas, produtores rurais, cooperativas, desenvolvedores de projetos e organizações que implementem atividades de redução ou remoção de emissões de gases de efeito estufa." },
   { q: "Quanto tempo leva o processo de certificação?", a: "O prazo varia conforme a complexidade do projeto, mas tipicamente entre 6 e 12 meses da submissão até a emissão dos primeiros créditos." },
   { q: "As metodologias da Green Ledger são públicas?", a: "Sim. Todas as metodologias aprovadas são publicadas em nosso repositório aberto e passam por revisão pública antes da aprovação." },
+  { q: "Quais setores a Green Ledger atende?", a: "Atuamos em diversos setores: agropecuário, florestal, energia, indústria, gestão de resíduos, entre outros. Nossos programas cobrem desde projetos de reflorestamento até tecnologias de eficiência energética." },
 ];
 
 const Index = () => {
@@ -43,7 +44,7 @@ const Index = () => {
       {/* Hero */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroBg} alt="Paisagem agrícola sustentável" className="w-full h-full object-cover" />
+          <img src={heroBg} alt="Paisagem sustentável" className="w-full h-full object-cover" />
           <div className="absolute inset-0 gradient-hero opacity-85" />
         </div>
         <div className="container relative z-10 py-32">
@@ -52,10 +53,10 @@ const Index = () => {
               Certificadora de Créditos de Carbono
             </span>
             <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground leading-tight animate-fade-in-up">
-              Certificação de Carbono para o Agro com Rigor Técnico e Transparência
+              Certificação de Carbono com Rigor Técnico e Transparência
             </h1>
             <p className="mt-6 text-lg text-primary-foreground/80 max-w-2xl leading-relaxed animate-fade-in-up" style={{ animationDelay: "0.15s" }}>
-              Metodologias robustas, governança independente e processos auditáveis para transformar práticas sustentáveis do agronegócio brasileiro em créditos de carbono de alta integridade.
+              Metodologias robustas, governança independente e processos auditáveis para transformar iniciativas sustentáveis em créditos de carbono de alta integridade.
             </p>
             <div className="mt-8 flex flex-wrap gap-4 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
               <Link to="/programas">
@@ -94,11 +95,11 @@ const Index = () => {
           <SectionHeading
             tag="Sobre"
             title="O que é a Green Ledger"
-            description="A Green Ledger é uma certificadora independente de créditos de carbono especializada no setor agropecuário. Desenvolvemos metodologias próprias, validadas por comitês científicos, e operamos com governança transparente para assegurar a integridade de cada crédito emitido."
+            description="A Green Ledger é uma certificadora independente de créditos de carbono. Desenvolvemos metodologias próprias para diversos setores, validadas por comitês científicos, e operamos com governança transparente para assegurar a integridade de cada crédito emitido."
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
             {[
-              { icon: Shield, title: "Integridade", desc: "Processos auditáveis e rastreáveis do registro à emissão, garantindo credibilidade no mercado voluntário." },
+              { icon: Shield, title: "Integridade", desc: "Processos auditáveis e rastreáveis do registro à emissão, garantindo credibilidade nos mercados voluntário e regulado." },
               { icon: FileCheck, title: "Rigor Técnico", desc: "Metodologias baseadas em ciência, revisadas por pares e alinhadas com melhores práticas internacionais." },
               { icon: Users, title: "Governança Independente", desc: "Comitês consultivos, auditorias externas e consultas públicas garantem imparcialidade e transparência." },
             ].map((item) => (
@@ -118,7 +119,7 @@ const Index = () => {
           <SectionHeading
             tag="Programas"
             title="Programas de Certificação"
-            description="Três programas desenhados para cobrir as principais atividades do agronegócio que geram redução ou remoção de emissões de gases de efeito estufa."
+            description="Programas especializados cobrindo atividades que geram redução ou remoção de emissões de gases de efeito estufa em múltiplos setores."
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {programs.map((p) => (
@@ -217,7 +218,7 @@ const Index = () => {
             Pronto para certificar seus créditos de carbono?
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto mb-8">
-            Entre em contato com nossa equipe para iniciar o processo de registro do seu projeto agropecuário.
+            Entre em contato com nossa equipe para iniciar o processo de registro do seu projeto.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link to="/contato">

@@ -8,7 +8,7 @@ const steps = [
     title: "Registro",
     description: "O desenvolvedor do projeto submete a documentação inicial, incluindo o Documento de Concepção do Projeto (DCP), dados de elegibilidade e plano de monitoramento proposto.",
     details: [
-      "Preenchimento do formulário de registro no portal do produtor",
+      "Preenchimento do formulário de registro no portal",
       "Upload do DCP conforme template da metodologia aplicável",
       "Pagamento da taxa de registro",
       "Análise de completude pela equipe Green Ledger (prazo: 15 dias úteis)",

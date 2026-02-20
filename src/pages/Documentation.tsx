@@ -11,8 +11,8 @@ const docs = [
       { title: "GL-AFOLU-003 — REDD+", version: "v1.0" },
       { title: "GL-SC-001 — Plantio Direto", version: "v1.3" },
       { title: "GL-SC-002 — ILPF", version: "v1.0" },
-      { title: "GL-AT-001 — Biodigestores", version: "v2.0" },
-      { title: "GL-AT-002 — Agricultura de Precisão", version: "v1.0" },
+      { title: "GL-ET-001 — Biodigestores e Tratamento de Resíduos", version: "v2.0" },
+      { title: "GL-ET-002 — Eficiência Energética e Tecnologias Limpas", version: "v1.0" },
     ],
   },
   {
