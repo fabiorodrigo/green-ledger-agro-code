@@ -76,7 +76,7 @@ const Contact = () => (
             <div className="mt-10 p-6 gradient-card rounded-xl border border-border shadow-card">
               <h3 className="font-heading font-semibold text-primary mb-2">Portal do Cliente</h3>
               <p className="text-sm text-muted-foreground mb-4">
-                Já tem um projeto registrado? Acesse a área do produtor para acompanhar o status do seu projeto.
+                Já tem um projeto registrado? Acesse a área do cliente para acompanhar o status do seu projeto.
               </p>
               <a href="https://app.greenledger.com" target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" size="sm" className="border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground">
