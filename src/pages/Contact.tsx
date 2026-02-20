@@ -74,7 +74,7 @@ const Contact = () => (
             </div>
 
             <div className="mt-10 p-6 gradient-card rounded-xl border border-border shadow-card">
-              <h3 className="font-heading font-semibold text-primary mb-2">Portal do Produtor</h3>
+              <h3 className="font-heading font-semibold text-primary mb-2">Portal do Cliente</h3>
               <p className="text-sm text-muted-foreground mb-4">
                 Já tem um projeto registrado? Acesse a área do produtor para acompanhar o status do seu projeto.
               </p>

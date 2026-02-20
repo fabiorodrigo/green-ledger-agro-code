@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Leaf, Globe, BarChart3, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Leaf, Globe, Zap, ArrowRight, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SectionHeading from "@/components/SectionHeading";
 
@@ -9,7 +9,7 @@ const programs = [
     icon: Leaf,
     title: "Green Ledger AFOLU",
     subtitle: "Agricultura, Florestas e Outros Usos do Solo",
-    description: "Programa abrangente que cobre atividades de redução e remoção de emissões de GEE no setor agropecuário e florestal, incluindo reflorestamento, restauração de vegetação nativa, sistemas agroflorestais e manejo florestal sustentável.",
+    description: "Programa abrangente que cobre atividades de redução e remoção de emissões de GEE nos setores agropecuário e florestal, incluindo reflorestamento, restauração de vegetação nativa, sistemas agroflorestais, manejo florestal sustentável e proteção de ecossistemas.",
     scope: [
       "Reflorestamento e restauração florestal",
       "Sistemas agroflorestais (SAFs)",
@@ -18,10 +18,10 @@ const programs = [
       "Recuperação de áreas degradadas",
     ],
     eligibility: [
-      "Propriedades rurais com CAR ativo",
       "Áreas com potencial de sequestro ou redução comprovável",
       "Conformidade com legislação ambiental vigente",
       "Período mínimo de creditação: 20 anos",
+      "Documentação de posse ou direito de uso da terra",
     ],
     methodologies: ["GL-AFOLU-001", "GL-AFOLU-002", "GL-AFOLU-003"],
   },
@@ -30,7 +30,7 @@ const programs = [
     icon: Globe,
     title: "Green Ledger Soil Carbon",
     subtitle: "Carbono no Solo",
-    description: "Programa dedicado ao sequestro de carbono orgânico no solo por meio de práticas agrícolas regenerativas, sistemas de plantio direto, rotação de culturas, integração lavoura-pecuária-floresta (ILPF) e uso de plantas de cobertura.",
+    description: "Programa dedicado ao sequestro de carbono orgânico no solo por meio de práticas regenerativas, sistemas de plantio direto, rotação de culturas, integração lavoura-pecuária-floresta (ILPF) e uso de plantas de cobertura.",
     scope: [
       "Plantio direto sobre palha",
       "Integração Lavoura-Pecuária-Floresta (ILPF)",
@@ -39,7 +39,7 @@ const programs = [
       "Manejo conservacionista do solo",
     ],
     eligibility: [
-      "Propriedades com histórico de uso convencional do solo",
+      "Áreas com histórico de uso convencional do solo",
       "Dados de linha de base de carbono no solo disponíveis ou mensuráveis",
       "Compromisso com monitoramento de longo prazo (mínimo 10 anos)",
       "Implementação de práticas regenerativas verificáveis",
@@ -47,17 +47,17 @@ const programs = [
     methodologies: ["GL-SC-001", "GL-SC-002"],
   },
   {
-    id: "agrotech",
-    icon: BarChart3,
-    title: "Green Ledger AgroTech",
-    subtitle: "Tecnologias Agrícolas",
-    description: "Programa voltado para tecnologias inovadoras que reduzem emissões no agronegócio: biodigestores, tratamento de dejetos, fertirrigação inteligente, agricultura de precisão, substituição de combustíveis fósseis e eficiência energética em operações agrícolas.",
+    id: "energytech",
+    icon: Zap,
+    title: "Green Ledger Energy & Tech",
+    subtitle: "Energia e Tecnologias Limpas",
+    description: "Programa voltado para tecnologias inovadoras que reduzem emissões em diversos setores: biodigestores, energias renováveis, eficiência energética, tratamento de resíduos, substituição de combustíveis fósseis e processos industriais mais limpos.",
     scope: [
-      "Biodigestores e tratamento de dejetos",
+      "Biodigestores e tratamento de resíduos",
       "Substituição de combustíveis fósseis",
-      "Agricultura de precisão e otimização de insumos",
-      "Fertirrigação inteligente",
-      "Eficiência energética em operações agrícolas",
+      "Eficiência energética industrial e comercial",
+      "Energias renováveis (solar, eólica, biomassa)",
+      "Otimização de processos e redução de emissões fugitivas",
     ],
     eligibility: [
       "Adoção de tecnologia comprovadamente superior à prática convencional",
@@ -65,7 +65,7 @@ const programs = [
       "Conformidade com padrões técnicos e regulatórios",
       "Dados de operação disponíveis para auditoria",
     ],
-    methodologies: ["GL-AT-001", "GL-AT-002"],
+    methodologies: ["GL-ET-001", "GL-ET-002"],
   },
 ];
 
@@ -82,7 +82,7 @@ const Programs = () => {
             Programas de Certificação
           </h1>
           <p className="mt-6 text-primary-foreground/80 max-w-2xl leading-relaxed text-lg">
-            Três programas especializados cobrindo as principais atividades do agronegócio que geram redução ou remoção de emissões de gases de efeito estufa.
+            Programas especializados cobrindo as principais atividades que geram redução ou remoção de emissões de gases de efeito estufa em múltiplos setores.
           </p>
         </div>
       </section>
