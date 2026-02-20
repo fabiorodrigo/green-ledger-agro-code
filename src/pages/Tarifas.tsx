@@ -1,206 +1,173 @@
 import { useLanguage } from "@/i18n/LanguageContext";
 import { Link } from "react-router-dom";
-import { ArrowRight, HelpCircle } from "lucide-react";
+import { ArrowRight, FileText, Download, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AnimatedSection from "@/components/AnimatedSection";
 import SEOHead from "@/components/SEOHead";
 
-interface TariffItem { service: string; value: string; note: string; }
-interface TariffCategory { category: string; items: TariffItem[]; }
 interface FAQ { q: string; a: string; }
+
+interface TariffDoc {
+  version: string;
+  date: string;
+  label: string;
+  url: string;
+}
 
 const i18n = {
   pt: {
-    seoTitle: "Tarifas e Taxas",
-    seoDesc: "Consulte a tabela completa de tarifas e taxas dos serviços de certificação da Green Ledger.",
-    thService: "Serviço", thValue: "Valor", thNote: "Observação",
+    seoTitle: "Tarifas de Serviço",
+    seoDesc: "Consulte a tabela de tarifas dos serviços de certificação da Green Ledger.",
+    badge: "Tarifas de Serviço",
+    title: "Tarifas de Serviço",
+    subtitle: "Conheça os custos associados aos nossos serviços de certificação.",
+    transparencyBadge: "Compromisso com a Transparência",
+    transparencyTitle: "Tabela de Tarifas",
+    transparencyDesc: "A Green Ledger é comprometida com a transparência total de seus processos e custos. Nossa tabela de tarifas detalha todos os valores aplicáveis aos serviços de registro, validação, verificação, emissão de créditos e credenciamento de VVBs.",
+    transparencyDesc2: "O documento é atualizado periodicamente e publicado em versões controladas. Consulte abaixo a versão vigente.",
+    downloadLabel: "Acessar Tabela de Tarifas",
+    docs: [
+      { version: "v1.0", date: "Março/2026", label: "Acessar Tabela de Tarifas em Português (v1.0)", url: "#" },
+    ] as TariffDoc[],
+    previousTitle: "Versões Anteriores",
+    previousEmpty: "Esta é a primeira versão publicada.",
     faqTitle: "Perguntas Frequentes",
     ctaTitle: "Precisa de um orçamento personalizado?",
     ctaDesc: "Entre em contato com nossa equipe comercial para um orçamento sob medida para o seu projeto.",
     ctaBtn: "Solicitar Orçamento",
-    placeholder: "* Valores placeholder — tabela de tarifas será atualizada com valores reais.",
-    tariffs: [
-      { category: "Registro de Projeto", items: [
-        { service: "Taxa de abertura de conta", value: "R$ 500", note: "Pagamento único" },
-        { service: "Registro — micro (<1.000 tCO₂e/ano)", value: "R$ 3.000", note: "" },
-        { service: "Registro — pequeno (1.000–10.000 tCO₂e/ano)", value: "R$ 7.500", note: "" },
-        { service: "Registro — médio (10.001–100.000 tCO₂e/ano)", value: "R$ 15.000", note: "" },
-        { service: "Registro — grande (>100.000 tCO₂e/ano)", value: "R$ 25.000", note: "" },
-        { service: "Revisão de projeto (re-submissão)", value: "R$ 2.000", note: "Por re-submissão" },
-      ]},
-      { category: "Validação e Verificação", items: [
-        { service: "Taxa de validação", value: "R$ 5.000 – R$ 20.000", note: "Variável conforme complexidade" },
-        { service: "Taxa de verificação periódica", value: "R$ 5.000 – R$ 15.000", note: "Por período" },
-        { service: "Verificação extraordinária", value: "R$ 8.000", note: "" },
-      ]},
-      { category: "Emissão de Créditos", items: [
-        { service: "Taxa de emissão", value: "R$ 0,30/tCO₂e", note: "Sobre volume emitido" },
-        { service: "Contribuição ao Buffer Pool", value: "5–20%", note: "Conforme risco" },
-        { service: "Taxa de transferência", value: "R$ 0,05/tCO₂e", note: "Mín. R$ 50" },
-        { service: "Taxa de aposentadoria/cancelamento", value: "R$ 0,02/tCO₂e", note: "Mín. R$ 25" },
-      ]},
-      { category: "Credenciamento de VVBs", items: [
-        { service: "Credenciamento inicial", value: "R$ 10.000", note: "" },
-        { service: "Renovação anual", value: "R$ 5.000", note: "" },
-        { service: "Ampliação de escopo", value: "R$ 3.000", note: "Por setor" },
-      ]},
-      { category: "Serviços Adicionais", items: [
-        { service: "Consulta técnica prévia", value: "R$ 1.500", note: "Opcional" },
-        { service: "Treinamento para desenvolvedores", value: "R$ 2.500", note: "Por participante" },
-        { service: "API (plano profissional)", value: "R$ 500/mês", note: "Uso comercial" },
-      ]},
-    ] as TariffCategory[],
+    placeholder: "* Documento placeholder — a tabela de tarifas oficial será publicada em breve.",
     faqs: [
       { q: "As tarifas incluem impostos?", a: "Todos os valores apresentados são líquidos. Impostos serão acrescidos conforme legislação vigente." },
       { q: "Há desconto para projetos comunitários?", a: "Sim. Projetos de comunidades tradicionais ou ONGs podem solicitar redução de até 50% nas taxas de registro e emissão." },
       { q: "Como funciona o pagamento?", a: "Taxas em reais (BRL) via boleto ou transferência. Para clientes internacionais, wire transfer em USD com câmbio do dia." },
       { q: "O que está incluído na taxa de registro?", a: "Análise de completude, elegibilidade preliminar, publicação para consulta pública e abertura no sistema." },
+      { q: "Com que frequência as tarifas são atualizadas?", a: "A tabela de tarifas é revisada semestralmente. Alterações são comunicadas com pelo menos 60 dias de antecedência." },
     ] as FAQ[],
   },
   en: {
-    seoTitle: "Fees and Pricing",
-    seoDesc: "View the complete fee schedule for Green Ledger's certification services.",
-    thService: "Service", thValue: "Fee", thNote: "Note",
+    seoTitle: "Service Fees",
+    seoDesc: "View the fee schedule for Green Ledger's certification services.",
+    badge: "Service Fees",
+    title: "Service Fees",
+    subtitle: "Learn about the costs associated with our certification services.",
+    transparencyBadge: "Commitment to Transparency",
+    transparencyTitle: "Fee Schedule",
+    transparencyDesc: "Green Ledger is committed to full transparency in its processes and costs. Our fee schedule details all applicable charges for registration, validation, verification, credit issuance and VVB accreditation services.",
+    transparencyDesc2: "The document is updated periodically and published in controlled versions. See the current version below.",
+    downloadLabel: "Access Fee Schedule",
+    docs: [
+      { version: "v1.0", date: "March/2026", label: "Access Fee Schedule in Portuguese (v1.0)", url: "#" },
+    ] as TariffDoc[],
+    previousTitle: "Previous Versions",
+    previousEmpty: "This is the first published version.",
     faqTitle: "Frequently Asked Questions",
     ctaTitle: "Need a custom quote?",
     ctaDesc: "Contact our team for a tailored quote for your project.",
     ctaBtn: "Request Quote",
-    placeholder: "* Placeholder values — fee schedule will be updated with actual values.",
-    tariffs: [
-      { category: "Project Registration", items: [
-        { service: "Account opening fee", value: "R$ 500", note: "One-time payment" },
-        { service: "Registration — micro (<1,000 tCO₂e/yr)", value: "R$ 3,000", note: "" },
-        { service: "Registration — small (1,000–10,000 tCO₂e/yr)", value: "R$ 7,500", note: "" },
-        { service: "Registration — medium (10,001–100,000 tCO₂e/yr)", value: "R$ 15,000", note: "" },
-        { service: "Registration — large (>100,000 tCO₂e/yr)", value: "R$ 25,000", note: "" },
-        { service: "Project revision (re-submission)", value: "R$ 2,000", note: "Per re-submission" },
-      ]},
-      { category: "Validation and Verification", items: [
-        { service: "Validation fee", value: "R$ 5,000 – R$ 20,000", note: "Varies by complexity" },
-        { service: "Periodic verification fee", value: "R$ 5,000 – R$ 15,000", note: "Per period" },
-        { service: "Extraordinary verification", value: "R$ 8,000", note: "" },
-      ]},
-      { category: "Credit Issuance", items: [
-        { service: "Issuance fee", value: "R$ 0.30/tCO₂e", note: "On issued volume" },
-        { service: "Buffer Pool contribution", value: "5–20%", note: "Based on risk" },
-        { service: "Transfer fee", value: "R$ 0.05/tCO₂e", note: "Min. R$ 50" },
-        { service: "Retirement/cancellation fee", value: "R$ 0.02/tCO₂e", note: "Min. R$ 25" },
-      ]},
-      { category: "VVB Accreditation", items: [
-        { service: "Initial accreditation", value: "R$ 10,000", note: "" },
-        { service: "Annual renewal", value: "R$ 5,000", note: "" },
-        { service: "Scope expansion", value: "R$ 3,000", note: "Per sector" },
-      ]},
-      { category: "Additional Services", items: [
-        { service: "Pre-registration technical consultation", value: "R$ 1,500", note: "Optional" },
-        { service: "Developer training", value: "R$ 2,500", note: "Per participant" },
-        { service: "API (professional plan)", value: "R$ 500/month", note: "Commercial use" },
-      ]},
-    ] as TariffCategory[],
+    placeholder: "* Placeholder document — the official fee schedule will be published soon.",
     faqs: [
       { q: "Do fees include taxes?", a: "All values shown are net. Applicable taxes will be added per current legislation." },
       { q: "Are there discounts for community projects?", a: "Yes. Projects by traditional communities or NGOs may request up to 50% reduction in registration and issuance fees." },
       { q: "How does payment work?", a: "Fees in BRL via bank slip or transfer. For international clients, wire transfer in USD at the day's exchange rate." },
       { q: "What's included in the registration fee?", a: "Completeness review, preliminary eligibility, public consultation publication and system registration." },
+      { q: "How often are fees updated?", a: "The fee schedule is reviewed semi-annually. Changes are communicated at least 60 days in advance." },
     ] as FAQ[],
   },
   es: {
-    seoTitle: "Tarifas y Precios",
-    seoDesc: "Consulte la tabla completa de tarifas de los servicios de certificación de Green Ledger.",
-    thService: "Servicio", thValue: "Valor", thNote: "Observación",
+    seoTitle: "Tarifas de Servicio",
+    seoDesc: "Consulte la tabla de tarifas de los servicios de certificación de Green Ledger.",
+    badge: "Tarifas de Servicio",
+    title: "Tarifas de Servicio",
+    subtitle: "Conozca los costos asociados a nuestros servicios de certificación.",
+    transparencyBadge: "Compromiso con la Transparencia",
+    transparencyTitle: "Tabla de Tarifas",
+    transparencyDesc: "Green Ledger se compromete con la transparencia total de sus procesos y costos. Nuestra tabla de tarifas detalla todos los valores aplicables a los servicios de registro, validación, verificación, emisión de créditos y acreditación de VVBs.",
+    transparencyDesc2: "El documento se actualiza periódicamente y se publica en versiones controladas. Consulte a continuación la versión vigente.",
+    downloadLabel: "Acceder a Tabla de Tarifas",
+    docs: [
+      { version: "v1.0", date: "Marzo/2026", label: "Acceder a Tabla de Tarifas en Portugués (v1.0)", url: "#" },
+    ] as TariffDoc[],
+    previousTitle: "Versiones Anteriores",
+    previousEmpty: "Esta es la primera versión publicada.",
     faqTitle: "Preguntas Frecuentes",
     ctaTitle: "¿Necesita un presupuesto personalizado?",
     ctaDesc: "Contáctenos para un presupuesto a medida para su proyecto.",
     ctaBtn: "Solicitar Presupuesto",
-    placeholder: "* Valores placeholder — tabla de tarifas será actualizada con valores reales.",
-    tariffs: [
-      { category: "Registro de Proyecto", items: [
-        { service: "Tasa de apertura de cuenta", value: "R$ 500", note: "Pago único" },
-        { service: "Registro — micro (<1.000 tCO₂e/año)", value: "R$ 3.000", note: "" },
-        { service: "Registro — pequeño (1.000–10.000 tCO₂e/año)", value: "R$ 7.500", note: "" },
-        { service: "Registro — mediano (10.001–100.000 tCO₂e/año)", value: "R$ 15.000", note: "" },
-        { service: "Registro — grande (>100.000 tCO₂e/año)", value: "R$ 25.000", note: "" },
-        { service: "Revisión de proyecto (re-envío)", value: "R$ 2.000", note: "Por re-envío" },
-      ]},
-      { category: "Validación y Verificación", items: [
-        { service: "Tasa de validación", value: "R$ 5.000 – R$ 20.000", note: "Variable según complejidad" },
-        { service: "Tasa de verificación periódica", value: "R$ 5.000 – R$ 15.000", note: "Por período" },
-        { service: "Verificación extraordinaria", value: "R$ 8.000", note: "" },
-      ]},
-      { category: "Emisión de Créditos", items: [
-        { service: "Tasa de emisión", value: "R$ 0,30/tCO₂e", note: "Sobre volumen emitido" },
-        { service: "Contribución al Buffer Pool", value: "5–20%", note: "Según riesgo" },
-        { service: "Tasa de transferencia", value: "R$ 0,05/tCO₂e", note: "Mín. R$ 50" },
-        { service: "Tasa de retiro/cancelación", value: "R$ 0,02/tCO₂e", note: "Mín. R$ 25" },
-      ]},
-      { category: "Acreditación de VVBs", items: [
-        { service: "Acreditación inicial", value: "R$ 10.000", note: "" },
-        { service: "Renovación anual", value: "R$ 5.000", note: "" },
-        { service: "Ampliación de alcance", value: "R$ 3.000", note: "Por sector" },
-      ]},
-      { category: "Servicios Adicionales", items: [
-        { service: "Consulta técnica previa", value: "R$ 1.500", note: "Opcional" },
-        { service: "Capacitación para desarrolladores", value: "R$ 2.500", note: "Por participante" },
-        { service: "API (plan profesional)", value: "R$ 500/mes", note: "Uso comercial" },
-      ]},
-    ] as TariffCategory[],
+    placeholder: "* Documento placeholder — la tabla de tarifas oficial será publicada próximamente.",
     faqs: [
       { q: "¿Las tarifas incluyen impuestos?", a: "Todos los valores presentados son netos. Los impuestos aplicables se agregarán según la legislación vigente." },
       { q: "¿Hay descuentos para proyectos comunitarios?", a: "Sí. Proyectos de comunidades tradicionales u ONGs pueden solicitar reducción de hasta 50% en tasas de registro y emisión." },
       { q: "¿Cómo funciona el pago?", a: "Tasas en reales (BRL) vía transferencia bancaria. Para clientes internacionales, transferencia en USD al tipo de cambio del día." },
       { q: "¿Qué incluye la tasa de registro?", a: "Análisis de completitud, elegibilidad preliminar, publicación para consulta pública y apertura en el sistema." },
+      { q: "¿Con qué frecuencia se actualizan las tarifas?", a: "La tabla de tarifas se revisa semestralmente. Los cambios se comunican con al menos 60 días de anticipación." },
     ] as FAQ[],
   },
 };
 
 const Tarifas = () => {
-  const { t, locale } = useLanguage();
+  const { locale } = useLanguage();
   const d = i18n[locale as keyof typeof i18n] || i18n.pt;
 
   return (
     <div className="pt-20">
       <SEOHead title={d.seoTitle} description={d.seoDesc} path="/tarifas" />
 
+      {/* Hero */}
       <section className="gradient-hero text-primary-foreground py-24 md:py-32">
         <div className="container">
-          <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-secondary/20 text-accent rounded-full mb-6">{t("page.tarifas.title")}</span>
-          <h1 className="font-heading text-4xl md:text-5xl font-bold max-w-3xl">{t("page.tarifas.title")}</h1>
-          <p className="mt-8 text-primary-foreground/80 max-w-2xl leading-relaxed text-lg">{t("page.tarifas.subtitle")}</p>
+          <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-secondary/20 text-accent rounded-full mb-6">{d.badge}</span>
+          <h1 className="font-heading text-4xl md:text-5xl font-bold max-w-3xl">{d.title}</h1>
+          <p className="mt-8 text-primary-foreground/80 max-w-2xl leading-relaxed text-lg">{d.subtitle}</p>
         </div>
       </section>
 
+      {/* Transparency + PDF Download */}
       <section className="py-20 md:py-28">
-        <div className="container max-w-4xl space-y-12">
-          {d.tariffs.map((cat, i) => (
-            <AnimatedSection key={cat.category} delay={i * 0.06}>
-              <div>
-                <h2 className="font-heading text-xl font-bold text-primary mb-4 pb-3 border-b border-border">{cat.category}</h2>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="text-left">
-                        <th className="py-2 pr-4 text-xs uppercase tracking-wider text-muted-foreground font-semibold">{d.thService}</th>
-                        <th className="py-2 pr-4 text-xs uppercase tracking-wider text-muted-foreground font-semibold text-right">{d.thValue}</th>
-                        <th className="py-2 text-xs uppercase tracking-wider text-muted-foreground font-semibold hidden md:table-cell">{d.thNote}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {cat.items.map((item) => (
-                        <tr key={item.service} className="border-t border-border/50">
-                          <td className="py-3 pr-4 text-primary">{item.service}</td>
-                          <td className="py-3 pr-4 text-right font-mono text-secondary font-medium whitespace-nowrap">{item.value}</td>
-                          <td className="py-3 text-muted-foreground hidden md:table-cell">{item.note}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </AnimatedSection>
-          ))}
+        <div className="container max-w-3xl">
+          <AnimatedSection>
+            <div className="text-center mb-12">
+              <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider text-secondary mb-4">{d.transparencyBadge}</span>
+              <h2 className="font-heading text-3xl md:text-4xl font-bold text-primary mb-6">{d.transparencyTitle}</h2>
+              <p className="text-muted-foreground leading-relaxed mb-4">{d.transparencyDesc}</p>
+              <p className="text-muted-foreground leading-relaxed">{d.transparencyDesc2}</p>
+            </div>
+          </AnimatedSection>
+
+          {/* Current version download */}
+          <AnimatedSection delay={0.1}>
+            <div className="space-y-4">
+              {d.docs.map((doc) => (
+                <a
+                  key={doc.version}
+                  href={doc.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-4 p-6 border border-border rounded-xl bg-card hover:shadow-card hover:border-secondary/40 transition-all group"
+                >
+                  <div className="w-14 h-14 rounded-lg bg-secondary/10 flex items-center justify-center shrink-0 group-hover:bg-secondary/20 transition-colors">
+                    <FileText className="w-7 h-7 text-secondary" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-heading font-semibold text-primary group-hover:text-secondary transition-colors">{doc.label}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{doc.date} — {doc.version}</p>
+                  </div>
+                  <Download className="w-5 h-5 text-muted-foreground group-hover:text-secondary transition-colors shrink-0" />
+                </a>
+              ))}
+            </div>
+          </AnimatedSection>
+
+          {/* Previous versions */}
+          <AnimatedSection delay={0.15}>
+            <div className="mt-10 pt-8 border-t border-border">
+              <h3 className="font-heading text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">{d.previousTitle}</h3>
+              <p className="text-sm text-muted-foreground italic">{d.previousEmpty}</p>
+            </div>
+          </AnimatedSection>
         </div>
       </section>
 
+      {/* FAQ */}
       <section className="py-16 bg-muted/20">
         <div className="container max-w-3xl">
           <AnimatedSection>
@@ -225,6 +192,7 @@ const Tarifas = () => {
         </div>
       </section>
 
+      {/* CTA */}
       <section className="py-16">
         <div className="container text-center">
           <AnimatedSection>
