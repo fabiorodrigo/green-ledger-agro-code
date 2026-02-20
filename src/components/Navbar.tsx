@@ -100,14 +100,6 @@ const Navbar = () => {
           >
             {t("nav.projetos")}
           </Link>
-          <Link
-            to="/comunicados"
-            className={`px-3 py-2 text-[13px] font-semibold uppercase tracking-wide transition-colors hover:text-secondary ${
-              location.pathname === "/comunicados" ? "text-secondary" : "text-foreground"
-            }`}
-          >
-            {t("nav.comunicados")}
-          </Link>
 
           {/* Separator */}
           <div className="w-px h-5 bg-border mx-2" />
@@ -228,15 +220,6 @@ const Navbar = () => {
               }`}
             >
               {t("nav.projetos")}
-            </Link>
-            <Link
-              to="/comunicados"
-              onClick={() => setMobileOpen(false)}
-              className={`block px-4 py-3 text-sm font-semibold uppercase tracking-wide transition-colors ${
-                location.pathname === "/comunicados" ? "text-secondary" : "text-foreground"
-              }`}
-            >
-              {t("nav.comunicados")}
             </Link>
 
             {/* Login CTA */}
