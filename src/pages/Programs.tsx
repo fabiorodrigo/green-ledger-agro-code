@@ -71,7 +71,7 @@ const programs = [
 
 const Programs = () => {
   return (
-    <div>
+    <div className="pt-20">
       {/* Header */}
       <section className="gradient-hero text-primary-foreground py-20 md:py-28">
         <div className="container">
