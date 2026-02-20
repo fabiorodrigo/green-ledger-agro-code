@@ -6,7 +6,7 @@ const Footer = () => (
     <div className="container py-16">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
         <div>
-          <img src={logo} alt="Green Ledger" className="h-8 w-auto mb-4 brightness-0 invert" />
+          <img src={logo} alt="Green Ledger" className="h-10 w-auto max-w-[180px] object-contain mb-4 brightness-0 invert" />
           <p className="text-sm opacity-80 leading-relaxed">
             Certificadora de créditos de carbono para o setor agropecuário brasileiro. Rigor técnico, transparência e integridade ambiental.
           </p>
