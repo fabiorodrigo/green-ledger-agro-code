@@ -1,106 +1,128 @@
-import { Shield, Eye, FileSearch, Users, Scale, BookOpen } from "lucide-react";
-import SectionHeading from "@/components/SectionHeading";
+import { Shield, Eye, FileSearch, Users, Scale, BookOpen, AlertTriangle } from "lucide-react";
 
-const pillars = [
+const sections = [
   {
     icon: Users,
-    title: "Comitês Técnicos Independentes",
-    description: "Cada programa de certificação possui um comitê técnico composto por especialistas independentes sem vínculos com desenvolvedores de projetos. Os comitês são responsáveis por aprovar novas metodologias, revisar metodologias existentes e avaliar questões técnicas complexas.",
+    title: "Conselho Técnico",
+    description: "Órgão máximo de governança técnica da Green Ledger, composto por especialistas independentes com reconhecida competência em mudanças climáticas, ciência do carbono e verificação ambiental.",
     items: [
-      "Membros selecionados por competência técnica e independência",
-      "Mandatos de 3 anos com limite de recondução",
-      "Declaração de conflito de interesse obrigatória",
-      "Reuniões trimestrais com atas publicadas",
+      "Composição mínima de 7 membros com mandato de 3 anos",
+      "Seleção por competência técnica, diversidade geográfica e independência",
+      "Declaração obrigatória de conflito de interesse e confidencialidade",
+      "Reuniões ordinárias trimestrais com atas publicadas em acesso aberto",
+      "Responsável pela aprovação de políticas, normas e diretrizes gerais",
     ],
   },
   {
     icon: FileSearch,
-    title: "Revisão de Metodologias",
-    description: "As metodologias da Green Ledger passam por um processo rigoroso de revisão antes da aprovação, incluindo análise técnica por pares, consulta pública e deliberação do comitê competente.",
+    title: "Comitê de Metodologias",
+    description: "Responsável pela avaliação técnica, aprovação e revisão periódica de todas as metodologias de quantificação da Green Ledger, assegurando rigor científico e alinhamento com melhores práticas.",
     items: [
-      "Desenvolvimento por equipe técnica qualificada",
-      "Revisão por pares (mínimo 3 revisores independentes)",
-      "Consulta pública de 60 dias com resposta documentada",
-      "Aprovação pelo comitê técnico do programa",
-      "Revisão periódica a cada 3 anos ou quando necessário",
+      "Avaliação técnica de novas propostas de metodologia",
+      "Revisão por pares com mínimo de 3 revisores independentes qualificados",
+      "Consulta pública de 60 dias com resposta documentada a cada comentário",
+      "Revisão periódica obrigatória a cada 3 anos ou quando necessário",
+      "Aprovação formal com publicação de justificativa técnica",
     ],
   },
   {
     icon: Scale,
-    title: "Auditoria e Conformidade",
-    description: "Auditores independentes credenciados pela Green Ledger realizam validações e verificações de projetos. O credenciamento segue critérios rigorosos de competência técnica e independência.",
+    title: "Processo de Revisão",
+    description: "Ciclo estruturado de revisão e atualização de metodologias, normas e procedimentos, garantindo que os padrões da Green Ledger permaneçam alinhados com avanços científicos e regulatórios.",
     items: [
-      "Credenciamento com avaliação de competência técnica",
-      "Rotação obrigatória de auditores a cada 5 anos",
-      "Supervisão da qualidade das auditorias",
-      "Mecanismo de reclamação e apelação",
-    ],
-  },
-  {
-    icon: Eye,
-    title: "Transparência",
-    description: "Todas as informações relevantes são publicadas em acesso aberto, incluindo projetos registrados, metodologias aprovadas, relatórios de validação e verificação e atas de reuniões dos comitês.",
-    items: [
-      "Registro público de todos os projetos certificados",
-      "Metodologias aprovadas disponíveis em acesso aberto",
-      "Relatórios de validação e verificação publicados",
-      "Atas de comitês e decisões documentadas",
+      "Proposta de revisão por equipe técnica, stakeholders ou revisão periódica programada",
+      "Avaliação de impacto e análise comparativa com padrões internacionais",
+      "Revisão por pares e consulta pública conforme procedimento padrão",
+      "Deliberação pelo Comitê de Metodologias com parecer fundamentado",
+      "Publicação da versão atualizada com registro de alterações e justificativas",
     ],
   },
   {
     icon: Shield,
-    title: "Integridade Ambiental",
-    description: "A Green Ledger adota princípios fundamentais para garantir que cada crédito emitido represente uma redução ou remoção real, mensurável, adicional e permanente de emissões.",
+    title: "Política de Integridade",
+    description: "Princípios fundamentais que regem a emissão de créditos pela Green Ledger, assegurando que cada unidade certificada represente uma redução ou remoção real, mensurável, adicional e permanente.",
     items: [
-      "Adicionalidade: créditos apenas para atividades que não ocorreriam sem o incentivo do carbono",
-      "Permanência: mecanismos de buffer e garantia contra reversões",
-      "Conservadorismo: fatores de desconto e abordagens conservadoras",
-      "Evitar dupla contagem: rastreabilidade e registro único",
+      "Adicionalidade: testes rigorosos para comprovar que a atividade não ocorreria sem o incentivo do carbono",
+      "Permanência: buffer pool e mecanismos de garantia contra reversões de longo prazo",
+      "Conservadorismo: fatores de desconto e abordagens conservadoras na quantificação",
+      "Evitar dupla contagem: rastreabilidade com número de série único e registro centralizado",
+      "Salvaguardas ambientais e sociais: avaliação de impactos e respeito a direitos de comunidades",
+    ],
+  },
+  {
+    icon: AlertTriangle,
+    title: "Gestão de Risco",
+    description: "Estrutura de identificação, avaliação e mitigação de riscos associados à integridade dos créditos, incluindo riscos de não-permanência, fraude, conflito de interesse e não-conformidade.",
+    items: [
+      "Avaliação de risco de não-permanência com contribuição ao buffer pool proporcional",
+      "Due diligence de desenvolvedores de projetos e organismos de auditoria",
+      "Mecanismo formal de reclamações, denúncias e apelação",
+      "Procedimentos de suspensão, revogação e cancelamento de créditos",
+      "Monitoramento contínuo de riscos sistêmicos e emergentes",
+    ],
+  },
+  {
+    icon: Eye,
+    title: "Independência de Auditoria",
+    description: "Organismos de validação e verificação (VVBs) credenciados pela Green Ledger atuam com independência assegurada por requisitos de competência técnica, rotação e supervisão de qualidade.",
+    items: [
+      "Credenciamento com avaliação de competência técnica setorial e independência",
+      "Rotação obrigatória de auditores a cada 5 anos por projeto",
+      "Proibição de conflito de interesse entre validação, verificação e consultoria",
+      "Supervisão da qualidade das auditorias por comitê independente",
+      "Avaliação de desempenho e recertificação periódica dos VVBs",
     ],
   },
   {
     icon: BookOpen,
-    title: "Conformidade Regulatória",
-    description: "Alinhamento com marcos regulatórios nacionais e internacionais, incluindo o Sistema Nacional de Registro de Créditos de Carbono e as diretrizes do Artigo 6 do Acordo de Paris.",
+    title: "Transparência",
+    description: "Compromisso com a publicação em acesso aberto de todas as informações relevantes para assegurar a confiança dos mercados e stakeholders.",
     items: [
-      "Conformidade com legislação ambiental brasileira",
-      "Alinhamento com ICVCM Core Carbon Principles",
-      "Compatibilidade com mercados voluntário e regulado",
-      "Acompanhamento contínuo de atualizações regulatórias",
+      "Registro público de todos os projetos certificados com dados de desempenho",
+      "Metodologias aprovadas disponíveis para download sem restrições",
+      "Relatórios de validação e verificação publicados integralmente",
+      "Atas de reuniões dos comitês e decisões regulatórias documentadas",
+      "Alinhamento com ICVCM Core Carbon Principles e marcos regulatórios nacionais",
     ],
   },
 ];
 
 const Governance = () => (
   <div className="pt-20">
-    <section className="gradient-hero text-primary-foreground py-20 md:py-28">
+    <section className="gradient-hero text-primary-foreground py-24 md:py-32">
       <div className="container">
-        <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-secondary/20 text-accent rounded-full mb-4">
+        <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-secondary/20 text-accent rounded-full mb-6">
           Governança
         </span>
-        <h1 className="font-heading text-4xl md:text-5xl font-bold max-w-3xl">Governança e Integridade</h1>
-        <p className="mt-6 text-primary-foreground/80 max-w-2xl leading-relaxed text-lg">
-          Nossa estrutura de governança garante independência, transparência e qualidade em todos os processos, desde a aprovação de metodologias até a emissão de créditos.
+        <h1 className="font-heading text-4xl md:text-5xl font-bold max-w-3xl">Governança Técnica e Integridade</h1>
+        <p className="mt-8 text-primary-foreground/80 max-w-2xl leading-relaxed text-lg">
+          A estrutura de governança da Green Ledger é projetada para assegurar independência, transparência e qualidade em todos os processos, desde a aprovação de metodologias até a emissão e rastreabilidade dos créditos de carbono.
         </p>
       </div>
     </section>
 
-    <section className="py-20">
-      <div className="container">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {pillars.map((p) => (
-            <div key={p.title} className="gradient-card rounded-xl p-8 border border-border shadow-card">
-              <p.icon className="w-10 h-10 text-secondary mb-4" />
-              <h3 className="font-heading text-xl font-bold text-primary mb-3">{p.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed mb-4">{p.description}</p>
-              <ul className="space-y-2">
-                {p.items.map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <span className="w-1.5 h-1.5 rounded-full bg-secondary mt-2 shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
+    <section className="py-24 md:py-32">
+      <div className="container max-w-5xl">
+        <div className="space-y-16">
+          {sections.map((s, i) => (
+            <div key={s.title} className="flex flex-col md:flex-row gap-8">
+              <div className="shrink-0 flex items-start">
+                <div className="w-14 h-14 rounded-xl bg-secondary/10 flex items-center justify-center">
+                  <s.icon className="w-7 h-7 text-secondary" />
+                </div>
+              </div>
+              <div className="flex-1">
+                <h3 className="font-heading text-xl font-bold text-primary mb-4">{s.title}</h3>
+                <p className="text-muted-foreground leading-relaxed mb-6">{s.description}</p>
+                <ul className="space-y-3">
+                  {s.items.map((item) => (
+                    <li key={item} className="flex items-start gap-3 text-sm text-muted-foreground">
+                      <span className="w-1.5 h-1.5 rounded-full bg-secondary mt-2 shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           ))}
         </div>
