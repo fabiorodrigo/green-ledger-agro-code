@@ -30,6 +30,7 @@ const pt: TranslationDict = {
   "nav.sobre": "Sobre",
   "nav.materiais": "Central de Materiais",
   "nav.contato": "Contato",
+  "nav.registro": "Registro Público",
   // Pages
   "page.projetos.title": "Projetos",
   "page.projetos.subtitle": "Conheça o ciclo de certificação e saiba como registrar seu projeto na Green Ledger.",
@@ -165,6 +166,7 @@ const en: TranslationDict = {
   "nav.sobre": "About",
   "nav.materiais": "Resource Center",
   "nav.contato": "Contact",
+  "nav.registro": "Public Registry",
   "page.projetos.title": "Projects",
   "page.projetos.subtitle": "Learn about the certification cycle and how to register your project at Green Ledger.",
   "page.projetos.cta": "Producer Area",
@@ -292,6 +294,7 @@ const es: TranslationDict = {
   "nav.sobre": "Acerca de",
   "nav.materiais": "Centro de Materiales",
   "nav.contato": "Contacto",
+  "nav.registro": "Registro Público",
   "page.projetos.title": "Proyectos",
   "page.projetos.subtitle": "Conozca el ciclo de certificación y cómo registrar su proyecto en Green Ledger.",
   "page.projetos.cta": "Área del Productor",
