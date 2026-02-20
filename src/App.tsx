@@ -22,6 +22,7 @@ import Plataforma from "./pages/Plataforma";
 import VVBs from "./pages/VVBs";
 import Sobre from "./pages/Sobre";
 import Materiais from "./pages/Materiais";
+import RegistroPublico from "./pages/RegistroPublico";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +53,7 @@ const App = () => (
               <Route path="/vvbs" element={<VVBs />} />
               <Route path="/sobre" element={<Sobre />} />
               <Route path="/materiais" element={<Materiais />} />
+              <Route path="/registro-publico" element={<RegistroPublico />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
