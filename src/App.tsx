@@ -8,7 +8,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import BackToTop from "./components/BackToTop";
-import Breadcrumbs from "./components/Breadcrumbs";
+
 import Index from "./pages/Index";
 import Programs from "./pages/Programs";
 import Methodologies from "./pages/Methodologies";
@@ -39,7 +39,7 @@ const App = () => (
         <BrowserRouter>
           <ScrollToTop />
           <Navbar />
-          <Breadcrumbs />
+          
           <main>
             <Routes>
               <Route path="/" element={<Index />} />
