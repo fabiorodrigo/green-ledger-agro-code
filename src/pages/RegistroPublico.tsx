@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
-import { Search, FileText, ExternalLink } from "lucide-react";
+import { Search, FileText, ExternalLink, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import AnimatedSection from "@/components/AnimatedSection";
 import SEOHead from "@/components/SEOHead";
 import { useLanguage } from "@/i18n/LanguageContext";
@@ -178,9 +179,15 @@ const RegistroPublico = () => {
                         {p.credits > 0 ? p.credits.toLocaleString() : "—"}
                       </td>
                       <td className="p-4 text-center">
-                        <button className="text-muted-foreground hover:text-secondary transition-colors" title={isEn ? "View documents" : "Ver documentos"}>
+                        <a
+                          href="https://app.greenledger.eco.br/public/assets"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-muted-foreground hover:text-secondary transition-colors inline-block"
+                          title={isEn ? "View on platform" : "Ver na plataforma"}
+                        >
                           <ExternalLink className="w-4 h-4" />
-                        </button>
+                        </a>
                       </td>
                     </tr>
                   ))}
@@ -199,6 +206,18 @@ const RegistroPublico = () => {
           <p className="text-xs text-muted-foreground italic text-center mt-8">
             {isEn ? "* Placeholder data — real projects will be published upon registration." : "* Dados placeholder — projetos reais serão publicados após registro."}
           </p>
+
+          <div className="mt-12 text-center">
+            <a
+              href="https://app.greenledger.eco.br/public/assets"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">
+                {isEn ? "View Full Registry on Platform" : "Ver Registro Completo na Plataforma"} <ExternalLink className="w-4 h-4" />
+              </Button>
+            </a>
+          </div>
         </div>
       </section>
     </div>

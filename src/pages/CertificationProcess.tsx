@@ -115,8 +115,17 @@ const CertificationProcess = () => {
             <h2 className="font-heading text-2xl font-bold text-primary mb-4">{t("cert.cta.title")}</h2>
             <p className="text-muted-foreground mb-8 max-w-lg mx-auto">{t("cert.cta.desc")}</p>
             <div className="flex flex-wrap gap-4 justify-center">
-              <Link to="/contato">
+              <a
+                href="https://app.greenledger.eco.br/register"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">
+                  {isEn ? "Start Certification" : "Iniciar Certificação"} <ArrowRight className="w-4 h-4" />
+                </Button>
+              </a>
+              <Link to="/contato">
+                <Button variant="outline" className="gap-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
                   {t("cert.cta.btn1")} <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>

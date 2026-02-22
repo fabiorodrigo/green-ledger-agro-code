@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Leaf, Globe, Zap } from "lucide-react";
+import { ArrowRight, ExternalLink, Leaf, Globe, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SectionHeading from "@/components/SectionHeading";
 import AnimatedSection from "@/components/AnimatedSection";
@@ -80,6 +80,11 @@ const Index = () => {
                   {t("index.hero.cta2")}
                 </Button>
               </Link>
+              <a href="https://app.greenledger.eco.br" target="_blank" rel="noopener noreferrer">
+                <Button size="lg" variant="hero-outline" className="text-base px-8 gap-2">
+                  {isEn ? "Access Platform" : "Acessar Plataforma"} <ExternalLink className="w-4 h-4" />
+                </Button>
+              </a>
             </div>
           </div>
 

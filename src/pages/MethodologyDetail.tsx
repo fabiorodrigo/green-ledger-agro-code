@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Download, FileText, CheckCircle2, Shield, Target, Layers, TreePine, Leaf, Zap } from "lucide-react";
+import { ArrowLeft, ArrowRight, Download, FileText, CheckCircle2, Shield, Target, Layers, TreePine, Leaf, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { methodologiesData } from "./Methodologies";
 import AnimatedSection from "@/components/AnimatedSection";
@@ -380,14 +380,23 @@ const MethodologyDetail = () => {
         <div className="container max-w-4xl text-center">
           <AnimatedSection>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-4">
-              Tem dúvidas sobre esta metodologia?
+              Pronto para iniciar seu projeto?
             </h2>
             <p className="text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed">
-              Entre em contato com nossa equipe técnica para obter orientação sobre a aplicação desta metodologia ao seu projeto.
+              Cadastre-se na plataforma e inicie um projeto usando esta metodologia, ou entre em contato com nossa equipe técnica.
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
+              <a
+                href="https://app.greenledger.eco.br/register"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">
+                  Usar esta Metodologia <ArrowRight className="w-4 h-4" />
+                </Button>
+              </a>
               <Link to="/contato">
-                <Button className="gap-2">Entre em Contato</Button>
+                <Button variant="outline" className="gap-2">Entre em Contato</Button>
               </Link>
               <Link to="/metodologias">
                 <Button variant="outline" className="gap-2">

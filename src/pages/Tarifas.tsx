@@ -198,7 +198,16 @@ const Tarifas = () => {
           <AnimatedSection>
             <h2 className="font-heading text-2xl font-bold text-primary mb-4">{d.ctaTitle}</h2>
             <p className="text-muted-foreground mb-6 max-w-lg mx-auto">{d.ctaDesc}</p>
-            <Link to="/contato"><Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">{d.ctaBtn} <ArrowRight className="w-4 h-4" /></Button></Link>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Link to="/contato">
+                <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">{d.ctaBtn} <ArrowRight className="w-4 h-4" /></Button>
+              </Link>
+              <a href="https://app.greenledger.eco.br" target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" className="gap-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                  {locale === "en" ? "Access Platform" : locale === "es" ? "Acceder a la Plataforma" : "Acessar Plataforma"} <ArrowRight className="w-4 h-4" />
+                </Button>
+              </a>
+            </div>
           </AnimatedSection>
         </div>
       </section>

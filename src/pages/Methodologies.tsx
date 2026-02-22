@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FileText } from "lucide-react";
+import { FileText, ExternalLink, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AnimatedSection from "@/components/AnimatedSection";
 import SEOHead from "@/components/SEOHead";
@@ -39,6 +39,16 @@ const Methodologies = () => {
 
       <section className="py-24 md:py-32">
         <div className="container">
+          <div className="flex justify-end mb-8">
+            <a
+              href="https://app.greenledger.eco.br/login"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90 transition-colors"
+            >
+              {isEn ? "Propose Methodology" : "Propor Metodologia"} <ExternalLink className="w-4 h-4" />
+            </a>
+          </div>
           <div className="space-y-8">
             {methodologiesData.map((m, i) => (
               <AnimatedSection key={m.code} delay={i * 0.06}>

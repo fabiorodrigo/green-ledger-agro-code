@@ -1,4 +1,5 @@
-import { Shield, Eye, FileSearch, Users, Scale, BookOpen, AlertTriangle } from "lucide-react";
+import { Shield, Eye, FileSearch, Users, Scale, BookOpen, AlertTriangle, ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import AnimatedSection from "@/components/AnimatedSection";
 import SEOHead from "@/components/SEOHead";
 import { useLanguage } from "@/i18n/LanguageContext";
@@ -73,6 +74,26 @@ const Governance = () => {
               </AnimatedSection>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-muted/20">
+        <div className="container text-center">
+          <AnimatedSection>
+            <h2 className="font-heading text-2xl font-bold text-primary mb-4">
+              {isEn ? "Public Registry" : "Registro Público"}
+            </h2>
+            <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
+              {isEn
+                ? "Access the public registry of certified projects and verified carbon assets on our platform."
+                : "Acesse o registro público de projetos certificados e ativos de carbono verificados em nossa plataforma."}
+            </p>
+            <a href="https://app.greenledger.eco.br/public/assets" target="_blank" rel="noopener noreferrer">
+              <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">
+                {isEn ? "Access Public Registry" : "Acessar Registro Público"} <ExternalLink className="w-4 h-4" />
+              </Button>
+            </a>
+          </AnimatedSection>
         </div>
       </section>
     </div>
