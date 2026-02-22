@@ -6,6 +6,7 @@ import AnimatedSection from "@/components/AnimatedSection";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import SEOHead from "@/components/SEOHead";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { usePublicStatistics } from "@/hooks/usePublicAPI";
 import heroBg from "@/assets/hero-bg.jpg";
 
 const programs = [
@@ -43,6 +44,7 @@ const Index = () => {
   const { t, locale } = useLanguage();
   const isEn = locale === "en";
   const faqs = isEn ? faqsEn : faqsPt;
+  const { data: stats } = usePublicStatistics();
 
   return (
     <>
@@ -90,6 +92,48 @@ const Index = () => {
 
         </div>
       </section>
+
+      {/* Statistics */}
+      {stats && (
+        <section className="py-12 border-b border-border bg-muted/20">
+          <div className="container">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+              <AnimatedSection>
+                <p className="font-heading text-3xl md:text-4xl font-bold text-secondary">
+                  <AnimatedCounter end={stats.totalProjects} />
+                </p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {isEn ? "Projects" : "Projetos"}
+                </p>
+              </AnimatedSection>
+              <AnimatedSection delay={0.1}>
+                <p className="font-heading text-3xl md:text-4xl font-bold text-secondary">
+                  <AnimatedCounter end={stats.totalMethodologies} />
+                </p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {isEn ? "Methodologies" : "Metodologias"}
+                </p>
+              </AnimatedSection>
+              <AnimatedSection delay={0.2}>
+                <p className="font-heading text-3xl md:text-4xl font-bold text-secondary">
+                  <AnimatedCounter end={stats.totalCreditsIssued} />
+                </p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {isEn ? "Credits Issued (tCO₂e)" : "Créditos Emitidos (tCO₂e)"}
+                </p>
+              </AnimatedSection>
+              <AnimatedSection delay={0.3}>
+                <p className="font-heading text-3xl md:text-4xl font-bold text-secondary">
+                  <AnimatedCounter end={stats.totalOrganizations} />
+                </p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {isEn ? "Organizations" : "Organizações"}
+                </p>
+              </AnimatedSection>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Principles */}
       <section className="py-24 md:py-32">

@@ -4,32 +4,15 @@ import { ArrowRight, CheckCircle2, Shield, Globe, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AnimatedSection from "@/components/AnimatedSection";
 import SEOHead from "@/components/SEOHead";
-
-interface VVB {
-  name: string;
-  country: string;
-  accreditationDate: string;
-  sectors: string[];
-  status: "Ativo" | "Em Renovação";
-  auditsCompleted: number;
-}
-
-const vvbs: VVB[] = [
-  { name: "VerdeAudit Certificações Ltda.", country: "Brasil", accreditationDate: "2023-03-15", sectors: ["AFOLU", "Soil Carbon"], status: "Ativo", auditsCompleted: 18 },
-  { name: "CarbonCheck International", country: "Brasil / EUA", accreditationDate: "2023-06-01", sectors: ["AFOLU", "Energy & Tech"], status: "Ativo", auditsCompleted: 12 },
-  { name: "EcoVerify Brasil", country: "Brasil", accreditationDate: "2023-09-20", sectors: ["Soil Carbon", "Energy & Tech"], status: "Ativo", auditsCompleted: 9 },
-  { name: "TerraAssurance S.A.", country: "Brasil / Colômbia", accreditationDate: "2024-01-10", sectors: ["AFOLU"], status: "Ativo", auditsCompleted: 7 },
-  { name: "ClimateGuard Verificações", country: "Brasil", accreditationDate: "2024-04-22", sectors: ["AFOLU", "Soil Carbon", "Energy & Tech"], status: "Ativo", auditsCompleted: 5 },
-  { name: "SustainProof Auditoria Ambiental", country: "Brasil", accreditationDate: "2024-08-05", sectors: ["AFOLU", "Soil Carbon"], status: "Em Renovação", auditsCompleted: 3 },
-];
+import { usePublicVvbs } from "@/hooks/usePublicAPI";
 
 const i18n = {
   pt: {
     seoTitle: "VVBs Credenciados", seoDesc: "Conheça os Organismos de Validação e Verificação credenciados pela Green Ledger.",
-    statVvbs: "VVBs Credenciados", statAudits: "Auditorias Realizadas", statSectors: "Setores Cobertos",
+    statVvbs: "VVBs Credenciados", statAudits: "Verificações Realizadas", statSectors: "Setores Cobertos",
     accreditedTitle: "Organismos Credenciados",
-    statusLabels: { "Ativo": "Ativo", "Em Renovação": "Em Renovação" },
-    since: "Desde", audits: "auditorias",
+    since: "Acreditado desde", audits: "verificações",
+    scales: "Escalas", sectors: "Setores", activities: "Tipos de Atividade",
     processTitle: "Processo de Credenciamento", processDesc: "Para se tornar um VVB credenciado pela Green Ledger, o organismo deve seguir o processo abaixo.",
     process: [
       { step: "01", title: "Solicitação", desc: "O organismo interessado submete formulário de solicitação com documentação comprobatória de competência técnica e experiência." },
@@ -49,14 +32,14 @@ const i18n = {
       "Aprovação em avaliação de competência técnica setorial",
     ],
     ctaTitle: "Quer se credenciar como VVB?", ctaDesc: "Entre em contato para iniciar o processo de credenciamento.", ctaBtn: "Iniciar Credenciamento",
-    placeholder: "* Dados placeholder — informações reais serão publicadas após credenciamento.",
+    loading: "Carregando VVBs...", noVvbs: "Nenhum VVB credenciado encontrado.", contactTeam: "Falar com a Equipe",
   },
   en: {
     seoTitle: "Accredited VVBs", seoDesc: "Learn about Validation and Verification Bodies accredited by Green Ledger.",
-    statVvbs: "Accredited VVBs", statAudits: "Audits Completed", statSectors: "Sectors Covered",
+    statVvbs: "Accredited VVBs", statAudits: "Verifications Completed", statSectors: "Sectors Covered",
     accreditedTitle: "Accredited Bodies",
-    statusLabels: { "Ativo": "Active", "Em Renovação": "Under Renewal" },
-    since: "Since", audits: "audits",
+    since: "Accredited since", audits: "verifications",
+    scales: "Scales", sectors: "Sectors", activities: "Activity Types",
     processTitle: "Accreditation Process", processDesc: "To become a Green Ledger-accredited VVB, the body must follow the process below.",
     process: [
       { step: "01", title: "Application", desc: "The interested body submits an application form with supporting documentation of technical competence and experience." },
@@ -76,14 +59,14 @@ const i18n = {
       "Approval in sectoral technical competence assessment",
     ],
     ctaTitle: "Want to become an accredited VVB?", ctaDesc: "Contact us to start the accreditation process.", ctaBtn: "Start Accreditation",
-    placeholder: "* Placeholder data — real VVB information will be published after accreditation.",
+    loading: "Loading VVBs...", noVvbs: "No accredited VVBs found.", contactTeam: "Contact Us",
   },
   es: {
     seoTitle: "VVBs Acreditados", seoDesc: "Conozca los Organismos de Validación y Verificación acreditados por Green Ledger.",
-    statVvbs: "VVBs Acreditados", statAudits: "Auditorías Realizadas", statSectors: "Sectores Cubiertos",
+    statVvbs: "VVBs Acreditados", statAudits: "Verificaciones Realizadas", statSectors: "Sectores Cubiertos",
     accreditedTitle: "Organismos Acreditados",
-    statusLabels: { "Ativo": "Activo", "Em Renovação": "En Renovación" },
-    since: "Desde", audits: "auditorías",
+    since: "Acreditado desde", audits: "verificaciones",
+    scales: "Escalas", sectors: "Sectores", activities: "Tipos de Actividad",
     processTitle: "Proceso de Acreditación", processDesc: "Para convertirse en un VVB acreditado por Green Ledger, el organismo debe seguir el proceso a continuación.",
     process: [
       { step: "01", title: "Solicitud", desc: "El organismo interesado envía el formulario de solicitud con documentación de competencia técnica y experiencia." },
@@ -103,13 +86,18 @@ const i18n = {
       "Aprobación en evaluación de competencia técnica sectorial",
     ],
     ctaTitle: "¿Desea acreditarse como VVB?", ctaDesc: "Contáctenos para iniciar el proceso de acreditación.", ctaBtn: "Iniciar Acreditación",
-    placeholder: "* Datos placeholder — información real será publicada tras acreditación.",
+    loading: "Cargando VVBs...", noVvbs: "No se encontraron VVBs acreditados.", contactTeam: "Contáctenos",
   },
 };
 
 const VVBs = () => {
   const { t, locale } = useLanguage();
   const d = i18n[locale as keyof typeof i18n] || i18n.pt;
+
+  const { data: vvbs, loading, error } = usePublicVvbs();
+
+  const totalAudits = vvbs?.reduce((s, v) => s + (v._count?.verificationAssignments ?? 0), 0) ?? 0;
+  const allSectors = [...new Set(vvbs?.flatMap((v) => v.accreditedSectors) ?? [])];
 
   return (
     <div className="pt-20">
@@ -126,37 +114,87 @@ const VVBs = () => {
       <section className="py-12 border-b border-border">
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center"><span className="font-heading text-3xl font-bold text-secondary">{vvbs.length}</span><p className="text-sm text-muted-foreground mt-1">{d.statVvbs}</p></div>
-            <div className="text-center"><span className="font-heading text-3xl font-bold text-secondary">{vvbs.reduce((s, v) => s + v.auditsCompleted, 0)}</span><p className="text-sm text-muted-foreground mt-1">{d.statAudits}</p></div>
-            <div className="text-center"><span className="font-heading text-3xl font-bold text-secondary">3</span><p className="text-sm text-muted-foreground mt-1">{d.statSectors}</p></div>
+            <div className="text-center">
+              <span className="font-heading text-3xl font-bold text-secondary">{loading ? "—" : (vvbs?.length ?? 0)}</span>
+              <p className="text-sm text-muted-foreground mt-1">{d.statVvbs}</p>
+            </div>
+            <div className="text-center">
+              <span className="font-heading text-3xl font-bold text-secondary">{loading ? "—" : totalAudits}</span>
+              <p className="text-sm text-muted-foreground mt-1">{d.statAudits}</p>
+            </div>
+            <div className="text-center">
+              <span className="font-heading text-3xl font-bold text-secondary">{loading ? "—" : allSectors.length}</span>
+              <p className="text-sm text-muted-foreground mt-1">{d.statSectors}</p>
+            </div>
           </div>
         </div>
       </section>
 
       <section className="py-20">
         <div className="container max-w-5xl">
-          <AnimatedSection><h2 className="font-heading text-2xl font-bold text-primary mb-8">{d.accreditedTitle}</h2></AnimatedSection>
+          <AnimatedSection>
+            <h2 className="font-heading text-2xl font-bold text-primary mb-8">{d.accreditedTitle}</h2>
+          </AnimatedSection>
+
+          {loading && (
+            <p className="text-muted-foreground text-center py-8">{d.loading}</p>
+          )}
+          {(error || (!loading && vvbs?.length === 0)) && (
+            <p className="text-muted-foreground text-center py-8">{d.noVvbs}</p>
+          )}
+
           <div className="space-y-4">
-            {vvbs.map((v, i) => (
-              <AnimatedSection key={v.name} delay={i * 0.06}>
+            {(vvbs ?? []).map((v, i) => (
+              <AnimatedSection key={v.id} delay={i * 0.06}>
                 <div className="border border-border rounded-xl p-6 hover:shadow-card transition-shadow bg-card">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0"><Shield className="w-6 h-6 text-secondary" /></div>
+                      <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0">
+                        <Shield className="w-6 h-6 text-secondary" />
+                      </div>
                       <div>
-                        <h3 className="font-heading font-semibold text-primary">{v.name}</h3>
-                        <div className="flex items-center gap-3 mt-1 flex-wrap">
-                          <span className="text-xs text-muted-foreground inline-flex items-center gap-1"><Globe className="w-3 h-3" /> {v.country}</span>
-                          <span className="text-xs text-muted-foreground">{d.since} {v.accreditationDate}</span>
-                          <span className="text-xs text-muted-foreground inline-flex items-center gap-1"><Award className="w-3 h-3" /> {v.auditsCompleted} {d.audits}</span>
+                        <h3 className="font-heading font-semibold text-primary">
+                          {v.publicWebsite ? (
+                            <a href={v.publicWebsite} target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors">
+                              {v.name}
+                            </a>
+                          ) : v.name}
+                        </h3>
+                        <div className="flex items-center gap-3 mt-1 flex-wrap text-xs text-muted-foreground">
+                          {v.accreditationDate && (
+                            <span className="inline-flex items-center gap-1">
+                              <Globe className="w-3 h-3" /> {d.since} {new Date(v.accreditationDate).getFullYear()}
+                            </span>
+                          )}
+                          <span className="inline-flex items-center gap-1">
+                            <Award className="w-3 h-3" /> {v._count?.verificationAssignments ?? 0} {d.audits}
+                          </span>
                         </div>
-                        <div className="flex flex-wrap gap-1.5 mt-2">
-                          {v.sectors.map((s) => (<span key={s} className="text-xs px-2 py-0.5 bg-secondary/10 text-secondary rounded-full">{s}</span>))}
-                        </div>
+                        {v.accreditedSectors?.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 mt-2">
+                            {v.accreditedSectors.map((s) => (
+                              <span key={s} className="text-xs px-2 py-0.5 bg-secondary/10 text-secondary rounded-full">{s}</span>
+                            ))}
+                          </div>
+                        )}
+                        {v.accreditedActivityTypes?.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 mt-1.5">
+                            {v.accreditedActivityTypes.map((a) => (
+                              <span key={a} className="text-xs px-2 py-0.5 bg-muted text-muted-foreground rounded-full">{a}</span>
+                            ))}
+                          </div>
+                        )}
+                        {v.accreditedScales?.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 mt-1.5">
+                            {v.accreditedScales.map((s) => (
+                              <span key={s} className="text-xs px-2 py-0.5 bg-primary/10 text-primary rounded-full">{s}</span>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
-                    <span className={`text-xs px-2.5 py-1 rounded-full font-medium shrink-0 ${v.status === "Ativo" ? "bg-secondary/20 text-secondary" : "bg-accent/20 text-accent-foreground"}`}>
-                      {d.statusLabels[v.status]}
+                    <span className="text-xs px-2.5 py-1 rounded-full font-medium shrink-0 bg-secondary/20 text-secondary">
+                      {v.accreditationStatus}
                     </span>
                   </div>
                 </div>
@@ -188,7 +226,9 @@ const VVBs = () => {
 
       <section className="py-20">
         <div className="container max-w-4xl">
-          <AnimatedSection><h2 className="font-heading text-2xl font-bold text-primary mb-8">{d.reqTitle}</h2></AnimatedSection>
+          <AnimatedSection>
+            <h2 className="font-heading text-2xl font-bold text-primary mb-8">{d.reqTitle}</h2>
+          </AnimatedSection>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {d.requirements.map((r, i) => (
               <AnimatedSection key={i} delay={i * 0.04}>
@@ -209,18 +249,19 @@ const VVBs = () => {
             <p className="text-muted-foreground mb-6 max-w-lg mx-auto">{d.ctaDesc}</p>
             <div className="flex flex-wrap gap-4 justify-center">
               <a href="https://app.greenledger.eco.br/register" target="_blank" rel="noopener noreferrer">
-                <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">{d.ctaBtn} <ArrowRight className="w-4 h-4" /></Button>
+                <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">
+                  {d.ctaBtn} <ArrowRight className="w-4 h-4" />
+                </Button>
               </a>
               <Link to="/contato">
                 <Button variant="outline" className="gap-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                  {locale === "en" ? "Contact Us" : locale === "es" ? "Contáctenos" : "Falar com a Equipe"} <ArrowRight className="w-4 h-4" />
+                  {d.contactTeam} <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
             </div>
           </AnimatedSection>
         </div>
       </section>
-      <p className="text-xs text-muted-foreground italic text-center py-8">{d.placeholder}</p>
     </div>
   );
 };
