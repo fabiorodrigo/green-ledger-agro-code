@@ -1,7 +1,8 @@
 import { useParams, Link } from "react-router-dom";
 import {
-  ArrowLeft, MapPin, Building2, FileText, ExternalLink,
+  ArrowLeft, MapPin, Building2, FileText, Download, ExternalLink,
   ShieldCheck, Leaf, Calendar, Hash, Globe, TreePine, BarChart3,
+  Mail, Link as LinkIcon, CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AnimatedSection from "@/components/AnimatedSection";
@@ -10,6 +11,26 @@ import { usePublicProjectByCode } from "@/hooks/usePublicAPI";
 import { getStatusLabel, getStatusColor } from "@/constants/projectStatus";
 import { getSectorLabel, getActivityTypeLabel, SDG_LABELS } from "@/constants/methodologyLabels";
 import SEOHead from "@/components/SEOHead";
+
+// Human-readable labels for document types returned by the API
+const DOC_TYPE_LABELS: Record<string, { pt: string; en: string }> = {
+  VALIDATION_OPINION:      { pt: "Parecer de Validação (GL)",         en: "Validation Opinion (GL)" },
+  VALIDATION_CERTIFICATE:  { pt: "Certificado de Validação",          en: "Validation Certificate" },
+  MONITORING_REPORT:       { pt: "Relatório de Monitoramento",        en: "Monitoring Report" },
+  GL_VERIFICATION_OPINION: { pt: "Parecer de Verificação (GL)",       en: "Verification Opinion (GL)" },
+  VVB_VERIFICATION_OPINION:{ pt: "Parecer de Verificação (VVB)",      en: "Verification Opinion (VVB)" },
+  VERIFICATION_CERTIFICATE:{ pt: "Certificado de Verificação",        en: "Verification Certificate" },
+  ISSUANCE_STATEMENT:      { pt: "Declaração de Emissão de VCUs",     en: "VCU Issuance Statement" },
+  RETIREMENT_CERTIFICATE:  { pt: "Certificado de Aposentadoria",      en: "Retirement Certificate" },
+  DCP:                     { pt: "Documento de Concepção de Projeto",  en: "Project Design Document" },
+  EVIDENCE:                { pt: "Evidência / Declaração",            en: "Evidence / Declaration" },
+};
+
+function docLabel(type: string, isEn: boolean): string {
+  const entry = DOC_TYPE_LABELS[type];
+  if (!entry) return type;
+  return isEn ? entry.en : entry.pt;
+}
 
 const ProjectDetail = () => {
   const { code } = useParams<{ code: string }>();
@@ -45,55 +66,78 @@ const ProjectDetail = () => {
   }
 
   const creditingStart = p.creditingPeriodStart
-    ? new Date(p.creditingPeriodStart).getFullYear()
+    ? new Date(p.creditingPeriodStart).toLocaleDateString(isEn ? "en-GB" : "pt-BR", { month: "2-digit", year: "numeric" })
     : "—";
   const creditingEnd = p.creditingPeriodEnd
-    ? new Date(p.creditingPeriodEnd).getFullYear()
+    ? new Date(p.creditingPeriodEnd).toLocaleDateString(isEn ? "en-GB" : "pt-BR", { month: "2-digit", year: "numeric" })
     : "—";
 
   const infoItems = [
-    { icon: ShieldCheck, label: "Status", value: getStatusLabel(p.status, lang) },
-    { icon: MapPin, label: isEn ? "Location" : "Localização", value: p.locationDescription },
-    { icon: Building2, label: isEn ? "Developer" : "Desenvolvedor", value: p.organization?.name },
-    { icon: FileText, label: isEn ? "Methodology" : "Metodologia", value: `${p.methodology?.code} — ${isEn ? (p.methodology?.nameEn ?? p.methodology?.name) : p.methodology?.name}`, link: p.methodology ? `/metodologias/${p.methodology.code.toLowerCase()}` : undefined },
-    { icon: Leaf, label: isEn ? "Solution Type" : "Tipo de Solução", value: p.solutionType },
-    { icon: TreePine, label: isEn ? "Sector" : "Setor", value: getSectorLabel(p.sector, lang) },
-    ...(p.methodology?.activityType ? [{ icon: Hash, label: isEn ? "Activity Type" : "Tipo de Atividade", value: getActivityTypeLabel(p.methodology.activityType, lang) }] : []),
-    ...(p.biome ? [{ icon: Globe, label: isEn ? "Biome" : "Bioma", value: p.biome }] : []),
-    ...(p.crop ? [{ icon: Leaf, label: isEn ? "Crop / Land Use" : "Cultura / Uso do Solo", value: p.crop }] : []),
-    ...(p.geeType ? [{ icon: BarChart3, label: isEn ? "GEE Type" : "Tipo de GEE", value: p.geeType }] : []),
-    { icon: Calendar, label: isEn ? "Crediting Period" : "Período de Creditação", value: `${creditingStart} — ${creditingEnd}` },
-    ...(p.totalAreaHa ? [{ icon: MapPin, label: isEn ? "Total Area" : "Área Total", value: `${Number(p.totalAreaHa).toLocaleString()} ha` }] : []),
-    ...(p.estimatedReductions ? [{ icon: BarChart3, label: isEn ? "Estimated Reductions" : "Reduções Estimadas", value: `${p.estimatedReductions.toLocaleString()} tCO₂e` }] : []),
+    { icon: ShieldCheck, label: "Status",                                                          value: getStatusLabel(p.status, lang) },
+    { icon: Building2,   label: isEn ? "Developer" : "Desenvolvedor",                             value: p.organization?.name },
+    { icon: FileText,    label: isEn ? "Methodology" : "Metodologia",
+      value: `${p.methodology?.code} — ${isEn ? (p.methodology?.nameEn ?? p.methodology?.name) : p.methodology?.name}`,
+      link: p.methodology ? `/metodologias/${p.methodology.code.toLowerCase()}` : undefined },
+    { icon: Leaf,        label: isEn ? "Solution Type" : "Tipo de Solução",                       value: p.solutionType },
+    { icon: TreePine,    label: isEn ? "Sector" : "Setor",                                        value: getSectorLabel(p.sector, lang) },
+    ...(p.methodology?.activityType
+      ? [{ icon: Hash, label: isEn ? "Activity Type" : "Tipo de Atividade",                       value: getActivityTypeLabel(p.methodology.activityType, lang) }]
+      : []),
+    ...(p.biome   ? [{ icon: Globe, label: isEn ? "Biome" : "Bioma",                              value: p.biome }] : []),
+    ...(p.crop    ? [{ icon: Leaf,  label: isEn ? "Crop / Land Use" : "Cultura / Uso do Solo",    value: p.crop  }] : []),
+    ...(p.geeType ? [{ icon: BarChart3, label: isEn ? "GEE Type" : "Tipo de GEE",                 value: p.geeType }] : []),
+    { icon: Calendar,    label: isEn ? "Crediting Period" : "Período de Creditação",               value: `${creditingStart} — ${creditingEnd}` },
+    ...(p.totalAreaHa
+      ? [{ icon: MapPin, label: isEn ? "Total Area" : "Área Total",                               value: `${Number(p.totalAreaHa).toLocaleString()} ha` }]
+      : []),
+    ...(p.estimatedReductions
+      ? [{ icon: BarChart3, label: isEn ? "Estimated Reductions" : "Reduções Estimadas",          value: `${p.estimatedReductions.toLocaleString()} tCO₂e` }]
+      : []),
   ];
 
-  const overview = isEn ? (p.overviewEn ?? p.overviewPt) : p.overviewPt;
-  const impact = p.impact ?? [];
+  const overview      = isEn ? (p.overviewEn ?? p.overviewPt) : p.overviewPt;
+  const impact        = p.impact ?? [];
   const verifications = p.verificationEvents ?? [];
-  const issuances = p.issuances ?? [];
-  const totalIssued = issuances.reduce((s, i) => s + (i.issuedQuantity ?? 0), 0);
+  const issuances     = p.issuances ?? [];
+  const documents     = p.documents ?? [];
+  const totalIssued   = issuances.reduce((s, i) => s + (i.issuedQuantity ?? 0), 0);
+
+  // Separate documents by lifecycle phase for grouped display
+  const projectDocs       = documents.filter((d) => ["DCP", "EVIDENCE"].includes(d.type));
+  const validationDocs    = documents.filter((d) => ["VALIDATION_OPINION", "VALIDATION_CERTIFICATE"].includes(d.type));
+  const verificationDocs  = documents.filter((d) =>
+    ["GL_VERIFICATION_OPINION", "VVB_VERIFICATION_OPINION", "VERIFICATION_CERTIFICATE",
+     "ISSUANCE_STATEMENT", "MONITORING_REPORT"].includes(d.type)
+  );
 
   return (
     <div className="pt-20">
       <SEOHead title={p.name} description={overview ?? p.locationDescription} path={`/projetos/${p.code}`} />
 
-      {/* Hero */}
+      {/* ===================================================================
+          Hero
+      =================================================================== */}
       <section className="gradient-hero text-primary-foreground py-24 md:py-32">
         <div className="container">
-          <Link to="/projetos" className="inline-flex items-center gap-2 text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors mb-10">
+          <Link
+            to="/projetos"
+            className="inline-flex items-center gap-2 text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors mb-10"
+          >
             <ArrowLeft className="w-4 h-4" /> {isEn ? "Back to Projects" : "Voltar para Projetos"}
           </Link>
+
           <div className="text-sm text-primary-foreground/60 uppercase tracking-widest font-medium mb-2">
             {p.code}
           </div>
           <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4">{p.name}</h1>
+
           <div className="flex items-center gap-4 flex-wrap">
             <span className={`inline-flex items-center gap-2 text-xs px-3 py-1.5 rounded-full border font-medium ${getStatusColor(p.status)}`}>
               <ShieldCheck className="w-3.5 h-3.5" />
               {getStatusLabel(p.status, lang)}
             </span>
             <span className="inline-flex items-center gap-2 text-xs px-3 py-1.5 bg-primary-foreground/10 rounded-full border border-primary-foreground/20">
-              <MapPin className="w-3.5 h-3.5" /> {p.locationDescription}
+              <MapPin className="w-3.5 h-3.5" /> {p.locationDescription?.split(",").slice(-2).join(",").trim()}
             </span>
             <span className="inline-flex items-center gap-2 text-xs px-3 py-1.5 bg-primary-foreground/10 rounded-full border border-primary-foreground/20">
               <Building2 className="w-3.5 h-3.5" /> {p.organization?.name}
@@ -102,12 +146,17 @@ const ProjectDetail = () => {
         </div>
       </section>
 
-      {/* Project Info Sidebar + Overview */}
+      {/* ===================================================================
+          Overview + Sidebar
+      =================================================================== */}
       <section className="py-16 md:py-24">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* Overview */}
-            <div className="lg:col-span-2">
+
+            {/* Main column */}
+            <div className="lg:col-span-2 space-y-16">
+
+              {/* Overview */}
               {overview && (
                 <AnimatedSection>
                   <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-6">
@@ -117,26 +166,34 @@ const ProjectDetail = () => {
                 </AnimatedSection>
               )}
 
-              {/* SDG Impact */}
+              {/* Impact metrics — big numbers like original design */}
               {impact.length > 0 && (
-                <AnimatedSection delay={0.2}>
-                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-6 mt-16">
-                    {isEn ? "Sustainable Development Goals" : "Objetivos de Desenvolvimento Sustentável"}
+                <AnimatedSection delay={0.1}>
+                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-4">
+                    {isEn ? "Positive Impact" : "Impacto Positivo"}
                   </h2>
+                  <p className="text-muted-foreground mb-8">
+                    {isEn
+                      ? "Key environmental and social indicators tracked throughout the project lifecycle."
+                      : "Principais indicadores ambientais e sociais acompanhados ao longo do ciclo do projeto."}
+                  </p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {impact.map((item, i) => (
-                      <div key={i} className="bg-card border border-border rounded-xl p-5">
+                      <div key={i} className="bg-card border border-border rounded-xl p-6">
                         <div className="flex items-start gap-3">
-                          <span className="text-secondary font-heading font-bold text-sm shrink-0">
+                          <span className="font-heading font-bold text-secondary text-sm shrink-0 mt-0.5">
                             ODS {item.sdg}
                           </span>
                           <div className="min-w-0">
-                            <p className="text-xs text-muted-foreground font-medium">
+                            <p className="text-xs font-medium text-muted-foreground">
                               {SDG_LABELS[item.sdg]?.[isEn ? "en" : "pt"] ?? `SDG ${item.sdg}`}
                             </p>
-                            <p className="text-sm text-primary mt-1">{item.indicator}</p>
+                            <p className="text-sm font-semibold text-primary mt-1 leading-snug">{item.indicator}</p>
                             {item.baseline && (
-                              <p className="text-xs text-muted-foreground mt-0.5">{isEn ? "Baseline:" : "Linha de base:"} {item.baseline}</p>
+                              <p className="text-xs text-muted-foreground mt-1">
+                                <span className="font-medium">{isEn ? "Baseline:" : "Linha de base:"}</span>{" "}
+                                {item.baseline}
+                              </p>
                             )}
                           </div>
                         </div>
@@ -146,20 +203,22 @@ const ProjectDetail = () => {
                 </AnimatedSection>
               )}
 
-              {/* Issuances summary */}
+              {/* Credits issued summary */}
               {totalIssued > 0 && (
-                <AnimatedSection delay={0.3}>
-                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-6 mt-16">
+                <AnimatedSection delay={0.2}>
+                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-6">
                     {isEn ? "Credits Issued" : "Créditos Emitidos"}
                   </h2>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {issuances.map((iss, i) => (
-                      <div key={i} className="bg-card border border-secondary/30 rounded-xl p-4 text-center">
-                        <p className="font-heading text-2xl font-bold text-secondary">{iss.issuedQuantity?.toLocaleString()}</p>
-                        <p className="text-xs text-muted-foreground mt-1">VCU · Vintage {iss.vintageYear}</p>
+                      <div key={i} className="bg-card border border-secondary/30 rounded-xl p-5 text-center">
+                        <p className="font-heading text-3xl md:text-4xl font-bold text-secondary">
+                          {iss.issuedQuantity?.toLocaleString()}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-2">VCU · Vintage {iss.vintageYear}</p>
                         {iss.txHash && (
                           <p className="text-xs font-mono text-muted-foreground truncate mt-1" title={iss.txHash}>
-                            {iss.txHash.slice(0, 8)}...
+                            {iss.txHash.slice(0, 10)}...
                           </p>
                         )}
                       </div>
@@ -169,15 +228,16 @@ const ProjectDetail = () => {
               )}
             </div>
 
-            {/* Info Sidebar */}
+            {/* Sidebar */}
             <div className="lg:col-span-1">
               <AnimatedSection delay={0.1}>
                 <div className="bg-card border border-border rounded-xl p-6 sticky top-28">
                   <h3 className="font-heading font-semibold text-primary text-sm uppercase tracking-wider mb-6">
                     {isEn ? "Project Summary" : "Resumo do Projeto"}
                   </h3>
+
                   <div className="space-y-4">
-                    {infoItems.filter((item) => item.value && item.value !== "—").map((item, i) => (
+                    {infoItems.filter((item) => item.value && String(item.value) !== "—").map((item, i) => (
                       <div key={i} className="flex items-start gap-3">
                         <item.icon className="w-4 h-4 text-secondary shrink-0 mt-0.5" />
                         <div className="min-w-0">
@@ -193,6 +253,33 @@ const ProjectDetail = () => {
                       </div>
                     ))}
                   </div>
+
+                  {/* Developer contact */}
+                  {(p.organization?.publicWebsite || p.organization?.email) && (
+                    <div className="mt-6 pt-6 border-t border-border space-y-2">
+                      <p className="text-xs text-muted-foreground uppercase tracking-wider mb-3">
+                        {isEn ? "Developer Contact" : "Contato do Desenvolvedor"}
+                      </p>
+                      {p.organization.publicWebsite && (
+                        <a
+                          href={p.organization.publicWebsite}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 text-sm text-primary hover:text-secondary transition-colors"
+                        >
+                          <LinkIcon className="w-3.5 h-3.5" /> Website
+                        </a>
+                      )}
+                      {p.organization.email && (
+                        <a
+                          href={`mailto:${p.organization.email}`}
+                          className="flex items-center gap-2 text-sm text-primary hover:text-secondary transition-colors"
+                        >
+                          <Mail className="w-3.5 h-3.5" /> {p.organization.email}
+                        </a>
+                      )}
+                    </div>
+                  )}
 
                   <div className="mt-6 pt-6 border-t border-border">
                     <a
@@ -212,7 +299,75 @@ const ProjectDetail = () => {
         </div>
       </section>
 
-      {/* Verification Events */}
+      {/* ===================================================================
+          Project Documents (DCP, Declarations)
+      =================================================================== */}
+      {projectDocs.length > 0 && (
+        <section className="py-16 md:py-24 bg-muted/30">
+          <div className="container max-w-4xl">
+            <AnimatedSection>
+              <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-8">
+                {isEn ? "Project Documents" : "Documentos do Projeto"}
+              </h2>
+            </AnimatedSection>
+            <AnimatedSection delay={0.1}>
+              <DocumentTable docs={projectDocs} isEn={isEn} />
+            </AnimatedSection>
+          </div>
+        </section>
+      )}
+
+      {/* ===================================================================
+          Validation
+      =================================================================== */}
+      {(p.validationEvent || validationDocs.length > 0) && (
+        <section className="py-16 md:py-24">
+          <div className="container max-w-4xl">
+            <AnimatedSection>
+              <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-6">
+                {isEn ? "Project Validation" : "Validação do Projeto"}
+              </h2>
+
+              {p.validationEvent && (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+                  {p.validationEvent.glOpinion && (
+                    <div className="bg-card border border-border rounded-lg p-4">
+                      <p className="text-xs text-muted-foreground mb-1">{isEn ? "GL Opinion" : "Parecer GL"}</p>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-secondary shrink-0" />
+                        <p className="text-sm font-semibold text-primary capitalize">
+                          {p.validationEvent.glOpinion.replace(/_/g, " ").toLowerCase()}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  {p.validationEvent.completedAt && (
+                    <div className="bg-card border border-border rounded-lg p-4">
+                      <p className="text-xs text-muted-foreground mb-1">{isEn ? "Completed" : "Concluída em"}</p>
+                      <p className="text-sm font-semibold text-primary">
+                        {new Date(p.validationEvent.completedAt).toLocaleDateString(isEn ? "en-GB" : "pt-BR")}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {validationDocs.length > 0 && (
+                <>
+                  <h3 className="font-heading font-semibold text-lg text-primary mb-4">
+                    {isEn ? "Validation Documents" : "Documentos da Validação"}
+                  </h3>
+                  <DocumentTable docs={validationDocs} isEn={isEn} />
+                </>
+              )}
+            </AnimatedSection>
+          </div>
+        </section>
+      )}
+
+      {/* ===================================================================
+          Verification Events
+      =================================================================== */}
       {verifications.length > 0 && (
         <section className="py-16 md:py-24 bg-muted/30">
           <div className="container max-w-4xl">
@@ -220,42 +375,77 @@ const ProjectDetail = () => {
               <div key={vi} className={vi > 0 ? "mt-16" : ""}>
                 <AnimatedSection>
                   <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-6">
-                    {isEn ? `Verification #${v.verificationNumber}` : `Verificação #${v.verificationNumber}`}
+                    {isEn ? `Verification #${v.verificationNumber}` : `${v.verificationNumber}ª Verificação`}
                   </h2>
+
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                     {v.netIssuable != null && (
                       <div className="bg-card border border-border rounded-lg p-4">
-                        <p className="text-xs text-muted-foreground mb-1">{isEn ? "Net Issuable" : "Emissível Líquido"}</p>
-                        <p className="text-sm font-semibold text-secondary">{v.netIssuable.toLocaleString()} tCO₂e</p>
+                        <p className="text-xs text-muted-foreground mb-1">{isEn ? "Credits" : "Créditos"}</p>
+                        <p className="text-sm font-semibold text-secondary">
+                          {v.netIssuable.toLocaleString()} tCO₂e
+                        </p>
                       </div>
                     )}
-                    {v.monitoringPeriodStart && (
+                    {v.monitoringPeriodStart && v.monitoringPeriodEnd && (
                       <div className="bg-card border border-border rounded-lg p-4">
                         <p className="text-xs text-muted-foreground mb-1">{isEn ? "Period" : "Período"}</p>
                         <p className="text-sm font-semibold text-primary">
-                          {new Date(v.monitoringPeriodStart).getFullYear()} — {new Date(v.monitoringPeriodEnd).getFullYear()}
+                          {new Date(v.monitoringPeriodStart).toLocaleDateString(isEn ? "en-GB" : "pt-BR", { month: "2-digit", year: "numeric" })}
+                          {" — "}
+                          {new Date(v.monitoringPeriodEnd).toLocaleDateString(isEn ? "en-GB" : "pt-BR", { month: "2-digit", year: "numeric" })}
                         </p>
                       </div>
                     )}
                     {v.verificationAssignment?.vvbOrganization && (
                       <div className="bg-card border border-border rounded-lg p-4">
                         <p className="text-xs text-muted-foreground mb-1">VVB</p>
-                        <p className="text-sm font-semibold text-primary">{v.verificationAssignment.vvbOrganization.name}</p>
+                        <p className="text-sm font-semibold text-primary">
+                          {v.verificationAssignment.vvbOrganization.name}
+                        </p>
                       </div>
                     )}
                     {v.vvbOpinion && (
                       <div className="bg-card border border-border rounded-lg p-4">
                         <p className="text-xs text-muted-foreground mb-1">{isEn ? "VVB Opinion" : "Parecer VVB"}</p>
-                        <p className="text-sm font-semibold text-primary">{v.vvbOpinion}</p>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-secondary shrink-0" />
+                          <p className="text-sm font-semibold text-primary capitalize">
+                            {v.vvbOpinion.replace(/_/g, " ").toLowerCase()}
+                          </p>
+                        </div>
                       </div>
                     )}
                     {v.completedAt && (
                       <div className="bg-card border border-border rounded-lg p-4">
-                        <p className="text-xs text-muted-foreground mb-1">{isEn ? "Completed" : "Concluído"}</p>
-                        <p className="text-sm font-semibold text-primary">{new Date(v.completedAt).toLocaleDateString()}</p>
+                        <p className="text-xs text-muted-foreground mb-1">{isEn ? "Completed" : "Concluída em"}</p>
+                        <p className="text-sm font-semibold text-primary">
+                          {new Date(v.completedAt).toLocaleDateString(isEn ? "en-GB" : "pt-BR")}
+                        </p>
+                      </div>
+                    )}
+                    {/* Vintage year from linked issuance */}
+                    {v.issuances?.[0]?.vintageYear && (
+                      <div className="bg-card border border-border rounded-lg p-4">
+                        <p className="text-xs text-muted-foreground mb-1">Vintage</p>
+                        <p className="text-sm font-semibold text-primary">{v.issuances[0].vintageYear}</p>
                       </div>
                     )}
                   </div>
+
+                  {/* Blockchain record — txHash from the linked issuance */}
+                  {v.issuances?.[0]?.txHash && (
+                    <div className="flex items-center gap-2 bg-card border border-secondary/30 rounded-lg p-4 mb-8">
+                      <Hash className="w-4 h-4 text-secondary shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs text-muted-foreground mb-0.5">
+                          {isEn ? "Blockchain Record" : "Registro Blockchain"}
+                        </p>
+                        <p className="text-xs font-mono text-primary truncate">{v.issuances[0].txHash}</p>
+                      </div>
+                      <ExternalLink className="w-4 h-4 text-secondary shrink-0" />
+                    </div>
+                  )}
                 </AnimatedSection>
               </div>
             ))}
@@ -263,8 +453,26 @@ const ProjectDetail = () => {
         </section>
       )}
 
-      {/* CTA */}
-      <section className="py-16 md:py-24">
+      {/* ===================================================================
+          Verification Documents (certificates, opinions)
+      =================================================================== */}
+      {verificationDocs.length > 0 && (
+        <section className="py-16 md:py-24">
+          <div className="container max-w-4xl">
+            <AnimatedSection>
+              <h3 className="font-heading font-semibold text-lg text-primary mb-4">
+                {isEn ? "Verification Documents" : "Documentos da Verificação"}
+              </h3>
+              <DocumentTable docs={verificationDocs} isEn={isEn} />
+            </AnimatedSection>
+          </div>
+        </section>
+      )}
+
+      {/* ===================================================================
+          CTA
+      =================================================================== */}
+      <section className="py-16 md:py-24 bg-muted/30">
         <div className="container max-w-4xl text-center">
           <AnimatedSection>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-4">
@@ -272,8 +480,8 @@ const ProjectDetail = () => {
             </h2>
             <p className="text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed">
               {isEn
-                ? "Contact us for more information or to consult our public registry."
-                : "Entre em contato para mais informações ou consulte nosso registro público."}
+                ? "Share your concerns or suggestions anonymously and help us improve continuously."
+                : "Compartilhe suas preocupações ou sugestões de forma anônima e ajude-nos a melhorar continuamente."}
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Link to="/contato">
@@ -291,5 +499,78 @@ const ProjectDetail = () => {
     </div>
   );
 };
+
+// ---------------------------------------------------------------------------
+// Reusable document table component
+// ---------------------------------------------------------------------------
+interface DocRow {
+  id: string;
+  type: string;
+  title: string;
+  version: number;
+  fileUrl?: string;
+  signedFileUrl?: string;
+  txHash?: string;
+  createdAt: string;
+}
+
+function DocumentTable({ docs, isEn }: { docs: DocRow[]; isEn: boolean }) {
+  return (
+    <div className="bg-card border border-border rounded-xl overflow-hidden">
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-border bg-muted/50">
+              <th className="text-left p-4 font-semibold text-primary">{isEn ? "Document" : "Documento"}</th>
+              <th className="text-left p-4 font-semibold text-primary">{isEn ? "Version" : "Versão"}</th>
+              <th className="text-left p-4 font-semibold text-primary">{isEn ? "Date" : "Data"}</th>
+              <th className="text-center p-4 font-semibold text-primary">PT</th>
+              <th className="text-center p-4 font-semibold text-primary">EN</th>
+            </tr>
+          </thead>
+          <tbody>
+            {docs.map((doc) => {
+              const url = doc.signedFileUrl ?? doc.fileUrl;
+              return (
+                <tr key={doc.id} className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
+                  <td className="p-4 text-primary font-medium">
+                    {docLabel(doc.type, isEn)}
+                    {doc.txHash && (
+                      <span className="ml-2 text-xs text-secondary font-mono" title={doc.txHash}>
+                        ⛓ {doc.txHash.slice(0, 8)}…
+                      </span>
+                    )}
+                  </td>
+                  <td className="p-4 text-muted-foreground">v{doc.version}</td>
+                  <td className="p-4 text-muted-foreground">
+                    {new Date(doc.createdAt).toLocaleDateString(isEn ? "en-GB" : "pt-BR")}
+                  </td>
+                  <td className="p-4 text-center">
+                    {url ? (
+                      <a href={url} target="_blank" rel="noopener noreferrer">
+                        <Button variant="ghost" size="sm" className="text-secondary hover:text-secondary">
+                          <Download className="w-4 h-4" />
+                        </Button>
+                      </a>
+                    ) : (
+                      <Button variant="ghost" size="sm" className="text-muted-foreground/40" disabled>
+                        <Download className="w-4 h-4" />
+                      </Button>
+                    )}
+                  </td>
+                  <td className="p-4 text-center">
+                    <Button variant="ghost" size="sm" className="text-muted-foreground/40" disabled>
+                      <Download className="w-4 h-4" />
+                    </Button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
 
 export default ProjectDetail;

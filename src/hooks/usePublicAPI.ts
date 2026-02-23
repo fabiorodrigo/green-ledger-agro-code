@@ -35,9 +35,20 @@ export interface PublicProject {
   methodology: { id: string; code: string; name: string; nameEn?: string };
 }
 
+export interface PublicProjectDocument {
+  id: string;
+  type: string;
+  title: string;
+  version: number;
+  fileUrl?: string;
+  signedFileUrl?: string;
+  txHash?: string;
+  createdAt: string;
+}
+
 export interface PublicProjectDetail extends PublicProject {
   methodologyVersion: string;
-  coordinates: { lat: number; lng: number };
+  coordinates?: { type: string; coordinates: [number, number] };
   startDate?: string;
   commitmentPeriodEnd?: string;
   landComplianceSeal?: string;
@@ -55,7 +66,13 @@ export interface PublicProjectDetail extends PublicProject {
     methodology: string;
   }>;
   updatedAt: string;
-  organization: { id: string; name: string; type: string };
+  organization: {
+    id: string;
+    name: string;
+    type: string;
+    publicWebsite?: string;
+    email?: string;
+  };
   methodology: {
     id: string;
     code: string;
@@ -70,23 +87,35 @@ export interface PublicProjectDetail extends PublicProject {
     role: string;
     organization: { id: string; name: string };
   }>;
-  validationEvent?: { completedAt?: string; glOpinion?: string };
+  validationEvent?: {
+    completedAt?: string;
+    glOpinion?: string;
+    glReportUrl?: string;
+  };
   verificationEvents: Array<{
     verificationNumber: number;
     monitoringPeriodStart: string;
     monitoringPeriodEnd: string;
     netIssuable?: number;
     vvbOpinion?: string;
+    vvbReportUrl?: string;
+    glDeclarationUrl?: string;
     completedAt?: string;
     verificationAssignment?: {
       vvbOrganization: { id: string; name: string };
     };
+    issuances: Array<{
+      vintageYear: number;
+      issuedQuantity: number;
+      txHash?: string;
+    }>;
   }>;
   issuances: Array<{
     vintageYear: number;
     issuedQuantity: number;
     txHash?: string;
   }>;
+  documents: PublicProjectDocument[];
   _count: { properties: number; issuances: number; assets: number };
 }
 
