@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import {
   ArrowLeft, MapPin, Building2, FileText, Download, ExternalLink,
   ShieldCheck, Leaf, Calendar, Hash, Globe, TreePine, BarChart3,
-  Mail, Link as LinkIcon, CheckCircle2,
+  Mail, Link as LinkIcon, CheckCircle2, Clock, Circle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AnimatedSection from "@/components/AnimatedSection";
@@ -11,6 +11,83 @@ import { usePublicProjectByCode } from "@/hooks/usePublicAPI";
 import { getStatusLabel, getStatusColor } from "@/constants/projectStatus";
 import { getSectorLabel, getActivityTypeLabel, SDG_LABELS } from "@/constants/methodologyLabels";
 import SEOHead from "@/components/SEOHead";
+
+// -------------------------------------------------------------------------
+// Lifecycle phases for the project status timeline
+// Each phase has the statuses that mark it as "completed" or "current"
+// -------------------------------------------------------------------------
+interface LifecyclePhase {
+  id: string;
+  labelPt: string;
+  labelEn: string;
+  completedStatuses: string[];
+  activeStatuses: string[];
+}
+
+const LIFECYCLE_PHASES: LifecyclePhase[] = [
+  {
+    id: "listed",
+    labelPt: "Listado",
+    labelEn: "Listed",
+    completedStatuses: [
+      "IN_VALIDATION","VALIDATED","IN_EXECUTION","IN_MONITORING",
+      "IN_VERIFICATION","VERIFIED","ACTIVE","FINALIZED","SUSPENDED",
+    ],
+    activeStatuses: ["LISTED"],
+  },
+  {
+    id: "validation",
+    labelPt: "Validação",
+    labelEn: "Validation",
+    completedStatuses: [
+      "VALIDATED","IN_EXECUTION","IN_MONITORING",
+      "IN_VERIFICATION","VERIFIED","ACTIVE","FINALIZED",
+    ],
+    activeStatuses: ["IN_VALIDATION"],
+  },
+  {
+    id: "execution",
+    labelPt: "Execução",
+    labelEn: "Execution",
+    completedStatuses: [
+      "IN_MONITORING","IN_VERIFICATION","VERIFIED","ACTIVE","FINALIZED",
+    ],
+    activeStatuses: ["VALIDATED","IN_EXECUTION"],
+  },
+  {
+    id: "monitoring",
+    labelPt: "Monitoramento",
+    labelEn: "Monitoring",
+    completedStatuses: ["IN_VERIFICATION","VERIFIED","ACTIVE","FINALIZED"],
+    activeStatuses: ["IN_MONITORING"],
+  },
+  {
+    id: "verification",
+    labelPt: "Verificação",
+    labelEn: "Verification",
+    completedStatuses: ["VERIFIED","ACTIVE","FINALIZED"],
+    activeStatuses: ["IN_VERIFICATION"],
+  },
+  {
+    id: "credits",
+    labelPt: "Emissão de Créditos",
+    labelEn: "Credit Issuance",
+    completedStatuses: ["FINALIZED"],
+    activeStatuses: ["VERIFIED","ACTIVE"],
+  },
+  {
+    id: "finalized",
+    labelPt: "Finalizado",
+    labelEn: "Finalized",
+    completedStatuses: [],
+    activeStatuses: ["FINALIZED"],
+  },
+];
+
+// Statuses where the timeline is useful (not trivially empty and not just DRAFT)
+const SHOW_TIMELINE_STATUSES = [
+  "LISTED","IN_VALIDATION","VALIDATED","IN_EXECUTION","IN_MONITORING","IN_VERIFICATION",
+];
 
 // Human-readable labels for document types returned by the API
 const DOC_TYPE_LABELS: Record<string, { pt: string; en: string }> = {
@@ -162,6 +239,65 @@ const ProjectDetail = () => {
           </div>
         </div>
       </section>
+
+      {/* ===================================================================
+          Lifecycle Progress Timeline (only for in-progress projects)
+      =================================================================== */}
+      {SHOW_TIMELINE_STATUSES.includes(p.status) && (
+        <section className="border-b border-border bg-muted/20">
+          <div className="container py-8">
+            <AnimatedSection>
+              <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium mb-5">
+                {isEn ? "Project Phase" : "Fase do Projeto"}
+              </p>
+              <div className="flex items-start gap-0 overflow-x-auto pb-2">
+                {LIFECYCLE_PHASES.map((phase, idx) => {
+                  const isCompleted = phase.completedStatuses.includes(p.status);
+                  const isCurrent  = phase.activeStatuses.includes(p.status);
+                  const isLast     = idx === LIFECYCLE_PHASES.length - 1;
+                  return (
+                    <div key={phase.id} className="flex items-center shrink-0">
+                      {/* Node */}
+                      <div className="flex flex-col items-center gap-1.5 min-w-[80px] max-w-[100px] text-center">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-colors ${
+                          isCompleted
+                            ? "bg-secondary border-secondary text-primary-foreground"
+                            : isCurrent
+                            ? "bg-background border-secondary text-secondary animate-pulse"
+                            : "bg-background border-muted-foreground/30 text-muted-foreground/40"
+                        }`}>
+                          {isCompleted ? (
+                            <CheckCircle2 className="w-4 h-4" />
+                          ) : isCurrent ? (
+                            <Clock className="w-4 h-4" />
+                          ) : (
+                            <Circle className="w-3.5 h-3.5" />
+                          )}
+                        </div>
+                        <span className={`text-[10px] font-medium leading-tight ${
+                          isCompleted
+                            ? "text-secondary"
+                            : isCurrent
+                            ? "text-primary font-semibold"
+                            : "text-muted-foreground/50"
+                        }`}>
+                          {isEn ? phase.labelEn : phase.labelPt}
+                        </span>
+                      </div>
+                      {/* Connector line */}
+                      {!isLast && (
+                        <div className={`h-0.5 w-8 md:w-12 shrink-0 mx-0 transition-colors ${
+                          isCompleted ? "bg-secondary" : "bg-muted-foreground/20"
+                        }`} />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </AnimatedSection>
+          </div>
+        </section>
+      )}
 
       {/* ===================================================================
           Overview + Sidebar
