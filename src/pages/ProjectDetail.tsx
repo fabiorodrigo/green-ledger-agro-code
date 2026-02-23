@@ -14,6 +14,7 @@ import SEOHead from "@/components/SEOHead";
 
 // Human-readable labels for document types returned by the API
 const DOC_TYPE_LABELS: Record<string, { pt: string; en: string }> = {
+  DCP:                     { pt: "Documento de Concepção de Projeto",  en: "Project Design Document (DCP)" },
   VALIDATION_OPINION:      { pt: "Parecer de Validação (GL)",         en: "Validation Opinion (GL)" },
   VALIDATION_CERTIFICATE:  { pt: "Certificado de Validação",          en: "Validation Certificate" },
   MONITORING_REPORT:       { pt: "Relatório de Monitoramento",        en: "Monitoring Report" },
@@ -22,8 +23,6 @@ const DOC_TYPE_LABELS: Record<string, { pt: string; en: string }> = {
   VERIFICATION_CERTIFICATE:{ pt: "Certificado de Verificação",        en: "Verification Certificate" },
   ISSUANCE_STATEMENT:      { pt: "Declaração de Emissão de VCUs",     en: "VCU Issuance Statement" },
   RETIREMENT_CERTIFICATE:  { pt: "Certificado de Aposentadoria",      en: "Retirement Certificate" },
-  DCP:                     { pt: "Documento de Concepção de Projeto",  en: "Project Design Document" },
-  EVIDENCE:                { pt: "Evidência / Declaração",            en: "Evidence / Declaration" },
 };
 
 function docLabel(type: string, isEn: boolean): string {
@@ -100,15 +99,33 @@ const ProjectDetail = () => {
   const verifications = p.verificationEvents ?? [];
   const issuances     = p.issuances ?? [];
   const documents     = p.documents ?? [];
+  const evidence      = p.evidence ?? [];
   const totalIssued   = issuances.reduce((s, i) => s + (i.issuedQuantity ?? 0), 0);
 
-  // Separate documents by lifecycle phase for grouped display
-  const projectDocs       = documents.filter((d) => ["DCP", "EVIDENCE"].includes(d.type));
-  const validationDocs    = documents.filter((d) => ["VALIDATION_OPINION", "VALIDATION_CERTIFICATE"].includes(d.type));
-  const verificationDocs  = documents.filter((d) =>
+  // DCP from evidence + any platform docs of type EVIDENCE grouped as "Project Documents"
+  const dcpRows: DocRow[] = evidence.map((e) => ({
+    id: e.id,
+    type: "DCP",
+    title: e.name,
+    version: 1,
+    fileUrl: e.fileUrl,
+    createdAt: e.createdAt,
+  }));
+
+  // Separate platform documents by lifecycle phase
+  const validationDocs   = documents.filter((d) => ["VALIDATION_OPINION", "VALIDATION_CERTIFICATE"].includes(d.type));
+  const verificationDocs = documents.filter((d) =>
     ["GL_VERIFICATION_OPINION", "VVB_VERIFICATION_OPINION", "VERIFICATION_CERTIFICATE",
      "ISSUANCE_STATEMENT", "MONITORING_REPORT"].includes(d.type)
   );
+
+  // "Project Documents" section = DCP (from evidence) + any remaining platform docs not in other sections
+  const usedTypes = new Set([
+    ...validationDocs.map((d) => d.type),
+    ...verificationDocs.map((d) => d.type),
+  ]);
+  const otherPlatformDocs = documents.filter((d) => !usedTypes.has(d.type));
+  const projectDocs: DocRow[] = [...dcpRows, ...otherPlatformDocs];
 
   return (
     <div className="pt-20">

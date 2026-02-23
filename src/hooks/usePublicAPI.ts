@@ -116,6 +116,14 @@ export interface PublicProjectDetail extends PublicProject {
     txHash?: string;
   }>;
   documents: PublicProjectDocument[];
+  /** DCP and other developer-submitted evidence visible per GL-DC.CER.001 */
+  evidence: Array<{
+    id: string;
+    category: string;
+    name: string;
+    fileUrl: string;
+    createdAt: string;
+  }>;
   _count: { properties: number; issuances: number; assets: number };
 }
 
