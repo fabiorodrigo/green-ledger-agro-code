@@ -60,11 +60,14 @@ export interface PublicProjectDetail extends PublicProject {
   overviewEn?: string;
   impact?: Array<{
     sdg: number;
+    value?: string;      // highlight number, e.g. "6.415" / "38k"
+    unit?: string;       // unit label, e.g. "tCO₂e" / "nascentes"
     indicator: string;
     baseline: string;
     frequency: string;
     methodology: string;
   }>;
+  properties?: Array<{ municipality: string; state: string }>;
   updatedAt: string;
   organization: {
     id: string;

@@ -231,7 +231,10 @@ const ProjectDetail = () => {
               {getStatusLabel(p.status, lang)}
             </span>
             <span className="inline-flex items-center gap-2 text-xs px-3 py-1.5 bg-primary-foreground/10 rounded-full border border-primary-foreground/20">
-              <MapPin className="w-3.5 h-3.5" /> {p.locationDescription?.split(",").slice(-2).join(",").trim()}
+              <MapPin className="w-3.5 h-3.5" />
+              {p.properties?.[0]
+                ? `${p.properties[0].municipality}, ${p.properties[0].state}`
+                : p.country}
             </span>
             <span className="inline-flex items-center gap-2 text-xs px-3 py-1.5 bg-primary-foreground/10 rounded-full border border-primary-foreground/20">
               <Building2 className="w-3.5 h-3.5" /> {p.organization?.name}
@@ -319,7 +322,7 @@ const ProjectDetail = () => {
                 </AnimatedSection>
               )}
 
-              {/* Impact metrics — big numbers like original design */}
+              {/* Impact metrics — Tero Carbon-style highlight numbers */}
               {impact.length > 0 && (
                 <AnimatedSection delay={0.1}>
                   <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-4">
@@ -330,26 +333,44 @@ const ProjectDetail = () => {
                       ? "Key environmental and social indicators tracked throughout the project lifecycle."
                       : "Principais indicadores ambientais e sociais acompanhados ao longo do ciclo do projeto."}
                   </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     {impact.map((item, i) => (
-                      <div key={i} className="bg-card border border-border rounded-xl p-6">
-                        <div className="flex items-start gap-3">
-                          <span className="font-heading font-bold text-secondary text-sm shrink-0 mt-0.5">
-                            ODS {item.sdg}
-                          </span>
-                          <div className="min-w-0">
-                            <p className="text-xs font-medium text-muted-foreground">
-                              {SDG_LABELS[item.sdg]?.[isEn ? "en" : "pt"] ?? `SDG ${item.sdg}`}
+                      <div
+                        key={i}
+                        className="bg-card border border-border rounded-xl p-6 flex flex-col gap-3"
+                      >
+                        {/* ODS badge */}
+                        <div className="inline-flex items-center gap-1.5 self-start text-xs px-2.5 py-1 rounded-full bg-secondary/10 text-secondary font-semibold">
+                          {isEn ? "SDG" : "ODS"} {item.sdg}
+                          {SDG_LABELS[item.sdg] && (
+                            <span className="font-normal opacity-75">
+                              · {SDG_LABELS[item.sdg][isEn ? "en" : "pt"]}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Highlight number (when available) */}
+                        {item.value && (
+                          <div>
+                            <p className="font-heading text-4xl md:text-5xl font-bold text-primary leading-none">
+                              {item.value}
                             </p>
-                            <p className="text-sm font-semibold text-primary mt-1 leading-snug">{item.indicator}</p>
-                            {item.baseline && (
-                              <p className="text-xs text-muted-foreground mt-1">
-                                <span className="font-medium">{isEn ? "Baseline:" : "Linha de base:"}</span>{" "}
-                                {item.baseline}
-                              </p>
+                            {item.unit && (
+                              <p className="text-sm font-medium text-secondary mt-1">{item.unit}</p>
                             )}
                           </div>
-                        </div>
+                        )}
+
+                        {/* Indicator description */}
+                        <p className="text-sm text-muted-foreground leading-snug">{item.indicator}</p>
+
+                        {/* Baseline */}
+                        {item.baseline && (
+                          <p className="text-xs text-muted-foreground/60">
+                            <span className="font-medium">{isEn ? "Baseline:" : "Linha de base:"}</span>{" "}
+                            {item.baseline}
+                          </p>
+                        )}
                       </div>
                     ))}
                   </div>
