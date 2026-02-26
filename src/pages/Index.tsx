@@ -82,11 +82,6 @@ const Index = () => {
                   {t("index.hero.cta2")}
                 </Button>
               </Link>
-              <a href="https://app.greenledger.eco.br" target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="hero-outline" className="text-base px-8 gap-2">
-                  {isEn ? "Access Platform" : "Acessar Plataforma"} <ExternalLink className="w-4 h-4" />
-                </Button>
-              </a>
             </div>
           </div>
 
