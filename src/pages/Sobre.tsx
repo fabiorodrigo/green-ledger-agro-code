@@ -1,6 +1,6 @@
 import { useLanguage } from "@/i18n/LanguageContext";
-import { Shield, Target, Eye, ArrowRight, ExternalLink } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Shield, Target, Eye } from "lucide-react";
+
 import AnimatedSection from "@/components/AnimatedSection";
 import SEOHead from "@/components/SEOHead";
 
@@ -63,27 +63,6 @@ const Sobre = () => {
         </div>
       </section>
 
-      <section className="py-16 bg-muted/20">
-        <div className="container text-center">
-          <AnimatedSection>
-            <h2 className="font-heading text-2xl font-bold text-primary mb-4">
-              {locale === "en" ? "Explore the Platform" : locale === "es" ? "Explore la Plataforma" : "Conheça a Plataforma"}
-            </h2>
-            <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
-              {locale === "en"
-                ? "Access the Green Ledger certification platform and discover how we work in practice."
-                : locale === "es"
-                ? "Acceda a la plataforma de certificación Green Ledger y descubra cómo trabajamos en la práctica."
-                : "Acesse a plataforma de certificação Green Ledger e veja como trabalhamos na prática."}
-            </p>
-            <a href="https://app.greenledger.eco.br" target="_blank" rel="noopener noreferrer">
-              <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">
-                {locale === "en" ? "Access Platform" : locale === "es" ? "Acceder a la Plataforma" : "Acessar Plataforma"} <ExternalLink className="w-4 h-4" />
-              </Button>
-            </a>
-          </AnimatedSection>
-        </div>
-      </section>
     </div>
   );
 };
