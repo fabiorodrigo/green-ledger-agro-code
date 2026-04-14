@@ -133,7 +133,7 @@ const Navbar = () => {
 
           {/* Login CTA */}
           <a
-            href="https://app.greenledger.eco.br/login"
+            href="https://plataforma.greenledger.eco.br/"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 ml-2 px-5 py-2 text-[13px] font-semibold uppercase tracking-wide bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90 transition-colors"
@@ -226,7 +226,7 @@ const Navbar = () => {
             {/* Login CTA */}
             <div className="pt-3 border-t border-border mt-3">
               <a
-                href="https://app.greenledger.eco.br/login"
+                href="https://plataforma.greenledger.eco.br/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full px-5 py-3 text-sm font-semibold uppercase tracking-wide bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90 transition-colors"
