@@ -3,12 +3,12 @@
  * Provides typed React hooks for the Green Ledger public API endpoints.
  * All endpoints are unauthenticated (no JWT required).
  *
- * API base: https://app.greenledger.eco.br/api
+ * API base: https://api.greenledger.eco.br
  */
 
 import { useState, useEffect } from "react";
 
-const API_BASE = "https://app.greenledger.eco.br/api";
+const API_BASE = "https://api.greenledger.eco.br";
 
 // ---------------------------------------------------------------------------
 // Types mirroring the API responses
