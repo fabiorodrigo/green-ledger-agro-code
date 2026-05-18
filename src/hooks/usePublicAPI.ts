@@ -3,7 +3,7 @@
  * Provides typed React hooks for the Green Ledger public API endpoints.
  * All endpoints are unauthenticated (no JWT required).
  *
- * API base: https://api.greenledger.eco.br
+ * API base: https://api.greenledger.eco.br/api
  */
 
 import { useState, useEffect } from "react";
