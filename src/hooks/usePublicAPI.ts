@@ -8,7 +8,7 @@
 
 import { useState, useEffect } from "react";
 
-const API_BASE = "https://api.greenledger.eco.br";
+const API_BASE = "https://api.greenledger.eco.br/api";
 
 // ---------------------------------------------------------------------------
 // Types mirroring the API responses
