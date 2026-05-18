@@ -9,7 +9,7 @@ import SEOHead from "@/components/SEOHead";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { getSectorLabel, getActivityTypeLabel, getSolutionLabel, SDG_LABELS } from "@/constants/methodologyLabels";
 
-const API_BASE = "https://api.greenledger.eco.br";
+const API_BASE = "https://api.greenledger.eco.br/api";
 
 // We look up by code (slug is just the lowercased code)
 interface MethodologyDetail {
