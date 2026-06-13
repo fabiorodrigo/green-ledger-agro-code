@@ -4,6 +4,8 @@ import {
   toPaginated,
   mapProject,
   mapProjectDetail,
+  mapMethodology,
+  mapMethodologyDetail,
   mapVvb,
   mapStatistics,
 } from "../publicApiAdapter";
@@ -142,6 +144,84 @@ describe("mapProjectDetail", () => {
     // backlog fields
     expect(d.evidence).toEqual([]);
     expect(d.impact).toBeUndefined();
+  });
+});
+
+describe("mapMethodology", () => {
+  it("maps platform fields to site shape and leaves backlog undefined/empty", () => {
+    const raw = {
+      _id: "m1",
+      code: "MET001",
+      name: "Reflorestamento",
+      status: "PUBLISHED",
+      description: "Metodologia de reflorestamento",
+      sectors: ["AFOLU", "Energia"],
+      version: "1.2",
+      createdAt: "2025-01-01",
+      developer: { _id: "u1", name: "Fulano", organizationName: "Org Verde" },
+    };
+    const m = mapMethodology(raw);
+
+    expect(m.id).toBe("m1");
+    expect(m.code).toBe("MET001");
+    expect(m.name).toBe("Reflorestamento");
+    expect(m.status).toBe("PUBLISHED");
+
+    // descriptionPt <- description
+    expect(m.descriptionPt).toBe("Metodologia de reflorestamento");
+
+    // sector <- sectors[0]; full sectors[] preserved
+    expect(m.sector).toBe("AFOLU");
+    expect(m.sectors).toEqual(["AFOLU", "Energia"]);
+
+    // developerOrganization <- developer{id,name}
+    expect(m.developerOrganization).toEqual({ id: "u1", name: "Org Verde" });
+
+    // currentVersion.versionNumber <- version
+    expect(m.currentVersion?.versionNumber).toBe("1.2");
+
+    // backlog fields never invented
+    expect(m.solutionType).toBeUndefined();
+    expect(m.activityType).toBeUndefined();
+    expect(m.geeType).toBeUndefined();
+    expect(m.sdgGoals).toBeUndefined();
+    expect(m.nameEn).toBeUndefined();
+  });
+
+  it("leaves sector undefined and currentVersion undefined when platform omits them", () => {
+    const m = mapMethodology({ _id: "m2", developer: { _id: "u", name: "Solo" } });
+    expect(m.sector).toBeUndefined();
+    expect(m.sectors).toEqual([]);
+    expect(m.currentVersion).toBeUndefined();
+  });
+});
+
+describe("mapMethodologyDetail", () => {
+  it("extends mapMethodology and leaves backlog collections empty", () => {
+    const raw = {
+      _id: "m1",
+      code: "MET001",
+      name: "Reflorestamento",
+      status: "PUBLISHED",
+      description: "Metodologia de reflorestamento",
+      sectors: ["AFOLU"],
+      version: "2.0",
+      createdAt: "2025-01-01",
+      developer: { _id: "u1", name: "Fulano", organizationName: "Org Verde" },
+    };
+    const m = mapMethodologyDetail(raw);
+
+    // inherited field maps
+    expect(m.descriptionPt).toBe("Metodologia de reflorestamento");
+    expect(m.sector).toBe("AFOLU");
+    expect(m.developerOrganization).toMatchObject({ id: "u1", name: "Org Verde" });
+    expect(m.currentVersion?.versionNumber).toBe("2.0");
+
+    // backlog collections (spec §4.3 / §9) — never invented
+    expect(m.versions).toEqual([]);
+    expect(m.consultations).toEqual([]);
+    expect(m.solutionType).toBeUndefined();
+    expect(m.updatedAt).toBeUndefined();
   });
 });
 

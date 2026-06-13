@@ -303,7 +303,7 @@ const STATUS_MAP: Record<string, string> = {
 
 /** Translate a platform workflow state to the canonical site status. */
 export function mapStatus(state: string): string {
-  // Unknown states pass through cru so getStatusLabel's fallback still works.
+  // Unknown states pass through unchanged so getStatusLabel's fallback still works.
   return STATUS_MAP[state] ?? state;
 }
 

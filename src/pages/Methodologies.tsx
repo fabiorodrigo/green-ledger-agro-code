@@ -111,12 +111,16 @@ const Methodologies = () => {
                                 v{m.currentVersion.versionNumber}
                               </span>
                             )}
-                            <span className="text-xs px-2 py-0.5 bg-secondary/10 text-secondary rounded-full">
-                              {getSolutionLabel(m.solutionType, lang)}
-                            </span>
-                            <span className="text-xs px-2 py-0.5 bg-muted text-muted-foreground rounded-full">
-                              {getSectorLabel(m.sector, lang)}
-                            </span>
+                            {m.solutionType && (
+                              <span className="text-xs px-2 py-0.5 bg-secondary/10 text-secondary rounded-full">
+                                {getSolutionLabel(m.solutionType, lang)}
+                              </span>
+                            )}
+                            {m.sector && (
+                              <span className="text-xs px-2 py-0.5 bg-muted text-muted-foreground rounded-full">
+                                {getSectorLabel(m.sector, lang)}
+                              </span>
+                            )}
                             {m.activityType && (
                               <span className="text-xs px-2 py-0.5 bg-accent/10 text-accent-foreground rounded-full">
                                 {getActivityTypeLabel(m.activityType, lang)}

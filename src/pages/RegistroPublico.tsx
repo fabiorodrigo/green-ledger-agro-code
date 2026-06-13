@@ -149,9 +149,13 @@ const RegistroPublico = () => {
                         </td>
                         <td className="p-4 text-muted-foreground hidden md:table-cell">{p.organization?.name}</td>
                         <td className="p-4 hidden lg:table-cell">
-                          <span className="text-xs px-2 py-0.5 bg-secondary/10 text-secondary rounded-full">
-                            {getSectorLabel(p.sector, lang)}
-                          </span>
+                          {p.sector ? (
+                            <span className="text-xs px-2 py-0.5 bg-secondary/10 text-secondary rounded-full">
+                              {getSectorLabel(p.sector, lang)}
+                            </span>
+                          ) : (
+                            <span className="text-muted-foreground">—</span>
+                          )}
                         </td>
                         <td className="p-4">
                           <span className={`text-xs px-2.5 py-1 rounded-full font-medium border ${getStatusColor(p.status)}`}>
