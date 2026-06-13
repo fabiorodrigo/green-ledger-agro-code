@@ -143,6 +143,20 @@ export interface PublicProjectDetail extends PublicProject {
     txHash?: string;
   }>;
   documents: PublicProjectDocument[];
+  /**
+   * Certificates issued by the platform (validation/verification opinions and
+   * blockchain-anchored certificates). Each is anchored in IPFS (`ipfsHash`)
+   * and on-chain (`blockchainTxHash`) with a `sha256` content hash.
+   */
+  certificates: Array<{
+    id: string;
+    type: string;
+    certificateNumber: string;
+    issuedAt: string;
+    ipfsHash?: string;
+    blockchainTxHash?: string;
+    sha256?: string;
+  }>;
   /** DCP and other developer-submitted evidence visible per GL-DC.CER.001 — backlog */
   evidence: Array<{
     id: string;
@@ -443,6 +457,29 @@ interface RawMember {
   organization?: RawOrgRef;
 }
 
+interface RawCertificate {
+  _id?: string;
+  id?: string;
+  type?: string;
+  certificateNumber?: string;
+  issuedAt?: string;
+  ipfsHash?: string;
+  blockchainTxHash?: string;
+  sha256?: string;
+}
+
+function mapCertificate(c: RawCertificate): PublicProjectDetail["certificates"][number] {
+  return {
+    id: c._id ?? c.id ?? "",
+    type: c.type ?? "",
+    certificateNumber: c.certificateNumber ?? "",
+    issuedAt: c.issuedAt ?? "",
+    ipfsHash: c.ipfsHash,
+    blockchainTxHash: c.blockchainTxHash,
+    sha256: c.sha256,
+  };
+}
+
 function mapDocument(d: RawDocument): PublicProjectDocument {
   return {
     id: d._id ?? d.id ?? "",
@@ -500,6 +537,7 @@ export function mapProjectDetail(raw: Record<string, unknown>): PublicProjectDet
     verificationEvents?: RawVerificationEvent[];
     issuances?: RawIssuance[];
     documents?: RawDocument[];
+    certificates?: RawCertificate[];
     members?: RawMember[];
     _count?: { properties?: number; issuances?: number; assets?: number };
   };
@@ -566,6 +604,7 @@ export function mapProjectDetail(raw: Record<string, unknown>): PublicProjectDet
     verificationEvents: (r.verificationEvents ?? []).map(mapVerificationEvent),
     issuances: (r.issuances ?? []).map(mapTopIssuance),
     documents: (r.documents ?? []).map(mapDocument),
+    certificates: (r.certificates ?? []).map(mapCertificate),
     evidence: [], // backlog (spec §9)
     _count: {
       properties: r._count?.properties ?? properties.length,
