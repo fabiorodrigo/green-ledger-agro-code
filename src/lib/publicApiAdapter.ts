@@ -449,6 +449,7 @@ interface RawDocument {
   fileUrl?: string;
   signedFileUrl?: string;
   txHash?: string;
+  ipfsHash?: string;
   createdAt?: string;
 }
 
@@ -482,6 +483,9 @@ function mapCertificate(c: RawCertificate): PublicProjectDetail["certificates"][
   };
 }
 
+/** Public IPFS gateway used to build download links from a pinned CID. */
+const IPFS_GATEWAY = "https://ipfs.io/ipfs/";
+
 function mapDocument(d: RawDocument): PublicProjectDocument {
   return {
     id: d._id ?? d.id ?? "",
@@ -489,7 +493,9 @@ function mapDocument(d: RawDocument): PublicProjectDocument {
     // Platform stores the human-readable file name under `originalName`.
     title: d.title ?? d.originalName ?? "",
     version: d.version ?? 1,
-    fileUrl: d.fileUrl,
+    // The public API exposes pinned documents via `ipfsHash` (never a disk path);
+    // build the download link from it. Falls back to an explicit fileUrl if present.
+    fileUrl: d.fileUrl ?? (d.ipfsHash ? `${IPFS_GATEWAY}${d.ipfsHash}` : undefined),
     signedFileUrl: d.signedFileUrl,
     txHash: d.txHash,
     createdAt: d.createdAt ?? "",
