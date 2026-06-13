@@ -144,6 +144,63 @@ describe("mapProjectDetail", () => {
     // backlog fields
     expect(d.evidence).toEqual([]);
     expect(d.impact).toBeUndefined();
+
+    // no certificates in input -> empty array (graceful degradation)
+    expect(d.certificates).toEqual([]);
+  });
+
+  it("maps certificates[] (id <- _id, fields preserved) and defaults to [] when absent", () => {
+    const raw = {
+      _id: "p8",
+      code: "GL-PRJ-0008",
+      name: "Detalhe com certificados",
+      type: "VCU",
+      status: "VERIFICATION_REGISTRY_UPDATE",
+      country: "BR",
+      location: "Cerrado, GO",
+      createdAt: "2025-01-01",
+      developer: { _id: "u1", organizationName: "Org Verde" },
+      methodology: { _id: "m1", code: "MET001", name: "Reflorestamento", version: "v1" },
+      certificates: [
+        {
+          _id: "c1",
+          type: "VALIDATION_OPINION",
+          certificateNumber: "GL-VAL-OP-0008",
+          issuedAt: "2025-03-01",
+          ipfsHash: "QmVal1",
+          blockchainTxHash: "0xval1",
+          sha256: "abc123",
+        },
+        {
+          _id: "c2",
+          type: "VERIFICATION_BLOCKCHAIN",
+          certificateNumber: "GL-VER-BC-0008",
+          issuedAt: "2025-06-01",
+          ipfsHash: "QmVer1",
+          blockchainTxHash: "0xver1",
+        },
+      ],
+    };
+    const d = mapProjectDetail(raw);
+
+    expect(d.certificates).toHaveLength(2);
+    expect(d.certificates[0]).toEqual({
+      id: "c1",
+      type: "VALIDATION_OPINION",
+      certificateNumber: "GL-VAL-OP-0008",
+      issuedAt: "2025-03-01",
+      ipfsHash: "QmVal1",
+      blockchainTxHash: "0xval1",
+      sha256: "abc123",
+    });
+    // optional sha256 preserved as undefined when omitted
+    expect(d.certificates[1]).toMatchObject({
+      id: "c2",
+      type: "VERIFICATION_BLOCKCHAIN",
+      certificateNumber: "GL-VER-BC-0008",
+      blockchainTxHash: "0xver1",
+    });
+    expect(d.certificates[1].sha256).toBeUndefined();
   });
 });
 

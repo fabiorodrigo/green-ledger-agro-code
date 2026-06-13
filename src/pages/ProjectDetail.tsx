@@ -100,6 +100,10 @@ const DOC_TYPE_LABELS: Record<string, { pt: string; en: string }> = {
   VERIFICATION_CERTIFICATE:{ pt: "Certificado de Verificação",        en: "Verification Certificate" },
   ISSUANCE_STATEMENT:      { pt: "Declaração de Emissão de VCUs",     en: "VCU Issuance Statement" },
   RETIREMENT_CERTIFICATE:  { pt: "Certificado de Aposentadoria",      en: "Retirement Certificate" },
+  // Platform `CertificateType` enum values surfaced from `certificates[]`.
+  VALIDATION:              { pt: "Certificado de Validação",          en: "Validation Certificate" },
+  VERIFICATION_OPINION:    { pt: "Parecer de Verificação",           en: "Verification Opinion" },
+  VERIFICATION_BLOCKCHAIN: { pt: "Registro Blockchain da Verificação", en: "Verification Blockchain Record" },
 };
 
 function docLabel(type: string, isEn: boolean): string {
@@ -193,12 +197,40 @@ const ProjectDetail = () => {
     createdAt: e.createdAt,
   }));
 
-  // Separate platform documents by lifecycle phase
-  const validationDocs   = documents.filter((d) => ["VALIDATION_OPINION", "VALIDATION_CERTIFICATE"].includes(d.type));
-  const verificationDocs = documents.filter((d) =>
-    ["GL_VERIFICATION_OPINION", "VVB_VERIFICATION_OPINION", "VERIFICATION_CERTIFICATE",
-     "ISSUANCE_STATEMENT", "MONITORING_REPORT"].includes(d.type)
-  );
+  // Platform-issued certificates (IPFS + on-chain anchored). The local
+  // DocumentTable renders the name from `docLabel(type)`; we still set `title`
+  // (with the certificate number) to satisfy DocRow and aid future use.
+  const IPFS_GATEWAY = "https://ipfs.io/ipfs/";
+  const certToRow = (c: (typeof p.certificates)[number]): DocRow => ({
+    id: c.id,
+    type: c.type,
+    title: `${docLabel(c.type, isEn)} — ${c.certificateNumber}`,
+    version: 1,
+    fileUrl: c.ipfsHash ? `${IPFS_GATEWAY}${c.ipfsHash}` : undefined,
+    txHash: c.blockchainTxHash,
+    createdAt: c.issuedAt,
+  });
+  const certs = p.certificates ?? [];
+  const validationCerts = certs
+    .filter((c) => ["VALIDATION_OPINION", "VALIDATION"].includes(c.type))
+    .map(certToRow);
+  const verificationCerts = certs
+    .filter((c) => ["VERIFICATION_OPINION", "VERIFICATION_BLOCKCHAIN"].includes(c.type))
+    .map(certToRow);
+
+  // Separate platform documents by lifecycle phase, then merge in certificates
+  // so the existing Validation/Verification sections render them.
+  const validationDocs: DocRow[] = [
+    ...documents.filter((d) => ["VALIDATION_OPINION", "VALIDATION_CERTIFICATE"].includes(d.type)),
+    ...validationCerts,
+  ];
+  const verificationDocs: DocRow[] = [
+    ...documents.filter((d) =>
+      ["GL_VERIFICATION_OPINION", "VVB_VERIFICATION_OPINION", "VERIFICATION_CERTIFICATE",
+       "ISSUANCE_STATEMENT", "MONITORING_REPORT"].includes(d.type)
+    ),
+    ...verificationCerts,
+  ];
 
   // "Project Documents" section = DCP (from evidence) + any remaining platform docs not in other sections
   const usedTypes = new Set([
@@ -712,7 +744,7 @@ function DocumentTable({ docs, isEn }: { docs: DocRow[]; isEn: boolean }) {
               return (
                 <tr key={doc.id} className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
                   <td className="p-4 text-primary font-medium">
-                    {docLabel(doc.type, isEn)}
+                    {doc.title || docLabel(doc.type, isEn)}
                     {doc.txHash && (
                       <span className="ml-2 text-xs text-secondary font-mono" title={doc.txHash}>
                         ⛓ {doc.txHash.slice(0, 8)}…
