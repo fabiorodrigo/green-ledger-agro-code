@@ -92,7 +92,7 @@ const Index = () => {
       {stats && (
         <section className="py-12 border-b border-border bg-muted/20">
           <div className="container">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div className={`grid grid-cols-2 gap-8 text-center ${stats.totalOrganizations != null ? "md:grid-cols-4" : "md:grid-cols-3"}`}>
               <AnimatedSection>
                 <p className="font-heading text-3xl md:text-4xl font-bold text-secondary">
                   <AnimatedCounter end={stats.totalProjects} />
@@ -117,14 +117,17 @@ const Index = () => {
                   {isEn ? "Credits Issued (tCO₂e)" : "Créditos Emitidos (tCO₂e)"}
                 </p>
               </AnimatedSection>
-              <AnimatedSection delay={0.3}>
-                <p className="font-heading text-3xl md:text-4xl font-bold text-secondary">
-                  <AnimatedCounter end={stats.totalOrganizations} />
-                </p>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {isEn ? "Organizations" : "Organizações"}
-                </p>
-              </AnimatedSection>
+              {/* Organizations stat hidden when backlog (totalOrganizations undefined) to avoid a misleading "0" */}
+              {stats.totalOrganizations != null && (
+                <AnimatedSection delay={0.3}>
+                  <p className="font-heading text-3xl md:text-4xl font-bold text-secondary">
+                    <AnimatedCounter end={stats.totalOrganizations} />
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {isEn ? "Organizations" : "Organizações"}
+                  </p>
+                </AnimatedSection>
+              )}
             </div>
           </div>
         </section>

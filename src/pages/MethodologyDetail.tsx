@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
   ArrowLeft, ArrowRight, FileText, CheckCircle2, Shield, Target, Layers,
@@ -8,54 +7,7 @@ import AnimatedSection from "@/components/AnimatedSection";
 import SEOHead from "@/components/SEOHead";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { getSectorLabel, getActivityTypeLabel, getSolutionLabel, SDG_LABELS } from "@/constants/methodologyLabels";
-
-const API_BASE = "https://api.greenledger.eco.br/api";
-
-// We look up by code (slug is just the lowercased code)
-interface MethodologyDetail {
-  id: string;
-  code: string;
-  name: string;
-  nameEn?: string;
-  solutionType: "NBS" | "TBS";
-  sector: string;
-  activityType?: string;
-  geeType?: string;
-  assetType: string;
-  status: string;
-  descriptionPt?: string;
-  descriptionEn?: string;
-  eligibilityPt?: string;
-  eligibilityEn?: string;
-  additionalityPt?: string;
-  additionalityEn?: string;
-  boundaryPt?: string;
-  boundaryEn?: string;
-  mrvPt?: string;
-  mrvEn?: string;
-  qaqcPt?: string;
-  qaqcEn?: string;
-  safeguardsPt?: string;
-  safeguardsEn?: string;
-  sdgGoals?: number[];
-  developerOrganization: { id: string; name: string };
-  currentVersion?: {
-    id: string;
-    versionNumber: string;
-    revisionType: string;
-    publishedAt?: string;
-  };
-  versions: Array<{
-    id: string;
-    versionNumber: string;
-    revisionType: string;
-    documentUrl?: string;
-    documentUrlEn?: string;
-    changeLog?: string;
-    publishedAt?: string;
-    createdAt: string;
-  }>;
-}
+import { usePublicMethodologies, usePublicMethodology } from "@/hooks/usePublicAPI";
 
 const whyChoose = [
   {
@@ -87,56 +39,30 @@ const MethodologyDetail = () => {
   const isEn = locale === "en";
   const lang = locale as "pt" | "en" | "es";
 
-  const [m, setM] = useState<MethodologyDetail | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  // The route slug is the methodology *code* (e.g. "met001"). The platform has
+  // no by-code methodology endpoint (only projects do), so we resolve in two
+  // steps via the mapped hooks:
+  //   1. search the (paginated) list by code to find the matching summary,
+  //   2. fetch the full detail by its id.
+  const { data: list, loading: listLoading, error: listError } =
+    usePublicMethodologies({ search: slug, limit: 50 });
 
-  useEffect(() => {
-    if (!slug) return;
+  const summary = list?.data.find(
+    (item) => item.code.toLowerCase() === slug?.toLowerCase(),
+  );
 
-    let cancelled = false;
-    setLoading(true);
-    setError(false);
+  const { data: m, loading: detailLoading, error: detailError } =
+    usePublicMethodology(summary?.id ?? null);
 
-    // Slug is the code lowercased (e.g. "gl-afolu-001")
-    // We search by code (uppercased) via the list endpoint
-    const upperCode = slug.toUpperCase();
-    fetch(`${API_BASE}/public/methodologies?search=${encodeURIComponent(upperCode)}&limit=5`)
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })
-      .then((data) => {
-        if (cancelled) return;
-        const list = data?.data ?? [];
-        const found = list.find((item: { code: string }) => item.code.toUpperCase() === upperCode);
-        if (!found) {
-          setError(true);
-          setLoading(false);
-          return;
-        }
-        // Fetch full detail
-        return fetch(`${API_BASE}/public/methodologies/${found.id}`)
-          .then((res) => {
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            return res.json();
-          })
-          .then((detail) => {
-            if (!cancelled) {
-              setM(detail);
-              setLoading(false);
-            }
-          });
-      })
-      .catch(() => {
-        if (!cancelled) {
-          setError(true);
-          setLoading(false);
-        }
-      });
-
-    return () => { cancelled = true; };
-  }, [slug]);
+  // Loading while the list is still resolving, or while we have a matched
+  // summary whose detail is still in flight.
+  const loading = listLoading || (!!summary && detailLoading);
+  // Error if either request failed, or the list resolved with no code match
+  // (genuine 404 — the methodology does not exist / is not published).
+  const error =
+    !!listError ||
+    !!detailError ||
+    (!listLoading && !!list && !summary);
 
   if (loading) {
     return (
@@ -272,12 +198,16 @@ const MethodologyDetail = () => {
           <p className="text-xl md:text-2xl text-accent font-heading font-semibold mb-6">{title}</p>
 
           <div className="flex items-center gap-3 flex-wrap">
-            <span className="inline-flex items-center gap-2 text-xs px-3 py-1.5 bg-primary-foreground/10 rounded-full border border-primary-foreground/20">
-              {getSolutionLabel(m.solutionType, lang)}
-            </span>
-            <span className="inline-flex items-center gap-2 text-xs px-3 py-1.5 bg-primary-foreground/10 rounded-full border border-primary-foreground/20">
-              {getSectorLabel(m.sector, lang)}
-            </span>
+            {m.solutionType && (
+              <span className="inline-flex items-center gap-2 text-xs px-3 py-1.5 bg-primary-foreground/10 rounded-full border border-primary-foreground/20">
+                {getSolutionLabel(m.solutionType, lang)}
+              </span>
+            )}
+            {m.sector && (
+              <span className="inline-flex items-center gap-2 text-xs px-3 py-1.5 bg-primary-foreground/10 rounded-full border border-primary-foreground/20">
+                {getSectorLabel(m.sector, lang)}
+              </span>
+            )}
             {m.activityType && (
               <span className="inline-flex items-center gap-2 text-xs px-3 py-1.5 bg-primary-foreground/10 rounded-full border border-primary-foreground/20">
                 {getActivityTypeLabel(m.activityType, lang)}

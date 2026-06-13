@@ -21,9 +21,8 @@ const RegistroPublico = () => {
 
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("");
-  const [solutionFilter, setSolutionFilter] = useState<string>("");
 
-  const { data: projectsResponse, loading, error } = usePublicProjects({ limit: 100, search: search || undefined, solutionType: solutionFilter || undefined });
+  const { data: projectsResponse, loading, error } = usePublicProjects({ limit: 100, search: search || undefined });
   const { data: stats } = usePublicStatistics();
 
   const projects = projectsResponse?.data ?? [];
@@ -104,15 +103,6 @@ const RegistroPublico = () => {
                 <option key={s} value={s}>{getStatusLabel(s, lang)}</option>
               ))}
             </select>
-            <select
-              value={solutionFilter}
-              onChange={(e) => setSolutionFilter(e.target.value)}
-              className="border border-border rounded-md px-3 py-2 text-sm bg-background text-foreground"
-            >
-              <option value="">{t("registry.all.programs")}</option>
-              <option value="NBS">{isEn ? "Nature-Based (NBS)" : "Base Natural (NBS)"}</option>
-              <option value="TBS">{isEn ? "Technology-Based (TBS)" : "Base Tecnológica (TBS)"}</option>
-            </select>
           </div>
 
           {/* Loading / Error */}
@@ -159,9 +149,13 @@ const RegistroPublico = () => {
                         </td>
                         <td className="p-4 text-muted-foreground hidden md:table-cell">{p.organization?.name}</td>
                         <td className="p-4 hidden lg:table-cell">
-                          <span className="text-xs px-2 py-0.5 bg-secondary/10 text-secondary rounded-full">
-                            {getSectorLabel(p.sector, lang)}
-                          </span>
+                          {p.sector ? (
+                            <span className="text-xs px-2 py-0.5 bg-secondary/10 text-secondary rounded-full">
+                              {getSectorLabel(p.sector, lang)}
+                            </span>
+                          ) : (
+                            <span className="text-muted-foreground">—</span>
+                          )}
                         </td>
                         <td className="p-4">
                           <span className={`text-xs px-2.5 py-1 rounded-full font-medium border ${getStatusColor(p.status)}`}>

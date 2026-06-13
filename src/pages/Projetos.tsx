@@ -122,9 +122,11 @@ const Projetos = () => {
                                 <ShieldCheck className="w-3 h-3" />
                                 {getStatusLabel(p.status, lang)}
                               </span>
-                              <span className="text-xs text-muted-foreground px-2 py-0.5 bg-muted rounded-full">
-                                {getSectorLabel(p.sector, lang)}
-                              </span>
+                              {p.sector && (
+                                <span className="text-xs text-muted-foreground px-2 py-0.5 bg-muted rounded-full">
+                                  {getSectorLabel(p.sector, lang)}
+                                </span>
+                              )}
                               <span className="font-mono text-xs text-secondary/70">{p.code}</span>
                             </div>
                             <h3 className="font-heading font-semibold text-xl text-primary mb-2">{p.name}</h3>

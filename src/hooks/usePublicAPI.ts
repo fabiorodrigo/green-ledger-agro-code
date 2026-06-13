@@ -1,223 +1,74 @@
 /**
  * GL Public API hooks
- * Provides typed React hooks for the Green Ledger public API endpoints.
- * All endpoints are unauthenticated (no JWT required).
  *
- * API base: https://api.greenledger.eco.br/api
+ * Typed React hooks for the Green Ledger public API. All endpoints are
+ * unauthenticated (no JWT required).
+ *
+ * The site was built (in Lovable) against a richer, differently-named contract
+ * than the platform actually exposes. These hooks fetch the REAL platform shape
+ * and run it through the pure mappers in `src/lib/publicApiAdapter.ts` (Task S1),
+ * preserving the original `{ data, loading, error }` return shape so the pages
+ * keep working unchanged.
+ *
+ * Spec: docs/specs/2026-06-13-public-api-adapter-design.md (§2 endpoints, §3
+ * pagination, §4 field maps).
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
-const API_BASE = "https://api.greenledger.eco.br/api";
+// Re-export the site types so existing `import { PublicProject, ... } from
+// "@/hooks/usePublicAPI"` call sites keep resolving (the types now live in the
+// adapter — single source of truth).
+export type {
+  PublicProject,
+  PublicProjectDetail,
+  PublicProjectDocument,
+  PublicMethodology,
+  PublicMethodologyDetail,
+  PublicVvb,
+  PublicStatistics,
+  PaginatedResponse,
+} from "@/lib/publicApiAdapter";
+
+import {
+  mapProject,
+  mapProjectDetail,
+  mapMethodology,
+  mapMethodologyDetail,
+  mapVvb,
+  mapStatistics,
+  toPaginated,
+} from "@/lib/publicApiAdapter";
+
+import type {
+  PublicProject,
+  PublicProjectDetail,
+  PublicMethodology,
+  PublicMethodologyDetail,
+  PublicVvb,
+  PublicStatistics,
+  PaginatedResponse,
+} from "@/lib/publicApiAdapter";
+
+// Configurable base URL — overridable per-environment via Vite env, with the
+// production platform API as the default.
+const API_BASE =
+  (import.meta.env.VITE_API_BASE_URL as string | undefined) ??
+  "https://api.greenledger.eco.br/api";
 
 // ---------------------------------------------------------------------------
-// Types mirroring the API responses
+// Raw platform shapes (minimal — only the fields the hooks pass to mappers).
+// The mappers own the precise field-level typing; here we keep just enough to
+// type `useFetch<T>` without resorting to `any`.
 // ---------------------------------------------------------------------------
 
-export interface PublicProject {
-  id: string;
-  code: string;
-  name: string;
-  assetType: string;
-  solutionType: "NBS" | "TBS";
-  scale?: string;
-  sector: string;
-  afolouCategory?: string;
-  status: string;
-  country: string;
-  locationDescription: string;
-  totalAreaHa: number;
-  estimatedReductions?: number;
-  creditingPeriodStart: string;
-  creditingPeriodEnd: string;
-  createdAt: string;
-  organization: { id: string; name: string };
-  methodology: { id: string; code: string; name: string; nameEn?: string };
-}
-
-export interface PublicProjectDocument {
-  id: string;
-  type: string;
-  title: string;
-  version: number;
-  fileUrl?: string;
-  signedFileUrl?: string;
-  txHash?: string;
-  createdAt: string;
-}
-
-export interface PublicProjectDetail extends PublicProject {
-  methodologyVersion: string;
-  coordinates?: { type: string; coordinates: [number, number] };
-  startDate?: string;
-  commitmentPeriodEnd?: string;
-  landComplianceSeal?: string;
-  sbceIntention?: boolean;
-  biome?: string;
-  crop?: string;
-  geeType?: string;
-  overviewPt?: string;
-  overviewEn?: string;
-  impact?: Array<{
-    sdg: number;
-    value?: string;      // highlight number, e.g. "6.415" / "38k"
-    unit?: string;       // unit label, e.g. "tCO₂e" / "nascentes"
-    indicator: string;
-    baseline: string;
-    frequency: string;
-    methodology: string;
-  }>;
-  properties?: Array<{ municipality: string; state: string }>;
-  updatedAt: string;
-  organization: {
-    id: string;
-    name: string;
-    type: string;
-    publicWebsite?: string;
-    email?: string;
-  };
-  methodology: {
-    id: string;
-    code: string;
-    name: string;
-    nameEn?: string;
-    solutionType: string;
-    sector: string;
-    activityType?: string;
-  };
-  members: Array<{
-    id: string;
-    role: string;
-    organization: { id: string; name: string };
-  }>;
-  validationEvent?: {
-    completedAt?: string;
-    glOpinion?: string;
-    glReportUrl?: string;
-  };
-  verificationEvents: Array<{
-    verificationNumber: number;
-    monitoringPeriodStart: string;
-    monitoringPeriodEnd: string;
-    netIssuable?: number;
-    vvbOpinion?: string;
-    vvbReportUrl?: string;
-    glDeclarationUrl?: string;
-    completedAt?: string;
-    verificationAssignment?: {
-      vvbOrganization: { id: string; name: string };
-    };
-    issuances: Array<{
-      vintageYear: number;
-      issuedQuantity: number;
-      txHash?: string;
-    }>;
-  }>;
-  issuances: Array<{
-    vintageYear: number;
-    issuedQuantity: number;
-    txHash?: string;
-  }>;
-  documents: PublicProjectDocument[];
-  /** DCP and other developer-submitted evidence visible per GL-DC.CER.001 */
-  evidence: Array<{
-    id: string;
-    category: string;
-    name: string;
-    fileUrl: string;
-    createdAt: string;
-  }>;
-  _count: { properties: number; issuances: number; assets: number };
-}
-
-export interface PublicMethodology {
-  id: string;
-  code: string;
-  name: string;
-  nameEn?: string;
-  solutionType: "NBS" | "TBS";
-  sector: string;
-  activityType?: string;
-  geeType?: string;
-  assetType: string;
-  status: string;
-  descriptionPt?: string;
-  descriptionEn?: string;
-  eligibilityPt?: string;
-  eligibilityEn?: string;
-  mrvPt?: string;
-  mrvEn?: string;
-  additionalityPt?: string;
-  additionalityEn?: string;
-  sdgGoals?: number[];
-  createdAt: string;
-  developerOrganization: { id: string; name: string };
-  currentVersion?: {
-    id: string;
-    versionNumber: string;
-    revisionType: string;
-    publishedAt?: string;
-  };
-}
-
-export interface PublicMethodologyDetail extends PublicMethodology {
-  boundaryPt?: string;
-  boundaryEn?: string;
-  qaqcPt?: string;
-  qaqcEn?: string;
-  safeguardsPt?: string;
-  safeguardsEn?: string;
-  licenseExpiresAt?: string;
-  updatedAt: string;
-  developerOrganization: { id: string; name: string; type: string };
-  versions: Array<{
-    id: string;
-    versionNumber: string;
-    revisionType: string;
-    documentUrl: string;
-    documentUrlEn?: string;
-    changeLog?: string;
-    publishedAt?: string;
-    createdAt: string;
-  }>;
-  consultations: Array<{
-    id: string;
-    startDate: string;
-    endDate: string;
-    status: string;
-    glOpinion?: string;
-    _count: { comments: number };
-  }>;
-}
-
-export interface PublicVvb {
-  id: string;
-  name: string;
-  publicWebsite?: string;
-  accreditationDate?: string;
-  accreditedScales: string[];
-  accreditedSectors: string[];
-  accreditedActivityTypes: string[];
-  accreditationStatus: string;
-  _count: { verificationAssignments: number };
-}
-
-export interface PublicStatistics {
-  totalProjects: number;
-  totalMethodologies: number;
-  totalCreditsIssued: number;
-  totalCreditsRetired: number;
-  totalOrganizations: number;
-}
-
-export interface PaginatedResponse<T> {
-  data: T[];
-  meta: {
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number;
-  };
+/** Flat pagination envelope returned by the platform list endpoints (§3). */
+interface RawPaginated {
+  data: Record<string, unknown>[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -264,78 +115,128 @@ function useFetch<T>(url: string | null): FetchState<T> {
   return state;
 }
 
+/**
+ * Apply a pure transform to a fetch result while preserving `loading`/`error`.
+ * The mapped value is memoized on `state.data` so a stable reference is handed
+ * to consumers across re-renders (avoids spurious downstream effects/renders).
+ */
+function useMapped<TRaw, TOut>(
+  state: FetchState<TRaw>,
+  transform: (raw: TRaw) => TOut,
+): FetchState<TOut> {
+  const data = useMemo(
+    () => (state.data ? transform(state.data) : null),
+    // `transform` is a module-level pure mapper (stable identity) — intentionally
+    // depend only on the fetched data to avoid re-mapping every render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [state.data],
+  );
+  return { data, loading: state.loading, error: state.error };
+}
+
 // ---------------------------------------------------------------------------
 // Public hooks
 // ---------------------------------------------------------------------------
 
-/** Fetch paginated list of publicly visible projects. */
+/**
+ * Fetch paginated list of publicly visible projects.
+ *
+ * NOTE: `solutionType` is accepted for backward-compat with call sites
+ * (RegistroPublico) but intentionally NOT sent — the platform does not model
+ * NBS/TBS classification yet (backlog, removed in S3).
+ */
 export function usePublicProjects(params?: {
   page?: number;
   limit?: number;
   solutionType?: string;
   search?: string;
-}) {
+}): FetchState<PaginatedResponse<PublicProject>> {
   const query = new URLSearchParams();
   if (params?.page) query.set("page", String(params.page));
   if (params?.limit) query.set("limit", String(params.limit));
-  if (params?.solutionType) query.set("solutionType", params.solutionType);
   if (params?.search) query.set("search", params.search);
   const url = `${API_BASE}/public/projects?${query.toString()}`;
-  return useFetch<PaginatedResponse<PublicProject>>(url);
+  const raw = useFetch<RawPaginated>(url);
+  return useMapped(raw, (r) => toPaginated(r, mapProject));
 }
 
 /** Fetch a single project by its code (e.g. GL-PRJ-0001). */
-export function usePublicProjectByCode(code: string | null) {
+export function usePublicProjectByCode(
+  code: string | null,
+): FetchState<PublicProjectDetail> {
   const url = code
     ? `${API_BASE}/public/projects/by-code/${encodeURIComponent(code)}`
     : null;
-  return useFetch<PublicProjectDetail>(url);
+  const raw = useFetch<Record<string, unknown>>(url);
+  return useMapped(raw, mapProjectDetail);
 }
 
-/** Fetch a single project by UUID. */
-export function usePublicProject(id: string | null) {
+/** Fetch a single project by id. */
+export function usePublicProject(
+  id: string | null,
+): FetchState<PublicProjectDetail> {
   const url = id ? `${API_BASE}/public/projects/${id}` : null;
-  return useFetch<PublicProjectDetail>(url);
+  const raw = useFetch<Record<string, unknown>>(url);
+  return useMapped(raw, mapProjectDetail);
 }
 
-/** Fetch paginated list of published methodologies. */
+/**
+ * Fetch paginated list of published methodologies.
+ *
+ * NOTE: `solutionType` accepted-but-ignored — see `usePublicProjects`.
+ */
 export function usePublicMethodologies(params?: {
   page?: number;
   limit?: number;
   solutionType?: string;
   search?: string;
-}) {
+}): FetchState<PaginatedResponse<PublicMethodology>> {
   const query = new URLSearchParams();
   if (params?.page) query.set("page", String(params.page));
   if (params?.limit) query.set("limit", String(params.limit));
-  if (params?.solutionType) query.set("solutionType", params.solutionType);
   if (params?.search) query.set("search", params.search);
   const url = `${API_BASE}/public/methodologies?${query.toString()}`;
-  return useFetch<PaginatedResponse<PublicMethodology>>(url);
+  const raw = useFetch<RawPaginated>(url);
+  return useMapped(raw, (r) => toPaginated(r, mapMethodology));
 }
 
-/** Fetch a single methodology by UUID. */
-export function usePublicMethodology(id: string | null) {
+/** Fetch a single methodology by id. */
+export function usePublicMethodology(
+  id: string | null,
+): FetchState<PublicMethodologyDetail> {
   const url = id ? `${API_BASE}/public/methodologies/${id}` : null;
-  return useFetch<PublicMethodologyDetail>(url);
+  const raw = useFetch<Record<string, unknown>>(url);
+  return useMapped(raw, mapMethodologyDetail);
 }
 
-/** Fetch list of accredited VVBs with active accreditation status. */
-export function usePublicVvbs() {
-  const url = `${API_BASE}/public/organizations/vvbs`;
-  return useFetch<PublicVvb[]>(url);
+/**
+ * Fetch list of accredited VVBs.
+ *
+ * The platform returns a paginated envelope (`{ data, ... }`); the hook flattens
+ * it to `PublicVvb[]` to preserve the original return shape (spec §4.4).
+ */
+export function usePublicVvbs(): FetchState<PublicVvb[]> {
+  const url = `${API_BASE}/public/vvbs`;
+  const raw = useFetch<RawPaginated>(url);
+  return useMapped(raw, (r) => (r.data ?? []).map(mapVvb));
 }
 
 /** Fetch platform aggregate statistics. */
-export function usePublicStatistics() {
-  const url = `${API_BASE}/public/statistics`;
-  return useFetch<PublicStatistics>(url);
+export function usePublicStatistics(): FetchState<PublicStatistics> {
+  const url = `${API_BASE}/public/registry/stats`;
+  const raw = useFetch<Record<string, unknown>>(url);
+  return useMapped(raw, mapStatistics);
 }
 
-/** Verify a carbon credit asset by serial number. */
-export function useVerifyAsset(serialNumber: string | null) {
+/**
+ * Verify a carbon credit asset by serial number.
+ *
+ * Returns the raw platform verification response unchanged (no site-specific
+ * mapper required — consumers read the platform shape directly).
+ */
+export function useVerifyAsset(serialNumber: string | null): FetchState<unknown> {
   const url = serialNumber
-    ? `${API_BASE}/public/assets/${encodeURIComponent(serialNumber)}`
+    ? `${API_BASE}/public/verify/asset/${encodeURIComponent(serialNumber)}`
     : null;
   return useFetch<unknown>(url);
 }
