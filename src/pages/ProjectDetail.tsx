@@ -744,7 +744,7 @@ function DocumentTable({ docs, isEn }: { docs: DocRow[]; isEn: boolean }) {
               return (
                 <tr key={doc.id} className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
                   <td className="p-4 text-primary font-medium">
-                    {docLabel(doc.type, isEn)}
+                    {doc.title || docLabel(doc.type, isEn)}
                     {doc.txHash && (
                       <span className="ml-2 text-xs text-secondary font-mono" title={doc.txHash}>
                         ⛓ {doc.txHash.slice(0, 8)}…
