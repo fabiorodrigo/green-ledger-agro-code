@@ -92,9 +92,13 @@ const SHOW_TIMELINE_STATUSES = [
 // Human-readable labels for document types returned by the API
 const DOC_TYPE_LABELS: Record<string, { pt: string; en: string }> = {
   DCP:                     { pt: "Documento de Concepção de Projeto",  en: "Project Design Document (DCP)" },
+  PUBLIC_CALL_RESPONSE:    { pt: "Resposta à Consulta Pública",       en: "Public Consultation Response" },
+  COI_DECLARATION:         { pt: "Declaração de Conflito de Interesse", en: "Conflict of Interest Declaration" },
   VALIDATION_OPINION:      { pt: "Parecer de Validação (GL)",         en: "Validation Opinion (GL)" },
   VALIDATION_CERTIFICATE:  { pt: "Certificado de Validação",          en: "Validation Certificate" },
+  VVB_OPINION:             { pt: "Parecer da VVB",                    en: "VVB Opinion" },
   MONITORING_REPORT:       { pt: "Relatório de Monitoramento",        en: "Monitoring Report" },
+  VERIFICATION_CERTIFICATE_BLOCKCHAIN: { pt: "Registro Blockchain da Verificação", en: "Verification Blockchain Record" },
   GL_VERIFICATION_OPINION: { pt: "Parecer de Verificação (GL)",       en: "Verification Opinion (GL)" },
   VVB_VERIFICATION_OPINION:{ pt: "Parecer de Verificação (VVB)",      en: "Verification Opinion (VVB)" },
   VERIFICATION_CERTIFICATE:{ pt: "Certificado de Verificação",        en: "Verification Certificate" },
@@ -222,14 +226,17 @@ const ProjectDetail = () => {
 
   // Separate platform documents by lifecycle phase, then merge in certificates
   // so the existing Validation/Verification sections render them.
+  // Document type filters use the real platform DocumentType enum values.
   const validationDocs: DocRow[] = [
-    ...documents.filter((d) => ["VALIDATION_OPINION", "VALIDATION_CERTIFICATE"].includes(d.type)),
+    ...documents.filter((d) =>
+      ["VALIDATION_OPINION", "VALIDATION_CERTIFICATE", "VVB_OPINION"].includes(d.type)
+    ),
     ...validationCerts,
   ];
   const verificationDocs: DocRow[] = [
     ...documents.filter((d) =>
-      ["GL_VERIFICATION_OPINION", "VVB_VERIFICATION_OPINION", "VERIFICATION_CERTIFICATE",
-       "ISSUANCE_STATEMENT", "MONITORING_REPORT"].includes(d.type)
+      ["VERIFICATION_OPINION", "VERIFICATION_CERTIFICATE",
+       "VERIFICATION_CERTIFICATE_BLOCKCHAIN", "MONITORING_REPORT"].includes(d.type)
     ),
     ...verificationCerts,
   ];

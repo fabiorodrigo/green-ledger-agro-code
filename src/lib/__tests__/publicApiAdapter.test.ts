@@ -103,9 +103,18 @@ describe("mapProjectDetail", () => {
         { vintageYear: 2025, issuedQuantity: 500, mintTxHash: "0xabc" },
       ],
       members: [{ role: "DEVELOPER", organization: { id: "u1", name: "Org Verde" } }],
+      documents: [
+        { _id: "doc1", type: "DCP", originalName: "DCP.pdf", ipfsHash: "QmDoc", createdAt: "2025-01-01" },
+        { _id: "doc2", type: "MONITORING_REPORT", originalName: "MR.pdf", createdAt: "2025-02-01" },
+      ],
       _count: { properties: 1, issuances: 1, assets: 5 },
     };
     const d = mapProjectDetail(raw);
+
+    // documents: title from originalName; fileUrl built from ipfsHash (IPFS gateway),
+    // undefined when not pinned.
+    expect(d.documents[0]).toMatchObject({ id: "doc1", type: "DCP", title: "DCP.pdf", fileUrl: "https://ipfs.io/ipfs/QmDoc" });
+    expect(d.documents[1].fileUrl).toBeUndefined();
 
     // properties pass-through
     expect(d.properties).toEqual([
