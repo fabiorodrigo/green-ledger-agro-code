@@ -82,6 +82,7 @@ describe("mapProjectDetail", () => {
       location: "Amazonia, PA",
       createdAt: "2025-01-01",
       overview: "Resumo do projeto",
+      description: "Descrição completa do projeto",
       developer: { _id: "u1", name: "Fulano", organizationName: "Org Verde" },
       methodology: { _id: "m1", code: "MET001", name: "Reflorestamento", version: "v2" },
       properties: [
@@ -110,6 +111,9 @@ describe("mapProjectDetail", () => {
     expect(d.properties).toEqual([
       { municipality: "Belem", state: "PA", latitude: -1.45, longitude: -48.5 },
     ]);
+
+    // description mapped (Overview fallback source)
+    expect(d.descriptionPt).toBe("Descrição completa do projeto");
 
     // status mapped
     expect(d.status).toBe("ACTIVE");

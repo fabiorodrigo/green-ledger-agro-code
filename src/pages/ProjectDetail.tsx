@@ -179,7 +179,9 @@ const ProjectDetail = () => {
       : []),
   ];
 
-  const overview      = isEn ? (p.overviewEn ?? p.overviewPt) : p.overviewPt;
+  // Overview prefers the dedicated overview field; falls back to the project
+  // description (PT) so "Visão Geral" isn't empty when overview is unset.
+  const overview      = (isEn ? (p.overviewEn ?? p.overviewPt) : p.overviewPt) ?? p.descriptionPt;
   const impact        = p.impact ?? [];
   const verifications = p.verificationEvents ?? [];
   const issuances     = p.issuances ?? [];
