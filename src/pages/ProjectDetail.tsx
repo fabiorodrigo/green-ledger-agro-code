@@ -154,8 +154,12 @@ const ProjectDetail = () => {
     { icon: FileText,    label: isEn ? "Methodology" : "Metodologia",
       value: `${p.methodology?.code} — ${isEn ? (p.methodology?.nameEn ?? p.methodology?.name) : p.methodology?.name}`,
       link: p.methodology ? `/metodologias/${p.methodology.code.toLowerCase()}` : undefined },
-    { icon: Leaf,        label: isEn ? "Solution Type" : "Tipo de Solução",                       value: p.solutionType },
-    { icon: TreePine,    label: isEn ? "Sector" : "Setor",                                        value: getSectorLabel(p.sector, lang) },
+    ...(p.solutionType
+      ? [{ icon: Leaf, label: isEn ? "Solution Type" : "Tipo de Solução", value: p.solutionType }]
+      : []),
+    ...(p.sector
+      ? [{ icon: TreePine, label: isEn ? "Sector" : "Setor", value: getSectorLabel(p.sector, lang) }]
+      : []),
     ...(p.methodology?.activityType
       ? [{ icon: Hash, label: isEn ? "Activity Type" : "Tipo de Atividade",                       value: getActivityTypeLabel(p.methodology.activityType, lang) }]
       : []),
