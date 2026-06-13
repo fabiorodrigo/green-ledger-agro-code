@@ -73,6 +73,8 @@ export interface PublicProjectDetail extends PublicProject {
   geeType?: string;
   overviewPt?: string;
   overviewEn?: string;
+  /** Project description (PT) — Overview fallback when overview is empty. */
+  descriptionPt?: string;
   impact?: Array<{
     sdg: number;
     value?: string;
@@ -532,6 +534,7 @@ export function mapProjectDetail(raw: Record<string, unknown>): PublicProjectDet
     biome?: string;
     cadTrustUrl?: string;
     methodology?: RawMethodologyRef | null;
+    description?: string;
     properties?: RawProperty[];
     validationEvent?: RawValidationEvent | null;
     verificationEvents?: RawVerificationEvent[];
@@ -579,6 +582,7 @@ export function mapProjectDetail(raw: Record<string, unknown>): PublicProjectDet
     geeType: undefined,
     overviewPt: r.overview,
     overviewEn: undefined,
+    descriptionPt: r.description,
     impact: undefined,
     properties,
     updatedAt: undefined,
