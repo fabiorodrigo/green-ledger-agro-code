@@ -146,6 +146,19 @@ export interface PublicProjectDetail extends PublicProject {
   }>;
   documents: PublicProjectDocument[];
   /**
+   * Open/closed public consultation attached to this project, when one exists.
+   * Metadata only — comment *content* is never returned (write-only endpoint);
+   * `commentCount` is the sole activity signal. `null` when no consultation.
+   */
+  consultation?: {
+    id: string;
+    status: string;
+    openDate?: string;
+    closeDate?: string;
+    title?: string;
+    commentCount: number;
+  } | null;
+  /**
    * Certificates issued by the platform (validation/verification opinions and
    * blockchain-anchored certificates). Each is anchored in IPFS (`ipfsHash`)
    * and on-chain (`blockchainTxHash`) with a `sha256` content hash.
@@ -232,6 +245,18 @@ export interface PublicMethodologyDetail extends PublicMethodology {
     glOpinion?: string;
     _count: { comments: number };
   }>;
+  /**
+   * Open/closed public consultation attached to this methodology, when one
+   * exists. Metadata only — see `PublicProjectDetail.consultation`.
+   */
+  consultation?: {
+    id: string;
+    status: string;
+    openDate?: string;
+    closeDate?: string;
+    title?: string;
+    commentCount: number;
+  } | null;
 }
 
 export interface PublicVvb {
@@ -505,6 +530,35 @@ function mapCertificate(c: RawCertificate): PublicProjectDetail["certificates"][
   };
 }
 
+/**
+ * Embedded consultation summary returned inline on project/methodology detail
+ * (C5). Comment content is never present — only `commentCount`.
+ */
+interface RawEmbeddedConsultation {
+  id?: string;
+  _id?: string;
+  status?: string;
+  openDate?: string;
+  closeDate?: string;
+  title?: string;
+  commentCount?: number;
+}
+
+/** Map an inline detail consultation, or `null` when the entity has none. */
+function mapEmbeddedConsultation(
+  raw: RawEmbeddedConsultation | null | undefined,
+): PublicProjectDetail["consultation"] {
+  if (!raw) return null;
+  return {
+    id: raw.id ?? raw._id ?? "",
+    status: raw.status ?? "",
+    openDate: raw.openDate,
+    closeDate: raw.closeDate,
+    title: raw.title,
+    commentCount: raw.commentCount ?? 0,
+  };
+}
+
 /** Public IPFS gateway used to build download links from a pinned CID. */
 const IPFS_GATEWAY = "https://ipfs.io/ipfs/";
 
@@ -570,6 +624,7 @@ export function mapProjectDetail(raw: Record<string, unknown>): PublicProjectDet
     documents?: RawDocument[];
     certificates?: RawCertificate[];
     members?: RawMember[];
+    consultation?: RawEmbeddedConsultation | null;
     _count?: { properties?: number; issuances?: number; assets?: number };
   };
 
@@ -637,6 +692,7 @@ export function mapProjectDetail(raw: Record<string, unknown>): PublicProjectDet
     issuances: (r.issuances ?? []).map(mapTopIssuance),
     documents: (r.documents ?? []).map(mapDocument),
     certificates: (r.certificates ?? []).map(mapCertificate),
+    consultation: mapEmbeddedConsultation(r.consultation),
     evidence: [], // backlog (spec §9)
     _count: {
       properties: r._count?.properties ?? properties.length,
@@ -688,11 +744,13 @@ export function mapMethodologyDetail(raw: Record<string, unknown>): PublicMethod
   const base = mapMethodology(raw);
   const r = raw as {
     developer?: RawOrgRef;
+    consultation?: RawEmbeddedConsultation | null;
   };
   return {
     ...base,
     updatedAt: undefined,
     developerOrganization: { ...mapOrg(r.developer), type: undefined },
+    consultation: mapEmbeddedConsultation(r.consultation),
     // backlog collections (spec §4.3 / §9):
     versions: [],
     consultations: [],

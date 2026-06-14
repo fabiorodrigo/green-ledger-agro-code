@@ -161,6 +161,41 @@ describe("mapProjectDetail", () => {
 
     // no certificates in input -> empty array (graceful degradation)
     expect(d.certificates).toEqual([]);
+
+    // no consultation in input -> null (C5)
+    expect(d.consultation).toBeNull();
+  });
+
+  it("maps embedded consultation (id, status, period, title, commentCount)", () => {
+    const raw = {
+      _id: "p9",
+      code: "GL-PRJ-0009",
+      name: "Projeto com consulta",
+      type: "VCU",
+      status: "VALIDATION_PROJECT_VALIDATION",
+      country: "BR",
+      location: "Amazonia, PA",
+      createdAt: "2025-01-01",
+      developer: { _id: "u1", organizationName: "Org Verde" },
+      methodology: { _id: "m1", code: "MET001", name: "Reflorestamento", version: "v1" },
+      consultation: {
+        id: "k1",
+        status: "OPEN",
+        openDate: "2026-01-01",
+        closeDate: "2026-02-01",
+        title: "Consulta Projeto X",
+        commentCount: 7,
+      },
+    };
+    const d = mapProjectDetail(raw);
+    expect(d.consultation).toEqual({
+      id: "k1",
+      status: "OPEN",
+      openDate: "2026-01-01",
+      closeDate: "2026-02-01",
+      title: "Consulta Projeto X",
+      commentCount: 7,
+    });
   });
 
   it("maps certificates[] (id <- _id, fields preserved) and defaults to [] when absent", () => {
@@ -293,6 +328,33 @@ describe("mapMethodologyDetail", () => {
     expect(m.consultations).toEqual([]);
     expect(m.solutionType).toBeUndefined();
     expect(m.updatedAt).toBeUndefined();
+
+    // no embedded consultation -> null (C5)
+    expect(m.consultation).toBeNull();
+  });
+
+  it("maps embedded consultation when present (C5)", () => {
+    const m = mapMethodologyDetail({
+      _id: "m2",
+      code: "MET002",
+      name: "Biochar",
+      status: "PUBLISHED",
+      developer: { _id: "u1", organizationName: "Org Verde" },
+      consultation: {
+        _id: "k9",
+        status: "CLOSED",
+        title: "Consulta Metodologia",
+        commentCount: 3,
+      },
+    });
+    expect(m.consultation).toEqual({
+      id: "k9",
+      status: "CLOSED",
+      openDate: undefined,
+      closeDate: undefined,
+      title: "Consulta Metodologia",
+      commentCount: 3,
+    });
   });
 });
 
