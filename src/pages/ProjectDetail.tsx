@@ -224,29 +224,34 @@ const ProjectDetail = () => {
     .filter((c) => ["VERIFICATION_OPINION", "VERIFICATION_BLOCKCHAIN"].includes(c.type))
     .map(certToRow);
 
-  // Separate platform documents by lifecycle phase, then merge in certificates
-  // so the existing Validation/Verification sections render them.
-  // Document type filters use the real platform DocumentType enum values.
+  // Platform-generated certificate PDFs are surfaced via `certificates[]`
+  // (validationCerts/verificationCerts above), so we exclude those document
+  // types from the document sections to avoid showing each certificate twice.
+  const CERT_DOC_TYPES = [
+    "VALIDATION_OPINION", "VALIDATION_CERTIFICATE",
+    "VERIFICATION_OPINION", "VERIFICATION_CERTIFICATE", "VERIFICATION_CERTIFICATE_BLOCKCHAIN",
+  ];
+  const uploadedDocs = documents.filter((d) => !CERT_DOC_TYPES.includes(d.type));
+
+  // Uploaded documents by lifecycle phase, then merge in the certificates.
+  // (VVB_OPINION is generic; shown under Validation — the file name disambiguates
+  // a verification VVB opinion.)
   const validationDocs: DocRow[] = [
-    ...documents.filter((d) =>
-      ["VALIDATION_OPINION", "VALIDATION_CERTIFICATE", "VVB_OPINION"].includes(d.type)
-    ),
+    ...uploadedDocs.filter((d) => d.type === "VVB_OPINION"),
     ...validationCerts,
   ];
   const verificationDocs: DocRow[] = [
-    ...documents.filter((d) =>
-      ["VERIFICATION_OPINION", "VERIFICATION_CERTIFICATE",
-       "VERIFICATION_CERTIFICATE_BLOCKCHAIN", "MONITORING_REPORT"].includes(d.type)
-    ),
+    ...uploadedDocs.filter((d) => d.type === "MONITORING_REPORT"),
     ...verificationCerts,
   ];
 
-  // "Project Documents" section = DCP (from evidence) + any remaining platform docs not in other sections
+  // "Project Documents" = DCP (from evidence) + remaining uploaded docs not in
+  // the validation/verification sections (e.g. DCP, PUBLIC_CALL_RESPONSE, COI_DECLARATION).
   const usedTypes = new Set([
     ...validationDocs.map((d) => d.type),
     ...verificationDocs.map((d) => d.type),
   ]);
-  const otherPlatformDocs = documents.filter((d) => !usedTypes.has(d.type));
+  const otherPlatformDocs = uploadedDocs.filter((d) => !usedTypes.has(d.type));
   const projectDocs: DocRow[] = [...dcpRows, ...otherPlatformDocs];
 
   return (
