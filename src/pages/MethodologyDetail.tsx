@@ -4,6 +4,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AnimatedSection from "@/components/AnimatedSection";
+import ConsultationForm from "@/components/ConsultationForm";
 import SEOHead from "@/components/SEOHead";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { getSectorLabel, getActivityTypeLabel, getSolutionLabel, SDG_LABELS } from "@/constants/methodologyLabels";
@@ -453,6 +454,28 @@ const MethodologyDetail = () => {
                 </AnimatedSection>
               ))}
             </div>
+          </div>
+        </section>
+      )}
+
+      {/* Public consultation comment form (C5) — only when one exists.
+          Submit-only: no comment list is ever rendered. */}
+      {m.consultation && (
+        <section className="py-16 md:py-24">
+          <div className="container max-w-4xl">
+            <AnimatedSection>
+              <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-2 text-center">
+                {isEn
+                  ? "Share your Concerns or Suggestions"
+                  : "Compartilhe suas Preocupações ou Sugestões"}
+              </h2>
+              <p className="text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed text-center">
+                {isEn
+                  ? "This methodology is under public consultation. Your contribution helps us improve continuously."
+                  : "Esta metodologia está em consulta pública. Sua contribuição nos ajuda a melhorar continuamente."}
+              </p>
+              <ConsultationForm consultation={m.consultation} isEn={isEn} />
+            </AnimatedSection>
           </div>
         </section>
       )}

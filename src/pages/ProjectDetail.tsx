@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AnimatedSection from "@/components/AnimatedSection";
+import ConsultationForm from "@/components/ConsultationForm";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { usePublicProjectByCode } from "@/hooks/usePublicAPI";
 import { getStatusLabel, getStatusColor } from "@/constants/projectStatus";
@@ -688,6 +689,30 @@ const ProjectDetail = () => {
                 {isEn ? "Verification Documents" : "Documentos da Verificação"}
               </h3>
               <DocumentTable docs={verificationDocs} isEn={isEn} />
+            </AnimatedSection>
+          </div>
+        </section>
+      )}
+
+      {/* ===================================================================
+          Public consultation comment form (C5) — only when a consultation
+          exists. Submit-only: no comment list is ever rendered.
+      =================================================================== */}
+      {p.consultation && (
+        <section className="py-16 md:py-24 bg-muted/30">
+          <div className="container max-w-4xl">
+            <AnimatedSection>
+              <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-2 text-center">
+                {isEn
+                  ? "Share your Concerns or Suggestions"
+                  : "Compartilhe suas Preocupações ou Sugestões"}
+              </h2>
+              <p className="text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed text-center">
+                {isEn
+                  ? "This project is under public consultation. Your contribution helps us improve continuously."
+                  : "Este projeto está em consulta pública. Sua contribuição nos ajuda a melhorar continuamente."}
+              </p>
+              <ConsultationForm consultation={p.consultation} isEn={isEn} />
             </AnimatedSection>
           </div>
         </section>
