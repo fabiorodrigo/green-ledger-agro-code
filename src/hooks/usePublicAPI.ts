@@ -27,6 +27,7 @@ export type {
   PublicMethodologyDetail,
   PublicVvb,
   PublicStatistics,
+  PublicConsultation,
   PaginatedResponse,
 } from "@/lib/publicApiAdapter";
 
@@ -37,6 +38,7 @@ import {
   mapMethodologyDetail,
   mapVvb,
   mapStatistics,
+  mapConsultation,
   toPaginated,
 } from "@/lib/publicApiAdapter";
 
@@ -47,6 +49,7 @@ import type {
   PublicMethodologyDetail,
   PublicVvb,
   PublicStatistics,
+  PublicConsultation,
   PaginatedResponse,
 } from "@/lib/publicApiAdapter";
 
@@ -239,4 +242,70 @@ export function useVerifyAsset(serialNumber: string | null): FetchState<unknown>
     ? `${API_BASE}/public/verify/asset/${encodeURIComponent(serialNumber)}`
     : null;
   return useFetch<unknown>(url);
+}
+
+// ---------------------------------------------------------------------------
+// Public consultations (C3)
+// ---------------------------------------------------------------------------
+
+/**
+ * Fetch paginated list of public consultations.
+ *
+ * `status` filters by consultation lifecycle (OPEN | CLOSED | RESPONSE_PUBLISHED);
+ * omit it to list all. Comment content is never returned — only `commentCount`.
+ */
+export function usePublicConsultations(params?: {
+  status?: string;
+  page?: number;
+  limit?: number;
+}): FetchState<PaginatedResponse<PublicConsultation>> {
+  const query = new URLSearchParams();
+  if (params?.status) query.set("status", params.status);
+  if (params?.page) query.set("page", String(params.page));
+  if (params?.limit) query.set("limit", String(params.limit));
+  const url = `${API_BASE}/public/consultations?${query.toString()}`;
+  const raw = useFetch<RawPaginated>(url);
+  return useMapped(raw, (r) => toPaginated(r, mapConsultation));
+}
+
+/** Fetch a single consultation by id. */
+export function usePublicConsultation(
+  id: string | null,
+): FetchState<PublicConsultation> {
+  const url = id ? `${API_BASE}/public/consultations/${id}` : null;
+  const raw = useFetch<Record<string, unknown>>(url);
+  return useMapped(raw, mapConsultation);
+}
+
+/**
+ * Submit a public comment to a consultation.
+ *
+ * Plain async function (not a hook) — called imperatively from a form submit
+ * handler. The platform returns 204 No Content on success. `organization` is
+ * optional; an optional honeypot field may be added by the caller for spam
+ * defense. The endpoint is throttled to 10 requests/min server-side.
+ *
+ * Throws an Error with a user-friendly (PT) message on any non-2xx response so
+ * the form can surface it directly.
+ */
+export async function submitConsultationComment(
+  id: string,
+  body: { author: string; email: string; organization?: string; content: string },
+): Promise<void> {
+  const res = await fetch(`${API_BASE}/public/consultations/${id}/comments`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+
+  if (res.ok) return;
+
+  if (res.status === 429) {
+    throw new Error(
+      "Muitas tentativas. Tente novamente em instantes.",
+    );
+  }
+  throw new Error(
+    "Não foi possível enviar seu comentário. Tente novamente mais tarde.",
+  );
 }

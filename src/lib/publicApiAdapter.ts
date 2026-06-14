@@ -256,6 +256,28 @@ export interface PublicStatistics {
   totalOrganizations?: number;
 }
 
+/**
+ * Public consultation (project validation / methodology public consultation).
+ *
+ * The platform exposes consultation metadata only — comment *content* is never
+ * returned by the public API (comments are write-only via the submit endpoint).
+ * `commentCount` is the only signal of activity.
+ */
+export interface PublicConsultation {
+  id: string;
+  /** PROJECT_VALIDATION | METHODOLOGY_CONSULTATION */
+  type: string;
+  title: string;
+  description?: string;
+  /** OPEN | CLOSED | RESPONSE_PUBLISHED */
+  status: string;
+  openDate?: string;
+  closeDate?: string;
+  commentCount: number;
+  /** The project/methodology the consultation is attached to, when resolvable. */
+  entity?: { kind: "project" | "methodology"; id: string; code?: string; name?: string };
+}
+
 export interface PaginatedResponse<T> {
   data: T[];
   meta: {
@@ -721,5 +743,54 @@ export function mapStatistics(raw: Record<string, unknown>): PublicStatistics {
     totalCreditsIssued: (r.totalVcuIssued ?? 0) + (r.totalVcsuIssued ?? 0),
     totalCreditsRetired: r.totalRetired ?? 0,
     totalOrganizations: undefined, // backlog (spec §4.5 / §9)
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Consultation. Public consultations contract (C3).
+// ---------------------------------------------------------------------------
+
+interface RawConsultationEntity {
+  kind?: "project" | "methodology";
+  id?: string;
+  code?: string;
+  name?: string;
+}
+
+export function mapConsultation(raw: Record<string, unknown>): PublicConsultation {
+  const r = raw as {
+    _id?: string;
+    id?: string;
+    type?: string;
+    title?: string;
+    description?: string;
+    status?: string;
+    openDate?: string;
+    closeDate?: string;
+    commentCount?: number;
+    entity?: RawConsultationEntity | null;
+  };
+  // Entity is passed through only when the platform resolved it (project /
+  // methodology may be deleted or hidden) — never fabricated.
+  const entity =
+    r.entity && r.entity.kind && r.entity.id
+      ? {
+          kind: r.entity.kind,
+          id: r.entity.id,
+          code: r.entity.code,
+          name: r.entity.name,
+        }
+      : undefined;
+
+  return {
+    id: r._id ?? r.id ?? "",
+    type: r.type ?? "",
+    title: r.title ?? "",
+    description: r.description,
+    status: r.status ?? "",
+    openDate: r.openDate,
+    closeDate: r.closeDate,
+    commentCount: r.commentCount ?? 0,
+    entity,
   };
 }

@@ -8,6 +8,7 @@ import {
   mapMethodologyDetail,
   mapVvb,
   mapStatistics,
+  mapConsultation,
 } from "../publicApiAdapter";
 
 describe("mapStatus", () => {
@@ -328,5 +329,57 @@ describe("mapStatistics", () => {
     expect(s.totalCreditsIssued).toBe(150);
     expect(s.totalCreditsRetired).toBe(20);
     expect(s.totalOrganizations).toBeUndefined();
+  });
+});
+
+describe("mapConsultation", () => {
+  it("maps _id->id, fields, commentCount, and entity pass-through", () => {
+    const raw = {
+      _id: "k1",
+      type: "PROJECT_VALIDATION",
+      title: "Consulta Projeto X",
+      description: "Período de consulta pública",
+      status: "OPEN",
+      openDate: "2026-01-01",
+      closeDate: "2026-02-01",
+      commentCount: 4,
+      entity: { kind: "project", id: "p1", code: "GL-PRJ-0001", name: "Projeto X" },
+    };
+    const c = mapConsultation(raw);
+
+    expect(c.id).toBe("k1");
+    expect(c.type).toBe("PROJECT_VALIDATION");
+    expect(c.title).toBe("Consulta Projeto X");
+    expect(c.description).toBe("Período de consulta pública");
+    expect(c.status).toBe("OPEN");
+    expect(c.openDate).toBe("2026-01-01");
+    expect(c.closeDate).toBe("2026-02-01");
+    expect(c.commentCount).toBe(4);
+    expect(c.entity).toEqual({
+      kind: "project",
+      id: "p1",
+      code: "GL-PRJ-0001",
+      name: "Projeto X",
+    });
+  });
+
+  it("defaults commentCount to 0 when absent and drops unresolved entity", () => {
+    const c = mapConsultation({
+      _id: "k2",
+      type: "METHODOLOGY_CONSULTATION",
+      title: "Consulta Metodologia",
+      status: "CLOSED",
+      entity: null,
+    });
+    expect(c.id).toBe("k2");
+    expect(c.commentCount).toBe(0);
+    expect(c.entity).toBeUndefined();
+    expect(c.description).toBeUndefined();
+    expect(c.openDate).toBeUndefined();
+  });
+
+  it("falls back to id when _id absent", () => {
+    const c = mapConsultation({ id: "k3", title: "X", type: "PROJECT_VALIDATION", status: "OPEN" });
+    expect(c.id).toBe("k3");
   });
 });
