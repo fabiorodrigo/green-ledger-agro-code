@@ -21,6 +21,7 @@ interface LifecyclePhase {
   id: string;
   labelPt: string;
   labelEn: string;
+  labelEs: string;
   completedStatuses: string[];
   activeStatuses: string[];
 }
@@ -30,6 +31,7 @@ const LIFECYCLE_PHASES: LifecyclePhase[] = [
     id: "listed",
     labelPt: "Listado",
     labelEn: "Listed",
+    labelEs: "Listado",
     completedStatuses: [
       "IN_VALIDATION","VALIDATED","IN_EXECUTION","IN_MONITORING",
       "IN_VERIFICATION","VERIFIED","ACTIVE","FINALIZED","SUSPENDED",
@@ -40,6 +42,7 @@ const LIFECYCLE_PHASES: LifecyclePhase[] = [
     id: "validation",
     labelPt: "Validação",
     labelEn: "Validation",
+    labelEs: "Validación",
     completedStatuses: [
       "VALIDATED","IN_EXECUTION","IN_MONITORING",
       "IN_VERIFICATION","VERIFIED","ACTIVE","FINALIZED",
@@ -50,6 +53,7 @@ const LIFECYCLE_PHASES: LifecyclePhase[] = [
     id: "execution",
     labelPt: "Execução",
     labelEn: "Execution",
+    labelEs: "Ejecución",
     completedStatuses: [
       "IN_MONITORING","IN_VERIFICATION","VERIFIED","ACTIVE","FINALIZED",
     ],
@@ -59,6 +63,7 @@ const LIFECYCLE_PHASES: LifecyclePhase[] = [
     id: "monitoring",
     labelPt: "Monitoramento",
     labelEn: "Monitoring",
+    labelEs: "Monitoreo",
     completedStatuses: ["IN_VERIFICATION","VERIFIED","ACTIVE","FINALIZED"],
     activeStatuses: ["IN_MONITORING"],
   },
@@ -66,6 +71,7 @@ const LIFECYCLE_PHASES: LifecyclePhase[] = [
     id: "verification",
     labelPt: "Verificação",
     labelEn: "Verification",
+    labelEs: "Verificación",
     completedStatuses: ["VERIFIED","ACTIVE","FINALIZED"],
     activeStatuses: ["IN_VERIFICATION"],
   },
@@ -73,6 +79,7 @@ const LIFECYCLE_PHASES: LifecyclePhase[] = [
     id: "credits",
     labelPt: "Emissão de Créditos",
     labelEn: "Credit Issuance",
+    labelEs: "Emisión de Créditos",
     completedStatuses: ["FINALIZED"],
     activeStatuses: ["VERIFIED","ACTIVE"],
   },
@@ -80,6 +87,7 @@ const LIFECYCLE_PHASES: LifecyclePhase[] = [
     id: "finalized",
     labelPt: "Finalizado",
     labelEn: "Finalized",
+    labelEs: "Finalizado",
     completedStatuses: [],
     activeStatuses: ["FINALIZED"],
   },
@@ -91,44 +99,45 @@ const SHOW_TIMELINE_STATUSES = [
 ];
 
 // Human-readable labels for document types returned by the API
-const DOC_TYPE_LABELS: Record<string, { pt: string; en: string }> = {
-  DCP:                     { pt: "Documento de Concepção de Projeto",  en: "Project Design Document (DCP)" },
-  PUBLIC_CALL_RESPONSE:    { pt: "Resposta à Consulta Pública",       en: "Public Consultation Response" },
-  COI_DECLARATION:         { pt: "Declaração de Conflito de Interesse", en: "Conflict of Interest Declaration" },
-  VALIDATION_OPINION:      { pt: "Parecer de Validação (GL)",         en: "Validation Opinion (GL)" },
-  VALIDATION_CERTIFICATE:  { pt: "Certificado de Validação",          en: "Validation Certificate" },
-  VVB_OPINION:             { pt: "Parecer da VVB",                    en: "VVB Opinion" },
-  MONITORING_REPORT:       { pt: "Relatório de Monitoramento",        en: "Monitoring Report" },
-  VERIFICATION_CERTIFICATE_BLOCKCHAIN: { pt: "Registro Blockchain da Verificação", en: "Verification Blockchain Record" },
-  GL_VERIFICATION_OPINION: { pt: "Parecer de Verificação (GL)",       en: "Verification Opinion (GL)" },
-  VVB_VERIFICATION_OPINION:{ pt: "Parecer de Verificação (VVB)",      en: "Verification Opinion (VVB)" },
-  VERIFICATION_CERTIFICATE:{ pt: "Certificado de Verificação",        en: "Verification Certificate" },
-  ISSUANCE_STATEMENT:      { pt: "Declaração de Emissão de VCUs",     en: "VCU Issuance Statement" },
-  RETIREMENT_CERTIFICATE:  { pt: "Certificado de Aposentadoria",      en: "Retirement Certificate" },
+const DOC_TYPE_LABELS: Record<string, { pt: string; en: string; es: string }> = {
+  DCP:                     { pt: "Documento de Concepção de Projeto",  en: "Project Design Document (DCP)", es: "Documento de Diseño de Proyecto (DDP)" },
+  PUBLIC_CALL_RESPONSE:    { pt: "Resposta à Consulta Pública",       en: "Public Consultation Response", es: "Respuesta a la Consulta Pública" },
+  COI_DECLARATION:         { pt: "Declaração de Conflito de Interesse", en: "Conflict of Interest Declaration", es: "Declaración de Conflicto de Interés" },
+  VALIDATION_OPINION:      { pt: "Parecer de Validação (GL)",         en: "Validation Opinion (GL)", es: "Dictamen de Validación (GL)" },
+  VALIDATION_CERTIFICATE:  { pt: "Certificado de Validação",          en: "Validation Certificate", es: "Certificado de Validación" },
+  VVB_OPINION:             { pt: "Parecer da VVB",                    en: "VVB Opinion", es: "Dictamen de la VVB" },
+  MONITORING_REPORT:       { pt: "Relatório de Monitoramento",        en: "Monitoring Report", es: "Informe de Monitoreo" },
+  VERIFICATION_CERTIFICATE_BLOCKCHAIN: { pt: "Registro Blockchain da Verificação", en: "Verification Blockchain Record", es: "Registro Blockchain de la Verificación" },
+  GL_VERIFICATION_OPINION: { pt: "Parecer de Verificação (GL)",       en: "Verification Opinion (GL)", es: "Dictamen de Verificación (GL)" },
+  VVB_VERIFICATION_OPINION:{ pt: "Parecer de Verificação (VVB)",      en: "Verification Opinion (VVB)", es: "Dictamen de Verificación (VVB)" },
+  VERIFICATION_CERTIFICATE:{ pt: "Certificado de Verificação",        en: "Verification Certificate", es: "Certificado de Verificación" },
+  ISSUANCE_STATEMENT:      { pt: "Declaração de Emissão de VCUs",     en: "VCU Issuance Statement", es: "Declaración de Emisión de VCUs" },
+  RETIREMENT_CERTIFICATE:  { pt: "Certificado de Aposentadoria",      en: "Retirement Certificate", es: "Certificado de Retiro" },
   // Platform `CertificateType` enum values surfaced from `certificates[]`.
-  VALIDATION:              { pt: "Certificado de Validação",          en: "Validation Certificate" },
-  VERIFICATION_OPINION:    { pt: "Parecer de Verificação",           en: "Verification Opinion" },
-  VERIFICATION_BLOCKCHAIN: { pt: "Registro Blockchain da Verificação", en: "Verification Blockchain Record" },
+  VALIDATION:              { pt: "Certificado de Validação",          en: "Validation Certificate", es: "Certificado de Validación" },
+  VERIFICATION_OPINION:    { pt: "Parecer de Verificação",           en: "Verification Opinion", es: "Dictamen de Verificación" },
+  VERIFICATION_BLOCKCHAIN: { pt: "Registro Blockchain da Verificação", en: "Verification Blockchain Record", es: "Registro Blockchain de la Verificación" },
 };
 
-function docLabel(type: string, isEn: boolean): string {
+function docLabel(type: string, lang: "pt" | "en" | "es"): string {
   const entry = DOC_TYPE_LABELS[type];
   if (!entry) return type;
-  return isEn ? entry.en : entry.pt;
+  return entry[lang] ?? entry.pt;
 }
 
 const ProjectDetail = () => {
   const { code } = useParams<{ code: string }>();
-  const { locale } = useLanguage();
-  const isEn = locale === "en";
+  const { locale, tr } = useLanguage();
   const lang = locale as "pt" | "en" | "es";
+  // Locale tag for `toLocaleDateString`, resolved to the active language.
+  const dateLocale = tr("pt-BR", "en-GB", "es-ES");
 
   const { data: p, loading, error } = usePublicProjectByCode(code ?? null);
 
   if (loading) {
     return (
       <div className="pt-20 min-h-screen flex items-center justify-center">
-        <p className="text-muted-foreground">{isEn ? "Loading project..." : "Carregando projeto..."}</p>
+        <p className="text-muted-foreground">{tr("Carregando projeto...", "Loading project...", "Cargando proyecto...")}</p>
       </div>
     );
   }
@@ -138,11 +147,11 @@ const ProjectDetail = () => {
       <div className="pt-20 min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="font-heading text-2xl font-bold text-primary mb-4">
-            {isEn ? "Project not found" : "Projeto não encontrado"}
+            {tr("Projeto não encontrado", "Project not found", "Proyecto no encontrado")}
           </h1>
           <Link to="/projetos">
             <Button variant="outline" className="gap-2">
-              <ArrowLeft className="w-4 h-4" /> {isEn ? "Back" : "Voltar"}
+              <ArrowLeft className="w-4 h-4" /> {tr("Voltar", "Back", "Volver")}
             </Button>
           </Link>
         </div>
@@ -151,42 +160,42 @@ const ProjectDetail = () => {
   }
 
   const creditingStart = p.creditingPeriodStart
-    ? new Date(p.creditingPeriodStart).toLocaleDateString(isEn ? "en-GB" : "pt-BR", { month: "2-digit", year: "numeric" })
+    ? new Date(p.creditingPeriodStart).toLocaleDateString(dateLocale, { month: "2-digit", year: "numeric" })
     : "—";
   const creditingEnd = p.creditingPeriodEnd
-    ? new Date(p.creditingPeriodEnd).toLocaleDateString(isEn ? "en-GB" : "pt-BR", { month: "2-digit", year: "numeric" })
+    ? new Date(p.creditingPeriodEnd).toLocaleDateString(dateLocale, { month: "2-digit", year: "numeric" })
     : "—";
 
   const infoItems = [
     { icon: ShieldCheck, label: "Status",                                                          value: getStatusLabel(p.status, lang) },
-    { icon: Building2,   label: isEn ? "Developer" : "Desenvolvedor",                             value: p.organization?.name },
-    { icon: FileText,    label: isEn ? "Methodology" : "Metodologia",
-      value: `${p.methodology?.code} — ${isEn ? (p.methodology?.nameEn ?? p.methodology?.name) : p.methodology?.name}`,
+    { icon: Building2,   label: tr("Desenvolvedor", "Developer", "Desarrollador"),                value: p.organization?.name },
+    { icon: FileText,    label: tr("Metodologia", "Methodology", "Metodología"),
+      value: `${p.methodology?.code} — ${lang === "en" ? (p.methodology?.nameEn ?? p.methodology?.name) : p.methodology?.name}`,
       link: p.methodology ? `/metodologias/${p.methodology.code.toLowerCase()}` : undefined },
     ...(p.solutionType
-      ? [{ icon: Leaf, label: isEn ? "Solution Type" : "Tipo de Solução", value: p.solutionType }]
+      ? [{ icon: Leaf, label: tr("Tipo de Solução", "Solution Type", "Tipo de Solución"), value: p.solutionType }]
       : []),
     ...(p.sector
-      ? [{ icon: TreePine, label: isEn ? "Sector" : "Setor", value: getSectorLabel(p.sector, lang) }]
+      ? [{ icon: TreePine, label: tr("Setor", "Sector", "Sector"), value: getSectorLabel(p.sector, lang) }]
       : []),
     ...(p.methodology?.activityType
-      ? [{ icon: Hash, label: isEn ? "Activity Type" : "Tipo de Atividade",                       value: getActivityTypeLabel(p.methodology.activityType, lang) }]
+      ? [{ icon: Hash, label: tr("Tipo de Atividade", "Activity Type", "Tipo de Actividad"),      value: getActivityTypeLabel(p.methodology.activityType, lang) }]
       : []),
-    ...(p.biome   ? [{ icon: Globe, label: isEn ? "Biome" : "Bioma",                              value: p.biome }] : []),
-    ...(p.crop    ? [{ icon: Leaf,  label: isEn ? "Crop / Land Use" : "Cultura / Uso do Solo",    value: p.crop  }] : []),
-    ...(p.geeType ? [{ icon: BarChart3, label: isEn ? "GEE Type" : "Tipo de GEE",                 value: p.geeType }] : []),
-    { icon: Calendar,    label: isEn ? "Crediting Period" : "Período de Creditação",               value: `${creditingStart} — ${creditingEnd}` },
+    ...(p.biome   ? [{ icon: Globe, label: tr("Bioma", "Biome", "Bioma"),                         value: p.biome }] : []),
+    ...(p.crop    ? [{ icon: Leaf,  label: tr("Cultura / Uso do Solo", "Crop / Land Use", "Cultivo / Uso del Suelo"),    value: p.crop  }] : []),
+    ...(p.geeType ? [{ icon: BarChart3, label: tr("Tipo de GEE", "GEE Type", "Tipo de GEI"),      value: p.geeType }] : []),
+    { icon: Calendar,    label: tr("Período de Creditação", "Crediting Period", "Período de Acreditación"),               value: `${creditingStart} — ${creditingEnd}` },
     ...(p.totalAreaHa
-      ? [{ icon: MapPin, label: isEn ? "Total Area" : "Área Total",                               value: `${Number(p.totalAreaHa).toLocaleString()} ha` }]
+      ? [{ icon: MapPin, label: tr("Área Total", "Total Area", "Área Total"),                     value: `${Number(p.totalAreaHa).toLocaleString()} ha` }]
       : []),
     ...(p.estimatedReductions
-      ? [{ icon: BarChart3, label: isEn ? "Estimated Reductions" : "Reduções Estimadas",          value: `${p.estimatedReductions.toLocaleString()} tCO₂e` }]
+      ? [{ icon: BarChart3, label: tr("Reduções Estimadas", "Estimated Reductions", "Reducciones Estimadas"),          value: `${p.estimatedReductions.toLocaleString()} tCO₂e` }]
       : []),
   ];
 
   // Overview prefers the dedicated overview field; falls back to the project
   // description (PT) so "Visão Geral" isn't empty when overview is unset.
-  const overview      = (isEn ? (p.overviewEn ?? p.overviewPt) : p.overviewPt) ?? p.descriptionPt;
+  const overview      = (lang === "en" ? (p.overviewEn ?? p.overviewPt) : p.overviewPt) ?? p.descriptionPt;
   const impact        = p.impact ?? [];
   const verifications = p.verificationEvents ?? [];
   const issuances     = p.issuances ?? [];
@@ -211,7 +220,7 @@ const ProjectDetail = () => {
   const certToRow = (c: (typeof p.certificates)[number]): DocRow => ({
     id: c.id,
     type: c.type,
-    title: `${docLabel(c.type, isEn)} — ${c.certificateNumber}`,
+    title: `${docLabel(c.type, lang)} — ${c.certificateNumber}`,
     version: 1,
     fileUrl: c.ipfsHash ? `${IPFS_GATEWAY}${c.ipfsHash}` : undefined,
     txHash: c.blockchainTxHash,
@@ -268,7 +277,7 @@ const ProjectDetail = () => {
             to="/projetos"
             className="inline-flex items-center gap-2 text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors mb-10"
           >
-            <ArrowLeft className="w-4 h-4" /> {isEn ? "Back to Projects" : "Voltar para Projetos"}
+            <ArrowLeft className="w-4 h-4" /> {tr("Voltar para Projetos", "Back to Projects", "Volver a Proyectos")}
           </Link>
 
           <div className="text-sm text-primary-foreground/60 uppercase tracking-widest font-medium mb-2">
@@ -302,7 +311,7 @@ const ProjectDetail = () => {
           <div className="container py-8">
             <AnimatedSection>
               <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium mb-5">
-                {isEn ? "Project Phase" : "Fase do Projeto"}
+                {tr("Fase do Projeto", "Project Phase", "Fase del Proyecto")}
               </p>
               <div className="flex items-start gap-0 overflow-x-auto pb-2">
                 {LIFECYCLE_PHASES.map((phase, idx) => {
@@ -335,7 +344,7 @@ const ProjectDetail = () => {
                             ? "text-primary font-semibold"
                             : "text-muted-foreground/50"
                         }`}>
-                          {isEn ? phase.labelEn : phase.labelPt}
+                          {tr(phase.labelPt, phase.labelEn, phase.labelEs)}
                         </span>
                       </div>
                       {/* Connector line */}
@@ -367,7 +376,7 @@ const ProjectDetail = () => {
               {overview && (
                 <AnimatedSection>
                   <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-6">
-                    {isEn ? "Overview" : "Visão Geral"}
+                    {tr("Visão Geral", "Overview", "Visión General")}
                   </h2>
                   <p className="text-muted-foreground leading-relaxed text-base md:text-lg">{overview}</p>
                 </AnimatedSection>
@@ -377,12 +386,14 @@ const ProjectDetail = () => {
               {impact.length > 0 && (
                 <AnimatedSection delay={0.1}>
                   <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-4">
-                    {isEn ? "Positive Impact" : "Impacto Positivo"}
+                    {tr("Impacto Positivo", "Positive Impact", "Impacto Positivo")}
                   </h2>
                   <p className="text-muted-foreground mb-8">
-                    {isEn
-                      ? "Key environmental and social indicators tracked throughout the project lifecycle."
-                      : "Principais indicadores ambientais e sociais acompanhados ao longo do ciclo do projeto."}
+                    {tr(
+                      "Principais indicadores ambientais e sociais acompanhados ao longo do ciclo do projeto.",
+                      "Key environmental and social indicators tracked throughout the project lifecycle.",
+                      "Principales indicadores ambientales y sociales monitoreados a lo largo del ciclo del proyecto.",
+                    )}
                   </p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     {impact.map((item, i) => (
@@ -392,10 +403,11 @@ const ProjectDetail = () => {
                       >
                         {/* ODS badge */}
                         <div className="inline-flex items-center gap-1.5 self-start text-xs px-2.5 py-1 rounded-full bg-secondary/10 text-secondary font-semibold">
-                          {isEn ? "SDG" : "ODS"} {item.sdg}
+                          {tr("ODS", "SDG", "ODS")} {item.sdg}
                           {SDG_LABELS[item.sdg] && (
                             <span className="font-normal opacity-75">
-                              · {SDG_LABELS[item.sdg][isEn ? "en" : "pt"]}
+                              {/* SDG_LABELS has no ES entries; Spanish falls back to EN. */}
+                              · {SDG_LABELS[item.sdg][lang === "en" ? "en" : "pt"]}
                             </span>
                           )}
                         </div>
@@ -418,7 +430,7 @@ const ProjectDetail = () => {
                         {/* Baseline */}
                         {item.baseline && (
                           <p className="text-xs text-muted-foreground/60">
-                            <span className="font-medium">{isEn ? "Baseline:" : "Linha de base:"}</span>{" "}
+                            <span className="font-medium">{tr("Linha de base:", "Baseline:", "Línea de base:")}</span>{" "}
                             {item.baseline}
                           </p>
                         )}
@@ -432,7 +444,7 @@ const ProjectDetail = () => {
               {totalIssued > 0 && (
                 <AnimatedSection delay={0.2}>
                   <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-6">
-                    {isEn ? "Credits Issued" : "Créditos Emitidos"}
+                    {tr("Créditos Emitidos", "Credits Issued", "Créditos Emitidos")}
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {issuances.map((iss, i) => (
@@ -458,7 +470,7 @@ const ProjectDetail = () => {
               <AnimatedSection delay={0.1}>
                 <div className="bg-card border border-border rounded-xl p-6 sticky top-28">
                   <h3 className="font-heading font-semibold text-primary text-sm uppercase tracking-wider mb-6">
-                    {isEn ? "Project Summary" : "Resumo do Projeto"}
+                    {tr("Resumo do Projeto", "Project Summary", "Resumen del Proyecto")}
                   </h3>
 
                   <div className="space-y-4">
@@ -483,7 +495,7 @@ const ProjectDetail = () => {
                   {(p.organization?.publicWebsite || p.organization?.email) && (
                     <div className="mt-6 pt-6 border-t border-border space-y-2">
                       <p className="text-xs text-muted-foreground uppercase tracking-wider mb-3">
-                        {isEn ? "Developer Contact" : "Contato do Desenvolvedor"}
+                        {tr("Contato do Desenvolvedor", "Developer Contact", "Contacto del Desarrollador")}
                       </p>
                       {p.organization.publicWebsite && (
                         <a
@@ -514,7 +526,7 @@ const ProjectDetail = () => {
                       className="flex items-center gap-2 text-sm text-secondary hover:underline"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
-                      {isEn ? "View on Platform" : "Ver na Plataforma"}
+                      {tr("Ver na Plataforma", "View on Platform", "Ver en la Plataforma")}
                     </a>
                   </div>
                 </div>
@@ -532,11 +544,11 @@ const ProjectDetail = () => {
           <div className="container max-w-4xl">
             <AnimatedSection>
               <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-8">
-                {isEn ? "Project Documents" : "Documentos do Projeto"}
+                {tr("Documentos do Projeto", "Project Documents", "Documentos del Proyecto")}
               </h2>
             </AnimatedSection>
             <AnimatedSection delay={0.1}>
-              <DocumentTable docs={projectDocs} isEn={isEn} />
+              <DocumentTable docs={projectDocs} lang={lang} />
             </AnimatedSection>
           </div>
         </section>
@@ -550,14 +562,14 @@ const ProjectDetail = () => {
           <div className="container max-w-4xl">
             <AnimatedSection>
               <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-6">
-                {isEn ? "Project Validation" : "Validação do Projeto"}
+                {tr("Validação do Projeto", "Project Validation", "Validación del Proyecto")}
               </h2>
 
               {p.validationEvent && (
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                   {p.validationEvent.glOpinion && (
                     <div className="bg-card border border-border rounded-lg p-4">
-                      <p className="text-xs text-muted-foreground mb-1">{isEn ? "GL Opinion" : "Parecer GL"}</p>
+                      <p className="text-xs text-muted-foreground mb-1">{tr("Parecer GL", "GL Opinion", "Dictamen GL")}</p>
                       <div className="flex items-center gap-2">
                         <CheckCircle2 className="w-4 h-4 text-secondary shrink-0" />
                         <p className="text-sm font-semibold text-primary capitalize">
@@ -568,9 +580,9 @@ const ProjectDetail = () => {
                   )}
                   {p.validationEvent.completedAt && (
                     <div className="bg-card border border-border rounded-lg p-4">
-                      <p className="text-xs text-muted-foreground mb-1">{isEn ? "Completed" : "Concluída em"}</p>
+                      <p className="text-xs text-muted-foreground mb-1">{tr("Concluída em", "Completed", "Concluida el")}</p>
                       <p className="text-sm font-semibold text-primary">
-                        {new Date(p.validationEvent.completedAt).toLocaleDateString(isEn ? "en-GB" : "pt-BR")}
+                        {new Date(p.validationEvent.completedAt).toLocaleDateString(dateLocale)}
                       </p>
                     </div>
                   )}
@@ -580,9 +592,9 @@ const ProjectDetail = () => {
               {validationDocs.length > 0 && (
                 <>
                   <h3 className="font-heading font-semibold text-lg text-primary mb-4">
-                    {isEn ? "Validation Documents" : "Documentos da Validação"}
+                    {tr("Documentos da Validação", "Validation Documents", "Documentos de la Validación")}
                   </h3>
-                  <DocumentTable docs={validationDocs} isEn={isEn} />
+                  <DocumentTable docs={validationDocs} lang={lang} />
                 </>
               )}
             </AnimatedSection>
@@ -600,13 +612,13 @@ const ProjectDetail = () => {
               <div key={vi} className={vi > 0 ? "mt-16" : ""}>
                 <AnimatedSection>
                   <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-6">
-                    {isEn ? `Verification #${v.verificationNumber}` : `${v.verificationNumber}ª Verificação`}
+                    {tr(`${v.verificationNumber}ª Verificação`, `Verification #${v.verificationNumber}`, `${v.verificationNumber}ª Verificación`)}
                   </h2>
 
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                     {v.netIssuable != null && (
                       <div className="bg-card border border-border rounded-lg p-4">
-                        <p className="text-xs text-muted-foreground mb-1">{isEn ? "Credits" : "Créditos"}</p>
+                        <p className="text-xs text-muted-foreground mb-1">{tr("Créditos", "Credits", "Créditos")}</p>
                         <p className="text-sm font-semibold text-secondary">
                           {v.netIssuable.toLocaleString()} tCO₂e
                         </p>
@@ -614,11 +626,11 @@ const ProjectDetail = () => {
                     )}
                     {v.monitoringPeriodStart && v.monitoringPeriodEnd && (
                       <div className="bg-card border border-border rounded-lg p-4">
-                        <p className="text-xs text-muted-foreground mb-1">{isEn ? "Period" : "Período"}</p>
+                        <p className="text-xs text-muted-foreground mb-1">{tr("Período", "Period", "Período")}</p>
                         <p className="text-sm font-semibold text-primary">
-                          {new Date(v.monitoringPeriodStart).toLocaleDateString(isEn ? "en-GB" : "pt-BR", { month: "2-digit", year: "numeric" })}
+                          {new Date(v.monitoringPeriodStart).toLocaleDateString(dateLocale, { month: "2-digit", year: "numeric" })}
                           {" — "}
-                          {new Date(v.monitoringPeriodEnd).toLocaleDateString(isEn ? "en-GB" : "pt-BR", { month: "2-digit", year: "numeric" })}
+                          {new Date(v.monitoringPeriodEnd).toLocaleDateString(dateLocale, { month: "2-digit", year: "numeric" })}
                         </p>
                       </div>
                     )}
@@ -632,7 +644,7 @@ const ProjectDetail = () => {
                     )}
                     {v.vvbOpinion && (
                       <div className="bg-card border border-border rounded-lg p-4">
-                        <p className="text-xs text-muted-foreground mb-1">{isEn ? "VVB Opinion" : "Parecer VVB"}</p>
+                        <p className="text-xs text-muted-foreground mb-1">{tr("Parecer VVB", "VVB Opinion", "Dictamen VVB")}</p>
                         <div className="flex items-center gap-2">
                           <CheckCircle2 className="w-4 h-4 text-secondary shrink-0" />
                           <p className="text-sm font-semibold text-primary capitalize">
@@ -643,9 +655,9 @@ const ProjectDetail = () => {
                     )}
                     {v.completedAt && (
                       <div className="bg-card border border-border rounded-lg p-4">
-                        <p className="text-xs text-muted-foreground mb-1">{isEn ? "Completed" : "Concluída em"}</p>
+                        <p className="text-xs text-muted-foreground mb-1">{tr("Concluída em", "Completed", "Concluida el")}</p>
                         <p className="text-sm font-semibold text-primary">
-                          {new Date(v.completedAt).toLocaleDateString(isEn ? "en-GB" : "pt-BR")}
+                          {new Date(v.completedAt).toLocaleDateString(dateLocale)}
                         </p>
                       </div>
                     )}
@@ -664,7 +676,7 @@ const ProjectDetail = () => {
                       <Hash className="w-4 h-4 text-secondary shrink-0" />
                       <div className="min-w-0 flex-1">
                         <p className="text-xs text-muted-foreground mb-0.5">
-                          {isEn ? "Blockchain Record" : "Registro Blockchain"}
+                          {tr("Registro Blockchain", "Blockchain Record", "Registro Blockchain")}
                         </p>
                         <p className="text-xs font-mono text-primary truncate">{v.issuances[0].txHash}</p>
                       </div>
@@ -686,9 +698,9 @@ const ProjectDetail = () => {
           <div className="container max-w-4xl">
             <AnimatedSection>
               <h3 className="font-heading font-semibold text-lg text-primary mb-4">
-                {isEn ? "Verification Documents" : "Documentos da Verificação"}
+                {tr("Documentos da Verificação", "Verification Documents", "Documentos de la Verificación")}
               </h3>
-              <DocumentTable docs={verificationDocs} isEn={isEn} />
+              <DocumentTable docs={verificationDocs} lang={lang} />
             </AnimatedSection>
           </div>
         </section>
@@ -703,16 +715,21 @@ const ProjectDetail = () => {
           <div className="container max-w-4xl">
             <AnimatedSection>
               <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-2 text-center">
-                {isEn
-                  ? "Share your Concerns or Suggestions"
-                  : "Compartilhe suas Preocupações ou Sugestões"}
+                {tr(
+                  "Compartilhe suas Preocupações ou Sugestões",
+                  "Share your Concerns or Suggestions",
+                  "Comparta sus Inquietudes o Sugerencias",
+                )}
               </h2>
               <p className="text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed text-center">
-                {isEn
-                  ? "This project is under public consultation. Your contribution helps us improve continuously."
-                  : "Este projeto está em consulta pública. Sua contribuição nos ajuda a melhorar continuamente."}
+                {tr(
+                  "Este projeto está em consulta pública. Sua contribuição nos ajuda a melhorar continuamente.",
+                  "This project is under public consultation. Your contribution helps us improve continuously.",
+                  "Este proyecto está en consulta pública. Su contribución nos ayuda a mejorar continuamente.",
+                )}
               </p>
-              <ConsultationForm consultation={p.consultation} isEn={isEn} />
+              {/* ConsultationForm still uses a boolean isEn prop; pass it derived from locale. */}
+              <ConsultationForm consultation={p.consultation} isEn={lang === "en"} />
             </AnimatedSection>
           </div>
         </section>
@@ -725,20 +742,22 @@ const ProjectDetail = () => {
         <div className="container max-w-4xl text-center">
           <AnimatedSection>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-4">
-              {isEn ? "Questions about this project?" : "Dúvidas sobre este projeto?"}
+              {tr("Dúvidas sobre este projeto?", "Questions about this project?", "¿Dudas sobre este proyecto?")}
             </h2>
             <p className="text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed">
-              {isEn
-                ? "Share your concerns or suggestions anonymously and help us improve continuously."
-                : "Compartilhe suas preocupações ou sugestões de forma anônima e ajude-nos a melhorar continuamente."}
+              {tr(
+                "Compartilhe suas preocupações ou sugestões de forma anônima e ajude-nos a melhorar continuamente.",
+                "Share your concerns or suggestions anonymously and help us improve continuously.",
+                "Comparta sus inquietudes o sugerencias de forma anónima y ayúdenos a mejorar continuamente.",
+              )}
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <Link to="/contato">
-                <Button className="gap-2">{isEn ? "Contact Us" : "Entre em Contato"}</Button>
+                <Button className="gap-2">{tr("Entre em Contato", "Contact Us", "Contáctenos")}</Button>
               </Link>
               <Link to="/projetos">
                 <Button variant="outline" className="gap-2">
-                  <ArrowLeft className="w-4 h-4" /> {isEn ? "All Projects" : "Todos os Projetos"}
+                  <ArrowLeft className="w-4 h-4" /> {tr("Todos os Projetos", "All Projects", "Todos los Proyectos")}
                 </Button>
               </Link>
             </div>
@@ -763,16 +782,21 @@ interface DocRow {
   createdAt: string;
 }
 
-function DocumentTable({ docs, isEn }: { docs: DocRow[]; isEn: boolean }) {
+function DocumentTable({ docs, lang }: { docs: DocRow[]; lang: "pt" | "en" | "es" }) {
+  // Local trilingual picker (this component renders outside the LanguageContext
+  // consumer in `ProjectDetail`, so it receives `lang` as a prop instead).
+  const pick = (pt: string, en: string, es: string) =>
+    lang === "en" ? en : lang === "es" ? es : pt;
+  const dateLocale = pick("pt-BR", "en-GB", "es-ES");
   return (
     <div className="bg-card border border-border rounded-xl overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border bg-muted/50">
-              <th className="text-left p-4 font-semibold text-primary">{isEn ? "Document" : "Documento"}</th>
-              <th className="text-left p-4 font-semibold text-primary">{isEn ? "Version" : "Versão"}</th>
-              <th className="text-left p-4 font-semibold text-primary">{isEn ? "Date" : "Data"}</th>
+              <th className="text-left p-4 font-semibold text-primary">{pick("Documento", "Document", "Documento")}</th>
+              <th className="text-left p-4 font-semibold text-primary">{pick("Versão", "Version", "Versión")}</th>
+              <th className="text-left p-4 font-semibold text-primary">{pick("Data", "Date", "Fecha")}</th>
               <th className="text-center p-4 font-semibold text-primary">PT</th>
               <th className="text-center p-4 font-semibold text-primary">EN</th>
             </tr>
@@ -783,7 +807,7 @@ function DocumentTable({ docs, isEn }: { docs: DocRow[]; isEn: boolean }) {
               return (
                 <tr key={doc.id} className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
                   <td className="p-4 text-primary font-medium">
-                    {doc.title || docLabel(doc.type, isEn)}
+                    {doc.title || docLabel(doc.type, lang)}
                     {doc.txHash && (
                       <span className="ml-2 text-xs text-secondary font-mono" title={doc.txHash}>
                         ⛓ {doc.txHash.slice(0, 8)}…
@@ -792,7 +816,7 @@ function DocumentTable({ docs, isEn }: { docs: DocRow[]; isEn: boolean }) {
                   </td>
                   <td className="p-4 text-muted-foreground">v{doc.version}</td>
                   <td className="p-4 text-muted-foreground">
-                    {new Date(doc.createdAt).toLocaleDateString(isEn ? "en-GB" : "pt-BR")}
+                    {new Date(doc.createdAt).toLocaleDateString(dateLocale)}
                   </td>
                   <td className="p-4 text-center">
                     {url ? (
