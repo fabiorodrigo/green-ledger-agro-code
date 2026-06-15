@@ -5,6 +5,8 @@ interface LanguageContextType {
   locale: Locale;
   setLocale: (locale: Locale) => void;
   t: (key: string) => string;
+  /** Inline trilingual helper: returns the string for the active locale (pt fallback). */
+  tr: (pt: string, en: string, es: string) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -30,8 +32,14 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     [locale]
   );
 
+  const tr = useCallback(
+    (pt: string, en: string, es: string) =>
+      ({ pt, en, es } as Record<Locale, string>)[locale] ?? pt,
+    [locale]
+  );
+
   return (
-    <LanguageContext.Provider value={{ locale, setLocale, t }}>
+    <LanguageContext.Provider value={{ locale, setLocale, t, tr }}>
       {children}
     </LanguageContext.Provider>
   );
