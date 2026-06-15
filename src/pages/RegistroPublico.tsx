@@ -167,7 +167,7 @@ const RegistroPublico = () => {
                         </td>
                         <td className="p-4 text-center">
                           <a
-                            href={`https://app.greenledger.eco.br/public/assets?project=${p.code}`}
+                            href={`https://plataforma.greenledger.eco.br/public/assets?project=${p.code}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-muted-foreground hover:text-secondary transition-colors inline-block"
@@ -201,7 +201,7 @@ const RegistroPublico = () => {
 
           <div className="mt-12 text-center">
             <a
-              href="https://app.greenledger.eco.br/public/assets"
+              href="https://plataforma.greenledger.eco.br/public/assets"
               target="_blank"
               rel="noopener noreferrer"
             >

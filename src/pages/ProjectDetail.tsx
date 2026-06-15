@@ -508,7 +508,7 @@ const ProjectDetail = () => {
 
                   <div className="mt-6 pt-6 border-t border-border">
                     <a
-                      href={`https://app.greenledger.eco.br/projects/${p.code}`}
+                      href={`https://plataforma.greenledger.eco.br/projects/${p.code}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-2 text-sm text-secondary hover:underline"

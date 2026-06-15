@@ -179,10 +179,10 @@ const Projetos = () => {
           </div>
           <div className="text-center mt-12">
             <div className="flex flex-wrap gap-4 justify-center">
-              <a href="https://app.greenledger.eco.br/login" target="_blank" rel="noopener noreferrer">
+              <a href="https://plataforma.greenledger.eco.br/login" target="_blank" rel="noopener noreferrer">
                 <Button size="lg" className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">{d.cta} <ArrowRight className="w-4 h-4" /></Button>
               </a>
-              <a href="https://app.greenledger.eco.br/register" target="_blank" rel="noopener noreferrer">
+              <a href="https://plataforma.greenledger.eco.br/register" target="_blank" rel="noopener noreferrer">
                 <Button size="lg" variant="outline" className="gap-2 border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10">
                   {d.registerProject} <ArrowRight className="w-4 h-4" />
                 </Button>
