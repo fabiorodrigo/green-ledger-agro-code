@@ -23,10 +23,18 @@ const stepsEn = [
   { icon: Award, num: "06", title: "Credit Issuance", description: "After positive verification and final review, Green Ledger issues the certified carbon credits on the blockchain platform, each with a unique serial number and immutable record, ensuring full traceability and prevention of double counting.", details: ["Final review by Green Ledger's technical team", "Buffer pool contribution deduction (when applicable, for non-permanence risk mitigation)", "Credit issuance with unique serial number on blockchain", "Immutable registration on Green Ledger's blockchain platform", "Credits available for transfer, retirement or cancellation via smart contracts"] },
 ];
 
+const stepsEs = [
+  { icon: ClipboardCheck, num: "01", title: "Registro del Proyecto", description: "El desarrollador del proyecto presenta el Documento de Concepción del Proyecto (DCP) a Green Ledger, incluyendo descripción de la actividad, análisis de adicionalidad, delimitación del boundary del proyecto y plan de monitoreo propuesto.", details: ["Presentación del DCP conforme a la plantilla de la metodología aplicable", "Documentación de titularidad o derecho de uso sobre el área/actividad", "Pago de la tasa de registro conforme a la tabla de tarifas", "Análisis de completitud por el equipo técnico (plazo: 15 días hábiles)", "Publicación del proyecto para consulta pública (30 días)"] },
+  { icon: Search, num: "02", title: "Evaluación de Elegibilidad", description: "El equipo técnico de Green Ledger evalúa si el proyecto cumple con los criterios de elegibilidad definidos por la metodología, incluyendo adicionalidad, límites del proyecto, conformidad regulatoria y salvaguardas ambientales y sociales.", details: ["Verificación de los criterios de elegibilidad de la metodología", "Evaluación de adicionalidad conforme a la herramienta de prueba aplicable", "Análisis de la delimitación del boundary del proyecto", "Evaluación de conformidad con salvaguardas ambientales y sociales", "Dictamen técnico de elegibilidad (aprobación, solicitud de revisión o rechazo)"] },
+  { icon: FileCheck, num: "03", title: "Validación", description: "Un organismo de validación/verificación (VVB) independiente, acreditado por Green Ledger, realiza el análisis técnico del proyecto para confirmar la conformidad con los requisitos de la metodología y la robustez de la cuantificación propuesta.", details: ["Designación de VVB independiente acreditado por Green Ledger", "Revisión documental y verificación del análisis de adicionalidad", "Evaluación del plan de monitoreo y protocolos de QA/QC", "Visita técnica al proyecto (cuando sea aplicable)", "Informe de validación con dictamen de conformidad"] },
+  { icon: Activity, num: "04", title: "Monitoreo", description: "El desarrollador implementa el plan de monitoreo aprobado, recopilando datos conforme a los protocolos de Medición, Reporte y Verificación (MRV) de la metodología a lo largo del período de creditación. Todos los datos se registran en la plataforma blockchain de Green Ledger.", details: ["Implementación del plan de monitoreo conforme al DCP aprobado", "Recopilación de datos conforme a los protocolos de MRV de la metodología", "Aplicación de procedimientos de QA/QC para asegurar la calidad de los datos", "Registro continuo en la plataforma blockchain de Green Ledger", "Preparación del informe de monitoreo al final de cada período de verificación"] },
+  { icon: ShieldCheck, num: "05", title: "Verificación Independiente", description: "Un VVB independiente audita los datos de monitoreo, verifica la conformidad con la metodología y confirma la cantidad de reducciones o remociones de emisiones de GEI alcanzadas en el período.", details: ["Designación de VVB independiente (distinto del validador cuando sea aplicable)", "Auditoría de los datos y registros de monitoreo", "Verificación in situ con muestreo representativo", "Recálculo independiente de las reducciones/remociones de GEI", "Informe de verificación con cuantificación confirmada"] },
+  { icon: Award, num: "06", title: "Emisión de Créditos", description: "Tras la verificación positiva y la revisión final, Green Ledger emite los créditos de carbono certificados en la plataforma blockchain, cada uno con número de serie único y registro inmutable, garantizando trazabilidad total e imposibilidad de doble contabilidad.", details: ["Revisión final por el equipo técnico de Green Ledger", "Deducción de la contribución al buffer pool (cuando sea aplicable, para mitigación de riesgo de no permanencia)", "Emisión de los créditos con número de serie único en la blockchain", "Registro inmutable en la plataforma blockchain de Green Ledger", "Créditos disponibles para transferencia, retiro o cancelación vía smart contracts"] },
+];
+
 const CertificationProcess = () => {
-  const { t, locale } = useLanguage();
-  const isEn = locale === "en";
-  const steps = isEn ? stepsEn : stepsPt;
+  const { t, tr, locale } = useLanguage();
+  const steps = locale === "en" ? stepsEn : locale === "es" ? stepsEs : stepsPt;
 
   return (
     <div className="pt-20">
@@ -121,7 +129,7 @@ const CertificationProcess = () => {
                 rel="noopener noreferrer"
               >
                 <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">
-                  {isEn ? "Start Certification" : "Iniciar Certificação"} <ArrowRight className="w-4 h-4" />
+                  {tr("Iniciar Certificação", "Start Certification", "Iniciar Certificación")} <ArrowRight className="w-4 h-4" />
                 </Button>
               </a>
               <Link to="/contato">

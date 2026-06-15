@@ -10,18 +10,18 @@ import { usePublicStatistics } from "@/hooks/usePublicAPI";
 import heroBg from "@/assets/hero-bg.jpg";
 
 const programs = [
-  { titleKey: "Green Ledger AFOLU", descPt: "Projetos de reflorestamento, restauração de vegetação nativa, sistemas agroflorestais e redução de desmatamento (REDD+), com foco em adicionalidade e permanência do carbono sequestrado.", descEn: "Reforestation, native vegetation restoration, agroforestry systems and deforestation reduction (REDD+) projects, focused on additionality and permanence of sequestered carbon.", icon: Leaf },
-  { titleKey: "Green Ledger Soil Carbon", descPt: "Sequestro de carbono orgânico no solo por meio de práticas regenerativas, plantio direto, integração lavoura-pecuária-floresta e manejo conservacionista, com protocolos de MRV específicos.", descEn: "Soil organic carbon sequestration through regenerative practices, no-till farming, crop-livestock-forestry integration and conservation management, with specific MRV protocols.", icon: Globe },
-  { titleKey: "Green Ledger Energy & Tech", descPt: "Redução de emissões por meio de eficiência energética, biodigestores, energias renováveis e tecnologias limpas, com mensuração contínua e verificação independente.", descEn: "Emissions reduction through energy efficiency, biodigesters, renewable energy and clean technologies, with continuous measurement and independent verification.", icon: Zap },
+  { titleKey: "Green Ledger AFOLU", descPt: "Projetos de reflorestamento, restauração de vegetação nativa, sistemas agroflorestais e redução de desmatamento (REDD+), com foco em adicionalidade e permanência do carbono sequestrado.", descEn: "Reforestation, native vegetation restoration, agroforestry systems and deforestation reduction (REDD+) projects, focused on additionality and permanence of sequestered carbon.", descEs: "Proyectos de reforestación, restauración de vegetación nativa, sistemas agroforestales y reducción de la deforestación (REDD+), con foco en la adicionalidad y la permanencia del carbono secuestrado.", icon: Leaf },
+  { titleKey: "Green Ledger Soil Carbon", descPt: "Sequestro de carbono orgânico no solo por meio de práticas regenerativas, plantio direto, integração lavoura-pecuária-floresta e manejo conservacionista, com protocolos de MRV específicos.", descEn: "Soil organic carbon sequestration through regenerative practices, no-till farming, crop-livestock-forestry integration and conservation management, with specific MRV protocols.", descEs: "Secuestro de carbono orgánico en el suelo mediante prácticas regenerativas, siembra directa, integración agricultura-ganadería-bosque y manejo conservacionista, con protocolos de MRV específicos.", icon: Globe },
+  { titleKey: "Green Ledger Energy & Tech", descPt: "Redução de emissões por meio de eficiência energética, biodigestores, energias renováveis e tecnologias limpas, com mensuração contínua e verificação independente.", descEn: "Emissions reduction through energy efficiency, biodigesters, renewable energy and clean technologies, with continuous measurement and independent verification.", descEs: "Reducción de emisiones mediante eficiencia energética, biodigestores, energías renovables y tecnologías limpias, con medición continua y verificación independiente.", icon: Zap },
 ];
 
 const steps = [
-  { num: "01", titlePt: "Registro", titleEn: "Registration", descPt: "Submissão do Documento de Concepção do Projeto e documentação técnica.", descEn: "Submission of Project Design Document and technical documentation." },
-  { num: "02", titlePt: "Avaliação", titleEn: "Assessment", descPt: "Análise de elegibilidade e adicionalidade pela equipe técnica.", descEn: "Eligibility and additionality analysis by technical team." },
-  { num: "03", titlePt: "Validação", titleEn: "Validation", descPt: "Revisão independente por organismo de validação credenciado.", descEn: "Independent review by accredited validation body." },
-  { num: "04", titlePt: "Monitoramento", titleEn: "Monitoring", descPt: "Implementação do plano de MRV conforme protocolo da metodologia.", descEn: "Implementation of MRV plan per methodology protocol." },
-  { num: "05", titlePt: "Verificação", titleEn: "Verification", descPt: "Auditoria independente dos dados de monitoramento e resultados.", descEn: "Independent audit of monitoring data and results." },
-  { num: "06", titlePt: "Emissão", titleEn: "Issuance", descPt: "Créditos certificados com número de série único e rastreabilidade.", descEn: "Certified credits with unique serial numbers and traceability." },
+  { num: "01", titlePt: "Registro", titleEn: "Registration", titleEs: "Registro", descPt: "Submissão do Documento de Concepção do Projeto e documentação técnica.", descEn: "Submission of Project Design Document and technical documentation.", descEs: "Presentación del Documento de Diseño del Proyecto y la documentación técnica." },
+  { num: "02", titlePt: "Avaliação", titleEn: "Assessment", titleEs: "Evaluación", descPt: "Análise de elegibilidade e adicionalidade pela equipe técnica.", descEn: "Eligibility and additionality analysis by technical team.", descEs: "Análisis de elegibilidad y adicionalidad por el equipo técnico." },
+  { num: "03", titlePt: "Validação", titleEn: "Validation", titleEs: "Validación", descPt: "Revisão independente por organismo de validação credenciado.", descEn: "Independent review by accredited validation body.", descEs: "Revisión independiente por un organismo de validación acreditado." },
+  { num: "04", titlePt: "Monitoramento", titleEn: "Monitoring", titleEs: "Monitoreo", descPt: "Implementação do plano de MRV conforme protocolo da metodologia.", descEn: "Implementation of MRV plan per methodology protocol.", descEs: "Implementación del plan de MRV según el protocolo de la metodología." },
+  { num: "05", titlePt: "Verificação", titleEn: "Verification", titleEs: "Verificación", descPt: "Auditoria independente dos dados de monitoramento e resultados.", descEn: "Independent audit of monitoring data and results.", descEs: "Auditoría independiente de los datos de monitoreo y los resultados." },
+  { num: "06", titlePt: "Emissão", titleEn: "Issuance", titleEs: "Emisión", descPt: "Créditos certificados com número de série único e rastreabilidade.", descEn: "Certified credits with unique serial numbers and traceability.", descEs: "Créditos certificados con número de serie único y trazabilidad." },
 ];
 
 const faqsPt = [
@@ -40,16 +40,23 @@ const faqsEn = [
   { q: "Are Green Ledger's methodologies public?", a: "Yes. All approved methodologies are published openly and undergo peer review and a 60-day public consultation before approval by the competent technical committee." },
 ];
 
+const faqsEs = [
+  { q: "¿Qué son los créditos de carbono certificados?", a: "Son unidades verificadas que representan una tonelada métrica de CO₂ equivalente removida o evitada, emitidas tras una validación y verificación independientes conforme a metodologías aprobadas por una certificadora." },
+  { q: "¿Quién puede registrar un proyecto en Green Ledger?", a: "Desarrolladores de proyectos, empresas, cooperativas y organizaciones que implementen actividades de reducción o remoción de emisiones de GEI en cualquier sector elegible, siempre que cumplan los criterios de adicionalidad y elegibilidad de las metodologías aplicables." },
+  { q: "¿Cuánto tarda el proceso de certificación?", a: "El plazo varía según la complejidad del proyecto y la disponibilidad de datos de línea base. Normalmente, el ciclo completo — del registro a la emisión de los primeros créditos — toma entre 6 y 12 meses." },
+  { q: "¿Cómo garantiza Green Ledger la integridad de los créditos?", a: "Mediante una gobernanza técnica independiente, procesos de validación y verificación por organismos acreditados, mecanismos de buffer contra reversiones, consulta pública de metodologías y alineación con los Core Carbon Principles del ICVCM." },
+  { q: "¿Las metodologías de Green Ledger son públicas?", a: "Sí. Todas las metodologías aprobadas se publican en acceso abierto y pasan por revisión por pares y una consulta pública de 60 días antes de su aprobación por el comité técnico competente." },
+];
+
 const Index = () => {
-  const { t, locale } = useLanguage();
-  const isEn = locale === "en";
-  const faqs = isEn ? faqsEn : faqsPt;
+  const { t, tr, locale } = useLanguage();
+  const faqs = ({ pt: faqsPt, en: faqsEn, es: faqsEs } as const)[locale] ?? faqsPt;
   const { data: stats } = usePublicStatistics();
 
   return (
     <>
       <SEOHead
-        title={isEn ? "Carbon Certification with Environmental Integrity" : "Certificação de Carbono com Integridade Ambiental"}
+        title={tr("Certificação de Carbono com Integridade Ambiental", "Carbon Certification with Environmental Integrity", "Certificación de Carbono con Integridad Ambiental")}
         description={t("index.hero.desc")}
         path="/"
       />
@@ -98,7 +105,7 @@ const Index = () => {
                   <AnimatedCounter end={stats.totalProjects} />
                 </p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {isEn ? "Projects" : "Projetos"}
+                  {tr("Projetos", "Projects", "Proyectos")}
                 </p>
               </AnimatedSection>
               <AnimatedSection delay={0.1}>
@@ -106,7 +113,7 @@ const Index = () => {
                   <AnimatedCounter end={stats.totalMethodologies} />
                 </p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {isEn ? "Methodologies" : "Metodologias"}
+                  {tr("Metodologias", "Methodologies", "Metodologías")}
                 </p>
               </AnimatedSection>
               <AnimatedSection delay={0.2}>
@@ -114,7 +121,7 @@ const Index = () => {
                   <AnimatedCounter end={stats.totalCreditsIssued} />
                 </p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {isEn ? "Credits Issued (tCO₂e)" : "Créditos Emitidos (tCO₂e)"}
+                  {tr("Créditos Emitidos (tCO₂e)", "Credits Issued (tCO₂e)", "Créditos Emitidos (tCO₂e)")}
                 </p>
               </AnimatedSection>
               {/* Organizations stat hidden when backlog (totalOrganizations undefined) to avoid a misleading "0" */}
@@ -124,7 +131,7 @@ const Index = () => {
                     <AnimatedCounter end={stats.totalOrganizations} />
                   </p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    {isEn ? "Organizations" : "Organizações"}
+                    {tr("Organizações", "Organizations", "Organizaciones")}
                   </p>
                 </AnimatedSection>
               )}
@@ -177,9 +184,9 @@ const Index = () => {
                 <div className="bg-card rounded-xl p-8 border border-border hover:shadow-card transition-all h-full">
                   <p.icon className="w-10 h-10 text-secondary mb-6" />
                   <h3 className="font-heading font-semibold text-lg text-primary mb-4">{p.titleKey}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed mb-8">{isEn ? p.descEn : p.descPt}</p>
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-8">{tr(p.descPt, p.descEn, p.descEs)}</p>
                   <Link to="/programas" className="text-secondary text-sm font-medium hover:underline inline-flex items-center gap-1">
-                    {isEn ? "View details" : "Ver detalhes"} <ArrowRight className="w-3 h-3" />
+                    {tr("Ver detalhes", "View details", "Ver detalles")} <ArrowRight className="w-3 h-3" />
                   </Link>
                 </div>
               </AnimatedSection>
@@ -203,8 +210,8 @@ const Index = () => {
               <AnimatedSection key={s.num} delay={i * 0.08}>
                 <div className="relative text-center p-6">
                   <span className="font-heading text-4xl font-bold text-secondary/15">{s.num}</span>
-                  <h4 className="font-heading font-semibold text-primary mt-2 mb-3">{isEn ? s.titleEn : s.titlePt}</h4>
-                  <p className="text-xs text-muted-foreground leading-relaxed">{isEn ? s.descEn : s.descPt}</p>
+                  <h4 className="font-heading font-semibold text-primary mt-2 mb-3">{tr(s.titlePt, s.titleEn, s.titleEs)}</h4>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{tr(s.descPt, s.descEn, s.descEs)}</p>
                   {i < steps.length - 1 && (
                     <ArrowRight className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-4 h-4 text-muted" />
                   )}

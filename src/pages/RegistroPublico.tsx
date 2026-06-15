@@ -15,8 +15,7 @@ const PUBLIC_STATUSES = [
 ];
 
 const RegistroPublico = () => {
-  const { t, locale } = useLanguage();
-  const isEn = locale === "en";
+  const { t, tr, locale } = useLanguage();
   const lang = locale as "pt" | "en" | "es";
 
   const [search, setSearch] = useState("");
@@ -73,7 +72,7 @@ const RegistroPublico = () => {
                 {stats?.totalOrganizations ?? "—"}
               </span>
               <p className="text-sm text-muted-foreground mt-1">
-                {isEn ? "Active Organizations" : "Organizações Ativas"}
+                {tr("Organizações Ativas", "Active Organizations", "Organizaciones Activas")}
               </p>
             </div>
           </div>
@@ -108,14 +107,16 @@ const RegistroPublico = () => {
           {/* Loading / Error */}
           {loading && (
             <div className="text-center py-16 text-muted-foreground">
-              {isEn ? "Loading projects..." : "Carregando projetos..."}
+              {tr("Carregando projetos...", "Loading projects...", "Cargando proyectos...")}
             </div>
           )}
           {error && (
             <div className="text-center py-16 text-muted-foreground text-sm">
-              {isEn
-                ? "Unable to load projects from the platform at this time."
-                : "Não foi possível carregar os projetos da plataforma no momento."}
+              {tr(
+                "Não foi possível carregar os projetos da plataforma no momento.",
+                "Unable to load projects from the platform at this time.",
+                "No fue posible cargar los proyectos en este momento."
+              )}
             </div>
           )}
 
@@ -130,7 +131,7 @@ const RegistroPublico = () => {
                       <th className="text-left p-4 font-semibold text-primary text-xs uppercase tracking-wider">{t("registry.project")}</th>
                       <th className="text-left p-4 font-semibold text-primary text-xs uppercase tracking-wider hidden md:table-cell">{t("registry.developer")}</th>
                       <th className="text-left p-4 font-semibold text-primary text-xs uppercase tracking-wider hidden lg:table-cell">
-                        {isEn ? "Sector" : "Setor"}
+                        {tr("Setor", "Sector", "Sector")}
                       </th>
                       <th className="text-left p-4 font-semibold text-primary text-xs uppercase tracking-wider">{t("registry.status")}</th>
                       <th className="text-right p-4 font-semibold text-primary text-xs uppercase tracking-wider hidden md:table-cell">{t("registry.credits")}</th>
@@ -171,7 +172,7 @@ const RegistroPublico = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-muted-foreground hover:text-secondary transition-colors inline-block"
-                            title={isEn ? "View on platform" : "Ver na plataforma"}
+                            title={tr("Ver na plataforma", "View on platform", "Ver en la plataforma")}
                           >
                             <ExternalLink className="w-4 h-4" />
                           </a>
@@ -181,7 +182,11 @@ const RegistroPublico = () => {
                     {filtered.length === 0 && !loading && (
                       <tr>
                         <td colSpan={7} className="p-8 text-center text-muted-foreground">
-                          {isEn ? "No projects found matching the filters." : "Nenhum projeto encontrado com os filtros aplicados."}
+                          {tr(
+                            "Nenhum projeto encontrado com os filtros aplicados.",
+                            "No projects found matching the filters.",
+                            "No se encontraron proyectos con los filtros aplicados."
+                          )}
                         </td>
                       </tr>
                     )}
@@ -193,9 +198,11 @@ const RegistroPublico = () => {
 
           {projectsResponse?.meta && (
             <p className="text-xs text-muted-foreground text-center mt-4">
-              {isEn
-                ? `Showing ${filtered.length} of ${projectsResponse.meta.total} projects`
-                : `Exibindo ${filtered.length} de ${projectsResponse.meta.total} projetos`}
+              {tr(
+                `Exibindo ${filtered.length} de ${projectsResponse.meta.total} projetos`,
+                `Showing ${filtered.length} of ${projectsResponse.meta.total} projects`,
+                `Mostrando ${filtered.length} de ${projectsResponse.meta.total} proyectos`
+              )}
             </p>
           )}
 
@@ -206,7 +213,7 @@ const RegistroPublico = () => {
               rel="noopener noreferrer"
             >
               <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">
-                {isEn ? "View Full Registry on Platform" : "Ver Registro Completo na Plataforma"} <ExternalLink className="w-4 h-4" />
+                {tr("Ver Registro Completo na Plataforma", "View Full Registry on Platform", "Ver registro completo en la plataforma")} <ExternalLink className="w-4 h-4" />
               </Button>
             </a>
           </div>

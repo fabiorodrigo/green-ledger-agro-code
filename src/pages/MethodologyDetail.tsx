@@ -15,29 +15,34 @@ const whyChoose = [
     icon: Target,
     titlePt: "Abordagem Robusta",
     titleEn: "Robust Approach",
+    titleEs: "Enfoque Robusto",
     descPt: "Construída sobre os princípios dos principais referenciais internacionais e alinhada com as melhores práticas do IPCC e padrões de integridade de mercado.",
     descEn: "Built on leading international frameworks and aligned with IPCC best practices and market integrity standards.",
+    descEs: "Construida sobre los principios de los principales referenciales internacionales y alineada con las mejores prácticas del IPCC y los estándares de integridad del mercado.",
   },
   {
     icon: Shield,
     titlePt: "Credibilidade e Transparência",
     titleEn: "Credibility and Transparency",
+    titleEs: "Credibilidad y Transparencia",
     descPt: "Processo de aprovação com consulta pública, revisão por pares e validação por VVBs independentes credenciados pela Green Ledger.",
     descEn: "Approval process with public consultation, peer review and validation by independent VVBs accredited by Green Ledger.",
+    descEs: "Proceso de aprobación con consulta pública, revisión por pares y validación por VVBs independientes acreditadas por Green Ledger.",
   },
   {
     icon: Layers,
     titlePt: "Processo Estruturado",
     titleEn: "Structured Process",
+    titleEs: "Proceso Estructurado",
     descPt: "Fornece um caminho claro e referenciado, conectando cada etapa do projeto às ferramentas e documentos necessários para a certificação.",
     descEn: "Provides a clear, referenced path connecting each project step to the tools and documents required for certification.",
+    descEs: "Proporciona un camino claro y referenciado, conectando cada etapa del proyecto con las herramientas y documentos necesarios para la certificación.",
   },
 ];
 
 const MethodologyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { locale } = useLanguage();
-  const isEn = locale === "en";
+  const { locale, tr } = useLanguage();
   const lang = locale as "pt" | "en" | "es";
 
   // The route slug is the methodology *code* (e.g. "met001"). The platform has
@@ -68,7 +73,7 @@ const MethodologyDetail = () => {
   if (loading) {
     return (
       <div className="pt-20 min-h-screen flex items-center justify-center">
-        <p className="text-muted-foreground">{isEn ? "Loading methodology..." : "Carregando metodologia..."}</p>
+        <p className="text-muted-foreground">{tr("Carregando metodologia...", "Loading methodology...", "Cargando metodología...")}</p>
       </div>
     );
   }
@@ -78,24 +83,26 @@ const MethodologyDetail = () => {
       <div className="pt-20 min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="font-heading text-2xl font-bold text-primary mb-4">
-            {isEn ? "Methodology not found" : "Metodologia não encontrada"}
+            {tr("Metodologia não encontrada", "Methodology not found", "Metodología no encontrada")}
           </h1>
           <Link to="/metodologias">
-            <Button variant="outline" className="gap-2"><ArrowLeft className="w-4 h-4" /> {isEn ? "Back" : "Voltar"}</Button>
+            <Button variant="outline" className="gap-2"><ArrowLeft className="w-4 h-4" /> {tr("Voltar", "Back", "Volver")}</Button>
           </Link>
         </div>
       </div>
     );
   }
 
-  const title = isEn ? (m.nameEn ?? m.name) : m.name;
-  const description = isEn ? (m.descriptionEn ?? m.descriptionPt) : m.descriptionPt;
-  const eligibility = isEn ? (m.eligibilityEn ?? m.eligibilityPt) : m.eligibilityPt;
-  const additionality = isEn ? (m.additionalityEn ?? m.additionalityPt) : m.additionalityPt;
-  const boundary = isEn ? (m.boundaryEn ?? m.boundaryPt) : m.boundaryPt;
-  const mrv = isEn ? (m.mrvEn ?? m.mrvPt) : m.mrvPt;
-  const qaqc = isEn ? (m.qaqcEn ?? m.qaqcPt) : m.qaqcPt;
-  const safeguards = isEn ? (m.safeguardsEn ?? m.safeguardsPt) : m.safeguardsPt;
+  // API-backed methodology content only has PT/EN variants; Spanish falls back
+  // to EN (rule: do not invent ES API data). Use `locale === "en"` selection.
+  const title = locale === "en" ? (m.nameEn ?? m.name) : m.name;
+  const description = locale === "en" ? (m.descriptionEn ?? m.descriptionPt) : m.descriptionPt;
+  const eligibility = locale === "en" ? (m.eligibilityEn ?? m.eligibilityPt) : m.eligibilityPt;
+  const additionality = locale === "en" ? (m.additionalityEn ?? m.additionalityPt) : m.additionalityPt;
+  const boundary = locale === "en" ? (m.boundaryEn ?? m.boundaryPt) : m.boundaryPt;
+  const mrv = locale === "en" ? (m.mrvEn ?? m.mrvPt) : m.mrvPt;
+  const qaqc = locale === "en" ? (m.qaqcEn ?? m.qaqcPt) : m.qaqcPt;
+  const safeguards = locale === "en" ? (m.safeguardsEn ?? m.safeguardsPt) : m.safeguardsPt;
 
   const eligibilityItems = eligibility
     ? eligibility.split(". ").filter(Boolean).map((s) => s.replace(/\.$/, ""))
@@ -106,6 +113,7 @@ const MethodologyDetail = () => {
       num: "01",
       titlePt: "Adicionalidade, Linha de Base e Vazamento",
       titleEn: "Additionality, Baseline and Leakage",
+      titleEs: "Adicionalidad, Línea de Base y Fuga",
       description: additionality,
       details: {
         pt: [
@@ -118,12 +126,18 @@ const MethodologyDetail = () => {
           "Calculate avoided emissions and/or removals per methodology equations and procedures",
           "Assess and quantify leakage risk using the appropriate tool",
         ],
+        es: [
+          "Demuestre que el proyecto es adicional utilizando la Herramienta de Demostración de Adicionalidad",
+          "Calcule las emisiones evitadas y/o remociones conforme a las ecuaciones y procedimientos de la metodología",
+          "Evalúe y cuantifique el riesgo de fuga (leakage) utilizando la herramienta apropiada",
+        ],
       },
     },
     {
       num: "02",
       titlePt: "Boundary e Escopo do Projeto",
       titleEn: "Project Boundary and Scope",
+      titleEs: "Boundary y Alcance del Proyecto",
       description: boundary,
       details: {
         pt: [
@@ -136,12 +150,18 @@ const MethodologyDetail = () => {
           "Identify all relevant sources, sinks and reservoirs",
           "Document the scope in the Project Design Document (PDD)",
         ],
+        es: [
+          "Defina los límites geográficos y temporales del proyecto",
+          "Identifique todas las fuentes, sumideros y reservorios relevantes",
+          "Documente el alcance en el Documento de Diseño de Proyecto (DDP)",
+        ],
       },
     },
     {
       num: "03",
       titlePt: "Monitoramento, Relato e Verificação (MRV)",
       titleEn: "Monitoring, Reporting and Verification (MRV)",
+      titleEs: "Monitoreo, Reporte y Verificación (MRV)",
       description: mrv,
       details: {
         pt: [
@@ -154,12 +174,18 @@ const MethodologyDetail = () => {
           "Maintain records for at least 5 years after the crediting period",
           "Verification by independent bodies (VVBs) accredited by Green Ledger",
         ],
+        es: [
+          "Implemente el plan de monitoreo según lo especificado en la documentación técnica",
+          "Mantenga registros durante al menos 5 años después del período de acreditación",
+          "Verificación por organismos independientes (VVBs) acreditados por Green Ledger",
+        ],
       },
     },
     {
       num: "04",
       titlePt: "Controle de Qualidade (QA/QC)",
       titleEn: "Quality Control (QA/QC)",
+      titleEs: "Control de Calidad (QA/QC)",
       description: qaqc,
       details: {
         pt: [
@@ -171,6 +197,11 @@ const MethodologyDetail = () => {
           "Follow standardized quality control protocols",
           "Perform cross-checks and internal reviews before submission",
           "Ensure full data and procedure traceability",
+        ],
+        es: [
+          "Siga los protocolos estandarizados de control de calidad",
+          "Realice verificaciones cruzadas y revisiones internas antes de la presentación",
+          "Garantice la trazabilidad completa de los datos y procedimientos",
         ],
       },
     },
@@ -187,11 +218,11 @@ const MethodologyDetail = () => {
             to="/metodologias"
             className="inline-flex items-center gap-2 text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors mb-10"
           >
-            <ArrowLeft className="w-4 h-4" /> {isEn ? "Back to Methodologies" : "Voltar para Metodologias"}
+            <ArrowLeft className="w-4 h-4" /> {tr("Voltar para Metodologias", "Back to Methodologies", "Volver a Metodologías")}
           </Link>
 
           <div className="text-sm text-primary-foreground/60 uppercase tracking-widest font-medium mb-2">
-            {isEn ? "Methodology" : "Metodologia"}
+            {tr("Metodologia", "Methodology", "Metodología")}
           </div>
           <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-3">
             {m.code}
@@ -229,7 +260,7 @@ const MethodologyDetail = () => {
           <div className="container max-w-4xl">
             <AnimatedSection>
               <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-6">
-                {isEn ? `Methodology ${m.code}` : `Metodologia ${m.code}`} — {title}
+                {tr(`Metodologia ${m.code}`, `Methodology ${m.code}`, `Metodología ${m.code}`)} — {title}
               </h2>
               <p className="text-muted-foreground leading-relaxed text-base md:text-lg">{description}</p>
             </AnimatedSection>
@@ -242,12 +273,14 @@ const MethodologyDetail = () => {
         <div className="container max-w-5xl">
           <AnimatedSection>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-4 text-center">
-              {isEn ? `Why choose ${m.code}?` : `Por que escolher a ${m.code}?`}
+              {tr(`Por que escolher a ${m.code}?`, `Why choose ${m.code}?`, `¿Por qué elegir la ${m.code}?`)}
             </h2>
             <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-12">
-              {isEn
-                ? "Key differentiators that make this methodology a reference for its type of project."
-                : "Diferenciais que tornam esta metodologia referência para o seu tipo de projeto."}
+              {tr(
+                "Diferenciais que tornam esta metodologia referência para o seu tipo de projeto.",
+                "Key differentiators that make this methodology a reference for its type of project.",
+                "Diferenciales que hacen de esta metodología una referencia para su tipo de proyecto.",
+              )}
             </p>
           </AnimatedSection>
 
@@ -259,10 +292,10 @@ const MethodologyDetail = () => {
                     <item.icon className="w-6 h-6 text-secondary" />
                   </div>
                   <h3 className="font-heading font-semibold text-lg text-primary mb-3">
-                    {isEn ? item.titleEn : item.titlePt}
+                    {tr(item.titlePt, item.titleEn, item.titleEs)}
                   </h3>
                   <p className="text-muted-foreground text-sm leading-relaxed">
-                    {isEn ? item.descEn : item.descPt}
+                    {tr(item.descPt, item.descEn, item.descEs)}
                   </p>
                 </div>
               </AnimatedSection>
@@ -277,12 +310,14 @@ const MethodologyDetail = () => {
           <div className="container max-w-4xl">
             <AnimatedSection>
               <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-4">
-                {isEn ? "Who can use this Methodology?" : "Quem pode utilizar esta Metodologia?"}
+                {tr("Quem pode utilizar esta Metodologia?", "Who can use this Methodology?", "¿Quién puede utilizar esta Metodología?")}
               </h2>
               <p className="text-muted-foreground mb-10 leading-relaxed">
-                {isEn
-                  ? "This methodology applies to projects meeting the following criteria:"
-                  : "Esta metodologia é aplicável a projetos que atendam aos seguintes critérios essenciais:"}
+                {tr(
+                  "Esta metodologia é aplicável a projetos que atendam aos seguintes critérios essenciais:",
+                  "This methodology applies to projects meeting the following criteria:",
+                  "Esta metodología es aplicable a proyectos que cumplan los siguientes criterios esenciales:",
+                )}
               </p>
             </AnimatedSection>
 
@@ -299,9 +334,11 @@ const MethodologyDetail = () => {
                 <div className="flex items-start gap-4 bg-card border border-border rounded-lg p-5">
                   <CheckCircle2 className="w-5 h-5 text-secondary shrink-0 mt-0.5" />
                   <p className="text-primary font-medium text-sm leading-relaxed">
-                    {isEn
-                      ? "Demonstrates compliance with Green Ledger's environmental and social safeguards."
-                      : "Demonstra conformidade com as salvaguardas ambientais e sociais da Green Ledger."}
+                    {tr(
+                      "Demonstra conformidade com as salvaguardas ambientais e sociais da Green Ledger.",
+                      "Demonstrates compliance with Green Ledger's environmental and social safeguards.",
+                      "Demuestra conformidad con las salvaguardas ambientales y sociales de Green Ledger.",
+                    )}
                   </p>
                 </div>
               </AnimatedSection>
@@ -316,14 +353,15 @@ const MethodologyDetail = () => {
           <div className="container max-w-4xl">
             <AnimatedSection>
               <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-6">
-                {isEn ? "Sustainable Development Goals" : "Objetivos de Desenvolvimento Sustentável"}
+                {tr("Objetivos de Desenvolvimento Sustentável", "Sustainable Development Goals", "Objetivos de Desarrollo Sostenible")}
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                 {m.sdgGoals.map((sdg) => (
                   <div key={sdg} className="bg-card border border-border rounded-lg p-4 text-center">
                     <span className="font-heading font-bold text-secondary text-lg block">ODS {sdg}</span>
                     <span className="text-xs text-muted-foreground mt-1 block">
-                      {SDG_LABELS[sdg]?.[isEn ? "en" : "pt"] ?? `SDG ${sdg}`}
+                      {/* SDG_LABELS has no ES entries; Spanish falls back to EN. */}
+                      {SDG_LABELS[sdg]?.[locale === "en" ? "en" : "pt"] ?? `SDG ${sdg}`}
                     </span>
                   </div>
                 ))}
@@ -339,12 +377,14 @@ const MethodologyDetail = () => {
           <div className="container max-w-4xl">
             <AnimatedSection>
               <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-4">
-                {isEn ? "How to Apply this Methodology" : "O Processo de Aplicação da Metodologia"}
+                {tr("O Processo de Aplicação da Metodologia", "How to Apply this Methodology", "El Proceso de Aplicación de la Metodología")}
               </h2>
               <p className="text-muted-foreground mb-12 leading-relaxed">
-                {isEn
-                  ? "Your journey from conception to credit generation follows a logical flow with specific tools at each step."
-                  : "Sua jornada desde a concepção até a geração de créditos segue um fluxo lógico com ferramentas específicas."}
+                {tr(
+                  "Sua jornada desde a concepção até a geração de créditos segue um fluxo lógico com ferramentas específicas.",
+                  "Your journey from conception to credit generation follows a logical flow with specific tools at each step.",
+                  "Su trayecto desde la concepción hasta la generación de créditos sigue un flujo lógico con herramientas específicas en cada etapa.",
+                )}
               </p>
             </AnimatedSection>
 
@@ -360,11 +400,11 @@ const MethodologyDetail = () => {
                     )}
                     <div>
                       <h3 className="font-heading font-semibold text-lg text-primary mb-2">
-                        {isEn ? step.titleEn : step.titlePt}
+                        {tr(step.titlePt, step.titleEn, step.titleEs)}
                       </h3>
                       <p className="text-muted-foreground text-sm leading-relaxed mb-4">{step.description}</p>
                       <ul className="space-y-2">
-                        {(isEn ? step.details.en : step.details.pt).map((d, j) => (
+                        {step.details[lang].map((d, j) => (
                           <li key={j} className="flex items-start gap-2 text-sm text-muted-foreground">
                             <span className="w-1.5 h-1.5 rounded-full bg-secondary shrink-0 mt-1.5" />
                             {d}
@@ -386,14 +426,16 @@ const MethodologyDetail = () => {
           <div className="container max-w-4xl">
             <AnimatedSection>
               <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-6">
-                {isEn ? "Environmental and Social Safeguards" : "Salvaguardas Ambientais e Sociais"}
+                {tr("Salvaguardas Ambientais e Sociais", "Environmental and Social Safeguards", "Salvaguardas Ambientales y Sociales")}
               </h2>
               <div className="bg-card border border-border rounded-xl p-8">
                 <p className="text-muted-foreground leading-relaxed text-sm">{safeguards}</p>
                 <p className="text-muted-foreground leading-relaxed text-sm mt-4">
-                  {isEn
-                    ? "Green Ledger requires all projects to conduct a full socio-environmental safeguards analysis, ensuring project benefits extend to local communities with no significant negative impacts."
-                    : "A Green Ledger exige que todos os projetos realizem uma análise completa de salvaguardas socioambientais, garantindo que os benefícios do projeto se estendam às comunidades locais e que nenhum impacto negativo significativo seja gerado."}
+                  {tr(
+                    "A Green Ledger exige que todos os projetos realizem uma análise completa de salvaguardas socioambientais, garantindo que os benefícios do projeto se estendam às comunidades locais e que nenhum impacto negativo significativo seja gerado.",
+                    "Green Ledger requires all projects to conduct a full socio-environmental safeguards analysis, ensuring project benefits extend to local communities with no significant negative impacts.",
+                    "Green Ledger exige que todos los proyectos realicen un análisis completo de salvaguardas socioambientales, garantizando que los beneficios del proyecto se extiendan a las comunidades locales y que no se genere ningún impacto negativo significativo.",
+                  )}
                 </p>
               </div>
             </AnimatedSection>
@@ -407,12 +449,14 @@ const MethodologyDetail = () => {
           <div className="container max-w-4xl">
             <AnimatedSection>
               <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-4">
-                {isEn ? "Version History" : "Histórico de Revisões"}
+                {tr("Histórico de Revisões", "Version History", "Historial de Revisiones")}
               </h2>
               <p className="text-muted-foreground mb-10 leading-relaxed">
-                {isEn
-                  ? "Full transparency — we maintain a public record of all versions of this methodology."
-                  : "Para garantir total transparência, mantemos um registro público de todas as versões desta metodologia."}
+                {tr(
+                  "Para garantir total transparência, mantemos um registro público de todas as versões desta metodologia.",
+                  "Full transparency — we maintain a public record of all versions of this methodology.",
+                  "Para garantizar total transparencia, mantenemos un registro público de todas las versiones de esta metodología.",
+                )}
               </p>
             </AnimatedSection>
 
@@ -425,19 +469,19 @@ const MethodologyDetail = () => {
                     </div>
                     <div className="flex-1">
                       <p className="font-semibold text-primary text-sm">
-                        {isEn ? "Version" : "Versão"} v{ver.versionNumber}
+                        {tr("Versão", "Version", "Versión")} v{ver.versionNumber}
                         {" · "}
                         <span className="text-muted-foreground font-normal text-xs">{ver.revisionType}</span>
                       </p>
                       {ver.publishedAt && (
                         <p className="text-muted-foreground text-xs">
-                          {isEn ? "Published" : "Publicada em"} {new Date(ver.publishedAt).getFullYear()}
+                          {tr("Publicada em", "Published", "Publicada en")} {new Date(ver.publishedAt).getFullYear()}
                         </p>
                       )}
                     </div>
                     {i === 0 && (
                       <span className="text-xs px-2 py-0.5 bg-secondary/10 text-secondary rounded-full font-medium">
-                        {isEn ? "Current" : "Atual"}
+                        {tr("Atual", "Current", "Actual")}
                       </span>
                     )}
                     {ver.documentUrl && (
@@ -465,16 +509,20 @@ const MethodologyDetail = () => {
           <div className="container max-w-4xl">
             <AnimatedSection>
               <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-2 text-center">
-                {isEn
-                  ? "Share your Concerns or Suggestions"
-                  : "Compartilhe suas Preocupações ou Sugestões"}
+                {tr(
+                  "Compartilhe suas Preocupações ou Sugestões",
+                  "Share your Concerns or Suggestions",
+                  "Comparta sus Inquietudes o Sugerencias",
+                )}
               </h2>
               <p className="text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed text-center">
-                {isEn
-                  ? "This methodology is under public consultation. Your contribution helps us improve continuously."
-                  : "Esta metodologia está em consulta pública. Sua contribuição nos ajuda a melhorar continuamente."}
+                {tr(
+                  "Esta metodologia está em consulta pública. Sua contribuição nos ajuda a melhorar continuamente.",
+                  "This methodology is under public consultation. Your contribution helps us improve continuously.",
+                  "Esta metodología está en consulta pública. Su contribución nos ayuda a mejorar continuamente.",
+                )}
               </p>
-              <ConsultationForm consultation={m.consultation} isEn={isEn} />
+              <ConsultationForm consultation={m.consultation} />
             </AnimatedSection>
           </div>
         </section>
@@ -485,27 +533,29 @@ const MethodologyDetail = () => {
         <div className="container max-w-4xl text-center">
           <AnimatedSection>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary mb-4">
-              {isEn ? "Ready to start your project?" : "Pronto para iniciar seu projeto?"}
+              {tr("Pronto para iniciar seu projeto?", "Ready to start your project?", "¿Listo para iniciar su proyecto?")}
             </h2>
             <p className="text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed">
-              {isEn
-                ? "Register on the platform and start a project using this methodology, or contact our technical team."
-                : "Cadastre-se na plataforma e inicie um projeto usando esta metodologia, ou entre em contato com nossa equipe técnica."}
+              {tr(
+                "Cadastre-se na plataforma e inicie um projeto usando esta metodologia, ou entre em contato com nossa equipe técnica.",
+                "Register on the platform and start a project using this methodology, or contact our technical team.",
+                "Regístrese en la plataforma e inicie un proyecto utilizando esta metodología, o póngase en contacto con nuestro equipo técnico.",
+              )}
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <a href="https://plataforma.greenledger.eco.br/register" target="_blank" rel="noopener noreferrer">
                 <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">
-                  {isEn ? "Use this Methodology" : "Usar esta Metodologia"} <ArrowRight className="w-4 h-4" />
+                  {tr("Usar esta Metodologia", "Use this Methodology", "Usar esta Metodología")} <ArrowRight className="w-4 h-4" />
                 </Button>
               </a>
               <Link to="/contato">
                 <Button variant="outline" className="gap-2">
-                  {isEn ? "Contact Us" : "Entre em Contato"}
+                  {tr("Entre em Contato", "Contact Us", "Contáctenos")}
                 </Button>
               </Link>
               <Link to="/metodologias">
                 <Button variant="outline" className="gap-2">
-                  <ArrowLeft className="w-4 h-4" /> {isEn ? "All Methodologies" : "Todas as Metodologias"}
+                  <ArrowLeft className="w-4 h-4" /> {tr("Todas as Metodologias", "All Methodologies", "Todas las Metodologías")}
                 </Button>
               </Link>
             </div>
