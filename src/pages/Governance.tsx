@@ -24,10 +24,19 @@ const sectionsEn = [
   { icon: BookOpen, title: "Transparency", description: "Commitment to open access publication of all relevant information to ensure market and stakeholder confidence.", items: ["Public registry of all certified projects with performance data", "Approved methodologies available for unrestricted download", "Validation and verification reports published in full", "Committee meeting minutes and regulatory decisions documented", "Alignment with ICVCM Core Carbon Principles and national regulatory frameworks"] },
 ];
 
+const sectionsEs = [
+  { icon: Users, title: "Consejo Técnico", description: "Órgano máximo de gobernanza técnica de Green Ledger, compuesto por especialistas independientes con reconocida competencia en cambio climático, ciencia del carbono y verificación ambiental.", items: ["Composición mínima de 7 miembros con mandato de 3 años", "Selección por competencia técnica, diversidad geográfica e independencia", "Declaración obligatoria de conflicto de interés y confidencialidad", "Reuniones ordinarias trimestrales con actas publicadas en acceso abierto", "Responsable de la aprobación de políticas, normas y directrices generales"] },
+  { icon: FileSearch, title: "Comité de Metodologías", description: "Responsable de la evaluación técnica, aprobación y revisión periódica de todas las metodologías de cuantificación de Green Ledger, asegurando rigor científico y alineación con las mejores prácticas.", items: ["Evaluación técnica de nuevas propuestas de metodología", "Revisión por pares con un mínimo de 3 revisores independientes calificados", "Consulta pública de 60 días con respuesta documentada a cada comentario", "Revisión periódica obligatoria cada 3 años o cuando sea necesario", "Aprobación formal con publicación de justificación técnica"] },
+  { icon: Scale, title: "Proceso de Revisión", description: "Ciclo estructurado de revisión y actualización de metodologías, normas y procedimientos, garantizando que los estándares de Green Ledger permanezcan alineados con los avances científicos y regulatorios.", items: ["Propuesta de revisión por el equipo técnico, partes interesadas o revisión periódica programada", "Evaluación de impacto y análisis comparativo con estándares internacionales", "Revisión por pares y consulta pública conforme al procedimiento estándar", "Deliberación por el Comité de Metodologías con dictamen fundamentado", "Publicación de la versión actualizada con registro de cambios y justificaciones"] },
+  { icon: Shield, title: "Política de Integridad", description: "Principios fundamentales que rigen la emisión de créditos por Green Ledger, asegurando que cada unidad certificada represente una reducción o remoción real, mensurable, adicional y permanente.", items: ["Adicionalidad: pruebas rigurosas para comprobar que la actividad no ocurriría sin el incentivo del carbono", "Permanencia: buffer pool y mecanismos de garantía contra reversiones a largo plazo", "Conservadurismo: factores de descuento y enfoques conservadores en la cuantificación", "Evitar la doble contabilidad: trazabilidad con número de serie único y registro centralizado", "Salvaguardas ambientales y sociales: evaluación de impactos y respeto a los derechos de las comunidades"] },
+  { icon: AlertTriangle, title: "Gestión de Riesgos", description: "Estructura de identificación, evaluación y mitigación de riesgos asociados a la integridad de los créditos, incluyendo riesgos de no permanencia, fraude, conflicto de interés e incumplimiento.", items: ["Evaluación de riesgo de no permanencia con contribución proporcional al buffer pool", "Debida diligencia de desarrolladores de proyectos y organismos de auditoría", "Mecanismo formal de reclamaciones, denuncias y apelación", "Procedimientos de suspensión, revocación y cancelación de créditos", "Monitoreo continuo de riesgos sistémicos y emergentes"] },
+  { icon: Eye, title: "Independencia de Auditoría", description: "Los organismos de validación y verificación (VVB) acreditados por Green Ledger actúan con independencia asegurada por requisitos de competencia técnica, rotación y supervisión de calidad.", items: ["Acreditación con evaluación de competencia técnica sectorial e independencia", "Rotación obligatoria de auditores cada 5 años por proyecto", "Prohibición de conflicto de interés entre validación, verificación y consultoría", "Supervisión de la calidad de las auditorías por un comité independiente", "Evaluación de desempeño y recertificación periódica de los VVB"] },
+  { icon: BookOpen, title: "Transparencia", description: "Compromiso con la publicación en acceso abierto de toda la información relevante para asegurar la confianza de los mercados y las partes interesadas.", items: ["Registro público de todos los proyectos certificados con datos de desempeño", "Metodologías aprobadas disponibles para descarga sin restricciones", "Informes de validación y verificación publicados íntegramente", "Actas de reuniones de los comités y decisiones regulatorias documentadas", "Alineación con los ICVCM Core Carbon Principles y marcos regulatorios nacionales"] },
+];
+
 const Governance = () => {
-  const { t, locale } = useLanguage();
-  const isEn = locale === "en";
-  const sections = isEn ? sectionsEn : sectionsPt;
+  const { t, tr, locale } = useLanguage();
+  const sections = locale === "en" ? sectionsEn : locale === "es" ? sectionsEs : sectionsPt;
 
   return (
     <div className="pt-20">
@@ -81,16 +90,18 @@ const Governance = () => {
         <div className="container text-center">
           <AnimatedSection>
             <h2 className="font-heading text-2xl font-bold text-primary mb-4">
-              {isEn ? "Public Registry" : "Registro Público"}
+              {tr("Registro Público", "Public Registry", "Registro Público")}
             </h2>
             <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
-              {isEn
-                ? "Access the public registry of certified projects and verified carbon assets on our platform."
-                : "Acesse o registro público de projetos certificados e ativos de carbono verificados em nossa plataforma."}
+              {tr(
+                "Acesse o registro público de projetos certificados e ativos de carbono verificados em nossa plataforma.",
+                "Access the public registry of certified projects and verified carbon assets on our platform.",
+                "Acceda al registro público de proyectos certificados y activos de carbono verificados en nuestra plataforma."
+              )}
             </p>
             <a href="https://plataforma.greenledger.eco.br/public/assets" target="_blank" rel="noopener noreferrer">
               <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">
-                {isEn ? "Access Public Registry" : "Acessar Registro Público"} <ExternalLink className="w-4 h-4" />
+                {tr("Acessar Registro Público", "Access Public Registry", "Acceder al Registro Público")} <ExternalLink className="w-4 h-4" />
               </Button>
             </a>
           </AnimatedSection>
