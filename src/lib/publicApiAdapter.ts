@@ -43,6 +43,8 @@ export interface PublicProject {
   /** backlog — total area not exposed by the platform yet */
   totalAreaHa?: number;
   estimatedReductions?: number;
+  /** Credits actually issued for this project (numeric, from the platform). */
+  creditsIssued?: number;
   creditingPeriodStart: string;
   creditingPeriodEnd: string;
   createdAt: string;
@@ -337,6 +339,8 @@ interface RawMethodologyRef {
   code: string;
   name: string;
   version?: string;
+  /** Sector taxonomy populated on the methodology ref (Task 1). */
+  sectors?: string[];
 }
 
 // ---------------------------------------------------------------------------
@@ -425,6 +429,7 @@ export function mapProject(raw: Record<string, unknown>): PublicProject {
     createdAt?: string;
     developer?: RawOrgRef;
     methodology?: RawMethodologyRef | null;
+    creditsIssued?: number;
   };
   return {
     id: r._id,
@@ -434,13 +439,18 @@ export function mapProject(raw: Record<string, unknown>): PublicProject {
     // backlog fields (spec §4.1 / §9) — never invented:
     solutionType: undefined,
     scale: undefined,
-    sector: undefined,
+    // Sector is derived from the populated methodology's sector taxonomy (Task 1);
+    // the first sector is the primary classification shown in the registry table.
+    sector: r.methodology?.sectors?.[0],
     afolouCategory: undefined,
     status: r.status ? mapStatus(r.status) : "",
     country: r.country ?? "",
     locationDescription: r.location ?? "",
     totalAreaHa: undefined,
+    // estimatedReductions remains a backlog field (a different concept from issued
+    // credits) — never invented. creditsIssued carries the real platform value.
     estimatedReductions: undefined,
+    creditsIssued: typeof r.creditsIssued === "number" ? r.creditsIssued : undefined,
     creditingPeriodStart: r.creditingPeriodStart ?? "",
     creditingPeriodEnd: r.creditingPeriodEnd ?? "",
     createdAt: r.createdAt ?? "",
@@ -794,13 +804,15 @@ export function mapStatistics(raw: Record<string, unknown>): PublicStatistics {
     totalVcuIssued?: number;
     totalVcsuIssued?: number;
     totalRetired?: number;
+    organizationCount?: number;
   };
   return {
     totalProjects: r.totalProjects ?? 0,
     totalMethodologies: r.methodologyCount ?? 0,
     totalCreditsIssued: (r.totalVcuIssued ?? 0) + (r.totalVcsuIssued ?? 0),
     totalCreditsRetired: r.totalRetired ?? 0,
-    totalOrganizations: undefined, // backlog (spec §4.5 / §9)
+    // Distinct active organization count (Task 1); undefined when the platform omits it.
+    totalOrganizations: typeof r.organizationCount === "number" ? r.organizationCount : undefined,
   };
 }
 

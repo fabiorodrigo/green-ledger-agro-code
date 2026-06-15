@@ -52,7 +52,8 @@ describe("mapProject", () => {
       creditingPeriodEnd: "2030-01-01",
       createdAt: "2025-01-01",
       developer: { _id: "u1", name: "Fulano", organizationName: "Org Verde" },
-      methodology: { _id: "m1", code: "MET001", name: "Reflorestamento", version: "v1" },
+      methodology: { _id: "m1", code: "MET001", name: "Reflorestamento", version: "v1", sectors: ["AFOLU"] },
+      creditsIssued: 1455,
     };
     const p = mapProject(raw);
     expect(p.id).toBe("a1");
@@ -63,11 +64,25 @@ describe("mapProject", () => {
     expect(p.organization).toEqual({ id: "u1", name: "Org Verde" });
     expect(p.methodology).toMatchObject({ id: "m1", code: "MET001", name: "Reflorestamento" });
     expect(p.solutionType).toBeUndefined();
-    expect(p.sector).toBeUndefined();
+    // sector derived from the populated methodology's sectors[0]
+    expect(p.sector).toBe("AFOLU");
+    // creditsIssued mapped from the platform's numeric field
+    expect(p.creditsIssued).toBe(1455);
+    // estimatedReductions stays a backlog field (different concept)
+    expect(p.estimatedReductions).toBeUndefined();
   });
   it("falls back organization name to developer.name when no org name", () => {
     const p = mapProject({ _id: "a", developer: { _id: "u", name: "Solo" }, methodology: null });
     expect(p.organization).toEqual({ id: "u", name: "Solo" });
+  });
+  it("leaves sector undefined when methodology has no sectors and creditsIssued undefined when absent", () => {
+    const p = mapProject({
+      _id: "a2",
+      developer: { _id: "u", name: "Solo" },
+      methodology: { _id: "m1", code: "MET001", name: "Reflorestamento", version: "v1" },
+    });
+    expect(p.sector).toBeUndefined();
+    expect(p.creditsIssued).toBeUndefined();
   });
 });
 
@@ -385,11 +400,18 @@ describe("mapStatistics", () => {
       totalBufferPool: 5,
       methodologyCount: 4,
       activeVvbCount: 2,
+      organizationCount: 7,
     });
     expect(s.totalProjects).toBe(7);
     expect(s.totalMethodologies).toBe(4);
     expect(s.totalCreditsIssued).toBe(150);
     expect(s.totalCreditsRetired).toBe(20);
+    // totalOrganizations now mapped from the platform's organizationCount
+    expect(s.totalOrganizations).toBe(7);
+  });
+
+  it("leaves totalOrganizations undefined when organizationCount is absent", () => {
+    const s = mapStatistics({ totalProjects: 1, methodologyCount: 1 });
     expect(s.totalOrganizations).toBeUndefined();
   });
 });

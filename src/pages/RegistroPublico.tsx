@@ -163,7 +163,7 @@ const RegistroPublico = () => {
                           </span>
                         </td>
                         <td className="p-4 text-right font-mono text-muted-foreground hidden md:table-cell">
-                          {p.estimatedReductions ? p.estimatedReductions.toLocaleString() : "—"}
+                          {p.creditsIssued != null ? p.creditsIssued.toLocaleString() : "—"}
                         </td>
                         <td className="p-4 text-center">
                           <a
