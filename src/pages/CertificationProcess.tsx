@@ -116,7 +116,7 @@ const CertificationProcess = () => {
             <p className="text-muted-foreground mb-8 max-w-lg mx-auto">{t("cert.cta.desc")}</p>
             <div className="flex flex-wrap gap-4 justify-center">
               <a
-                href="https://app.greenledger.eco.br/register"
+                href="https://plataforma.greenledger.eco.br/register"
                 target="_blank"
                 rel="noopener noreferrer"
               >

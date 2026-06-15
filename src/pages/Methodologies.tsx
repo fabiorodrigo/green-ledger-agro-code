@@ -68,7 +68,7 @@ const Methodologies = () => {
               </select>
             </div>
             <a
-              href="https://app.greenledger.eco.br/login"
+              href="https://plataforma.greenledger.eco.br/login"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90 transition-colors shrink-0"

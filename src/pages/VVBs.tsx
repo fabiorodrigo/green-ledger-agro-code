@@ -248,7 +248,7 @@ const VVBs = () => {
             <h2 className="font-heading text-2xl font-bold text-primary mb-4">{d.ctaTitle}</h2>
             <p className="text-muted-foreground mb-6 max-w-lg mx-auto">{d.ctaDesc}</p>
             <div className="flex flex-wrap gap-4 justify-center">
-              <a href="https://app.greenledger.eco.br/register" target="_blank" rel="noopener noreferrer">
+              <a href="https://plataforma.greenledger.eco.br/register" target="_blank" rel="noopener noreferrer">
                 <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">
                   {d.ctaBtn} <ArrowRight className="w-4 h-4" />
                 </Button>

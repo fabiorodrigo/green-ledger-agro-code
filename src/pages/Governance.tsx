@@ -88,7 +88,7 @@ const Governance = () => {
                 ? "Access the public registry of certified projects and verified carbon assets on our platform."
                 : "Acesse o registro público de projetos certificados e ativos de carbono verificados em nossa plataforma."}
             </p>
-            <a href="https://app.greenledger.eco.br/public/assets" target="_blank" rel="noopener noreferrer">
+            <a href="https://plataforma.greenledger.eco.br/public/assets" target="_blank" rel="noopener noreferrer">
               <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">
                 {isEn ? "Access Public Registry" : "Acessar Registro Público"} <ExternalLink className="w-4 h-4" />
               </Button>

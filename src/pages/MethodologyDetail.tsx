@@ -493,7 +493,7 @@ const MethodologyDetail = () => {
                 : "Cadastre-se na plataforma e inicie um projeto usando esta metodologia, ou entre em contato com nossa equipe técnica."}
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
-              <a href="https://app.greenledger.eco.br/register" target="_blank" rel="noopener noreferrer">
+              <a href="https://plataforma.greenledger.eco.br/register" target="_blank" rel="noopener noreferrer">
                 <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">
                   {isEn ? "Use this Methodology" : "Usar esta Metodologia"} <ArrowRight className="w-4 h-4" />
                 </Button>
