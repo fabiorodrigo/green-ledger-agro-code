@@ -522,8 +522,7 @@ const MethodologyDetail = () => {
                   "Esta metodología está en consulta pública. Su contribución nos ayuda a mejorar continuamente.",
                 )}
               </p>
-              {/* ConsultationForm still uses a boolean isEn prop; pass it derived from locale. */}
-              <ConsultationForm consultation={m.consultation} isEn={locale === "en"} />
+              <ConsultationForm consultation={m.consultation} />
             </AnimatedSection>
           </div>
         </section>

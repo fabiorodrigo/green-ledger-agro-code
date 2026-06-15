@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { submitConsultationComment } from "@/hooks/usePublicAPI";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 interface ConsultationSummary {
   id: string;
@@ -31,14 +32,14 @@ interface ConsultationSummary {
 
 interface ConsultationFormProps {
   consultation: ConsultationSummary;
-  isEn: boolean;
 }
 
 /** Format an ISO date for the consultation period line; empty string if absent. */
-function formatDate(iso: string | undefined, isEn: boolean): string {
+function formatDate(iso: string | undefined, locale: string): string {
   if (!iso) return "";
   const d = new Date(iso);
-  return Number.isNaN(d.getTime()) ? "" : d.toLocaleDateString(isEn ? "en-GB" : "pt-BR");
+  const dateLocale = locale === "en" ? "en-GB" : locale === "es" ? "es-ES" : "pt-BR";
+  return Number.isNaN(d.getTime()) ? "" : d.toLocaleDateString(dateLocale);
 }
 
 /** Whether the consultation still accepts contributions. */
@@ -46,7 +47,8 @@ function isOpen(status: string): boolean {
   return status.toUpperCase() === "OPEN";
 }
 
-const ConsultationForm = ({ consultation, isEn }: ConsultationFormProps) => {
+const ConsultationForm = ({ consultation }: ConsultationFormProps) => {
+  const { tr, locale } = useLanguage();
   const [author, setAuthor] = useState("");
   const [email, setEmail] = useState("");
   const [organization, setOrganization] = useState("");
@@ -57,7 +59,7 @@ const ConsultationForm = ({ consultation, isEn }: ConsultationFormProps) => {
   const [submitted, setSubmitted] = useState(false);
 
   const open = isOpen(consultation.status);
-  const period = [formatDate(consultation.openDate, isEn), formatDate(consultation.closeDate, isEn)]
+  const period = [formatDate(consultation.openDate, locale), formatDate(consultation.closeDate, locale)]
     .filter(Boolean)
     .join(" — ");
 
@@ -80,9 +82,11 @@ const ConsultationForm = ({ consultation, isEn }: ConsultationFormProps) => {
         content: content.trim(),
       });
       toast.success(
-        isEn
-          ? "Thank you! Your contribution was submitted."
-          : "Obrigado! Sua contribuição foi enviada.",
+        tr(
+          "Obrigado! Sua contribuição foi enviada.",
+          "Thank you! Your contribution was submitted.",
+          "¡Gracias! Su contribución fue enviada.",
+        ),
       );
       setAuthor("");
       setEmail("");
@@ -93,9 +97,11 @@ const ConsultationForm = ({ consultation, isEn }: ConsultationFormProps) => {
       const message =
         err instanceof Error
           ? err.message
-          : isEn
-            ? "Could not submit your contribution. Please try again later."
-            : "Não foi possível enviar sua contribuição. Tente novamente mais tarde.";
+          : tr(
+              "Não foi possível enviar sua contribuição. Tente novamente mais tarde.",
+              "Could not submit your contribution. Please try again later.",
+              "No fue posible enviar su contribución. Inténtelo de nuevo más tarde.",
+            );
       toast.error(message);
     } finally {
       setSubmitting(false);
@@ -108,7 +114,8 @@ const ConsultationForm = ({ consultation, isEn }: ConsultationFormProps) => {
       <div className="mb-6">
         <div className="flex items-center justify-between gap-4 flex-wrap">
           <h3 className="font-heading font-semibold text-lg text-primary">
-            {consultation.title || (isEn ? "Public Consultation" : "Consulta Pública")}
+            {consultation.title ||
+              tr("Consulta Pública", "Public Consultation", "Consulta Pública")}
           </h3>
           <span
             className={`text-xs font-medium px-2.5 py-1 rounded-full ${
@@ -117,17 +124,23 @@ const ConsultationForm = ({ consultation, isEn }: ConsultationFormProps) => {
                 : "bg-muted text-muted-foreground"
             }`}
           >
-            {open ? (isEn ? "Open" : "Aberta") : isEn ? "Closed" : "Encerrada"}
+            {open
+              ? tr("Aberta", "Open", "Abierta")
+              : tr("Encerrada", "Closed", "Cerrada")}
           </span>
         </div>
         {period && (
           <p className="text-sm text-muted-foreground mt-1">
-            {isEn ? "Period" : "Período"}: {period}
+            {tr("Período", "Period", "Período")}: {period}
           </p>
         )}
         <p className="text-sm text-muted-foreground mt-1">
           {consultation.commentCount}{" "}
-          {isEn ? "contributions received" : "contribuições recebidas"}
+          {tr(
+            "contribuições recebidas",
+            "contributions received",
+            "contribuciones recibidas",
+          )}
         </p>
       </div>
 
@@ -135,9 +148,11 @@ const ConsultationForm = ({ consultation, isEn }: ConsultationFormProps) => {
         <div className="flex items-start gap-3 rounded-lg bg-secondary/10 border border-secondary/20 p-4">
           <CheckCircle2 className="w-5 h-5 text-secondary shrink-0 mt-0.5" />
           <p className="text-sm text-primary">
-            {isEn
-              ? "Your contribution was submitted. Thank you for participating!"
-              : "Sua contribuição foi enviada. Obrigado por participar!"}
+            {tr(
+              "Sua contribuição foi enviada. Obrigado por participar!",
+              "Your contribution was submitted. Thank you for participating!",
+              "Su contribución fue enviada. ¡Gracias por participar!",
+            )}
           </p>
         </div>
       ) : open ? (
@@ -145,7 +160,7 @@ const ConsultationForm = ({ consultation, isEn }: ConsultationFormProps) => {
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label htmlFor="consultation-author">
-                {isEn ? "Name" : "Nome"} <span className="text-destructive">*</span>
+                {tr("Nome", "Name", "Nombre")} <span className="text-destructive">*</span>
               </Label>
               <Input
                 id="consultation-author"
@@ -158,7 +173,8 @@ const ConsultationForm = ({ consultation, isEn }: ConsultationFormProps) => {
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="consultation-email">
-                {isEn ? "Email" : "E-mail"} <span className="text-destructive">*</span>
+                {tr("E-mail", "Email", "Correo electrónico")}{" "}
+                <span className="text-destructive">*</span>
               </Label>
               <Input
                 id="consultation-email"
@@ -174,7 +190,11 @@ const ConsultationForm = ({ consultation, isEn }: ConsultationFormProps) => {
 
           <div className="space-y-1.5">
             <Label htmlFor="consultation-organization">
-              {isEn ? "Organization (optional)" : "Organização (opcional)"}
+              {tr(
+                "Organização (opcional)",
+                "Organization (optional)",
+                "Organización (opcional)",
+              )}
             </Label>
             <Input
               id="consultation-organization"
@@ -187,7 +207,8 @@ const ConsultationForm = ({ consultation, isEn }: ConsultationFormProps) => {
 
           <div className="space-y-1.5">
             <Label htmlFor="consultation-content">
-              {isEn ? "Message" : "Mensagem"} <span className="text-destructive">*</span>
+              {tr("Mensagem", "Message", "Comentario")}{" "}
+              <span className="text-destructive">*</span>
             </Label>
             <Textarea
               id="consultation-content"
@@ -196,18 +217,22 @@ const ConsultationForm = ({ consultation, isEn }: ConsultationFormProps) => {
               required
               disabled={submitting}
               rows={5}
-              placeholder={
-                isEn
-                  ? "Share your concerns or suggestions..."
-                  : "Compartilhe suas preocupações ou sugestões..."
-              }
+              placeholder={tr(
+                "Compartilhe suas preocupações ou sugestões...",
+                "Share your concerns or suggestions...",
+                "Comparta sus inquietudes o sugerencias...",
+              )}
             />
           </div>
 
           {/* Honeypot — visually hidden, off the tab order, ignored by humans. */}
           <div className="hidden" aria-hidden="true">
             <label htmlFor="consultation-honeypot">
-              {isEn ? "Leave this field empty" : "Deixe este campo vazio"}
+              {tr(
+                "Deixe este campo vazio",
+                "Leave this field empty",
+                "Deje este campo vacío",
+              )}
             </label>
             <input
               id="consultation-honeypot"
@@ -223,19 +248,17 @@ const ConsultationForm = ({ consultation, isEn }: ConsultationFormProps) => {
           <Button type="submit" disabled={submitting} className="gap-2">
             <Send className="w-4 h-4" />
             {submitting
-              ? isEn
-                ? "Submitting..."
-                : "Enviando..."
-              : isEn
-                ? "Submit Contribution"
-                : "Enviar Contribuição"}
+              ? tr("Enviando...", "Submitting...", "Enviando...")
+              : tr("Enviar Contribuição", "Submit Contribution", "Enviar contribución")}
           </Button>
         </form>
       ) : (
         <p className="text-sm text-muted-foreground">
-          {isEn
-            ? "This consultation is closed and no longer accepts contributions."
-            : "Esta consulta está encerrada e não aceita mais contribuições."}
+          {tr(
+            "Esta consulta está encerrada e não aceita mais contribuições.",
+            "This consultation is closed and no longer accepts contributions.",
+            "Esta consulta está cerrada y ya no acepta contribuciones.",
+          )}
         </p>
       )}
     </div>

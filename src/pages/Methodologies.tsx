@@ -10,8 +10,7 @@ import { usePublicMethodologies } from "@/hooks/usePublicAPI";
 import { getSectorLabel, getActivityTypeLabel, getSolutionLabel } from "@/constants/methodologyLabels";
 
 const Methodologies = () => {
-  const { t, locale } = useLanguage();
-  const isEn = locale === "en";
+  const { t, tr, locale } = useLanguage();
   const lang = locale as "pt" | "en" | "es";
 
   const [search, setSearch] = useState("");
@@ -51,7 +50,11 @@ const Methodologies = () => {
               <div className="relative flex-1 max-w-sm">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
-                  placeholder={isEn ? "Search methodologies..." : "Buscar metodologias..."}
+                  placeholder={tr(
+                    "Buscar metodologias...",
+                    "Search methodologies...",
+                    "Buscar metodologías...",
+                  )}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="pl-10"
@@ -62,9 +65,15 @@ const Methodologies = () => {
                 onChange={(e) => setSolutionFilter(e.target.value)}
                 className="border border-border rounded-md px-3 py-2 text-sm bg-background text-foreground"
               >
-                <option value="">{isEn ? "All Solutions" : "Todas as Soluções"}</option>
-                <option value="NBS">{isEn ? "Nature-Based (NBS)" : "Base Natural (NBS)"}</option>
-                <option value="TBS">{isEn ? "Technology-Based (TBS)" : "Base Tecnológica (TBS)"}</option>
+                <option value="">
+                  {tr("Todas as Soluções", "All Solutions", "Todas las Soluciones")}
+                </option>
+                <option value="NBS">
+                  {tr("Base Natural (NBS)", "Nature-Based (NBS)", "Base Natural (NBS)")}
+                </option>
+                <option value="TBS">
+                  {tr("Base Tecnológica (TBS)", "Technology-Based (TBS)", "Base Tecnológica (TBS)")}
+                </option>
               </select>
             </div>
             <a
@@ -73,21 +82,28 @@ const Methodologies = () => {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90 transition-colors shrink-0"
             >
-              {isEn ? "Propose Methodology" : "Propor Metodologia"} <ExternalLink className="w-4 h-4" />
+              {tr("Propor Metodologia", "Propose Methodology", "Proponer Metodología")}{" "}
+              <ExternalLink className="w-4 h-4" />
             </a>
           </div>
 
           {/* Loading / Error */}
           {loading && (
             <div className="text-center py-16 text-muted-foreground">
-              {isEn ? "Loading methodologies..." : "Carregando metodologias..."}
+              {tr(
+                "Carregando metodologias...",
+                "Loading methodologies...",
+                "Cargando metodologías...",
+              )}
             </div>
           )}
           {error && (
             <div className="text-center py-16 text-muted-foreground text-sm">
-              {isEn
-                ? "Unable to load methodologies at this time."
-                : "Não foi possível carregar as metodologias no momento."}
+              {tr(
+                "Não foi possível carregar as metodologias no momento.",
+                "Unable to load methodologies at this time.",
+                "No fue posible cargar las metodologías en este momento.",
+              )}
             </div>
           )}
 
@@ -96,7 +112,11 @@ const Methodologies = () => {
             <div className="space-y-8">
               {methodologies.length === 0 ? (
                 <p className="text-center py-16 text-muted-foreground">
-                  {isEn ? "No methodologies found." : "Nenhuma metodologia encontrada."}
+                  {tr(
+                    "Nenhuma metodologia encontrada.",
+                    "No methodologies found.",
+                    "No se encontraron metodologías.",
+                  )}
                 </p>
               ) : (
                 methodologies.map((m, i) => (
@@ -128,11 +148,16 @@ const Methodologies = () => {
                             )}
                           </div>
                           <h3 className="font-heading font-semibold text-xl text-primary mb-3">
-                            {isEn ? (m.nameEn ?? m.name) : m.name}
+                            {/* API methodology content only ships PT/EN; ES falls back to PT. */}
+                            {tr(m.name, m.nameEn ?? m.name, m.name)}
                           </h3>
                           {(m.descriptionPt || m.descriptionEn) && (
                             <p className="text-muted-foreground text-sm leading-relaxed mb-6">
-                              {isEn ? (m.descriptionEn ?? m.descriptionPt) : m.descriptionPt}
+                              {tr(
+                                m.descriptionPt,
+                                m.descriptionEn ?? m.descriptionPt,
+                                m.descriptionPt,
+                              )}
                             </p>
                           )}
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
@@ -140,7 +165,11 @@ const Methodologies = () => {
                               <div>
                                 <span className="font-semibold text-primary text-xs uppercase tracking-wider">{t("meth.eligibility")}</span>
                                 <p className="text-muted-foreground mt-1.5 leading-relaxed">
-                                  {isEn ? (m.eligibilityEn ?? m.eligibilityPt) : m.eligibilityPt}
+                                  {tr(
+                                    m.eligibilityPt,
+                                    m.eligibilityEn ?? m.eligibilityPt,
+                                    m.eligibilityPt,
+                                  )}
                                 </p>
                               </div>
                             )}
@@ -148,7 +177,7 @@ const Methodologies = () => {
                               <div>
                                 <span className="font-semibold text-primary text-xs uppercase tracking-wider">{t("meth.mrv")}</span>
                                 <p className="text-muted-foreground mt-1.5 leading-relaxed">
-                                  {isEn ? (m.mrvEn ?? m.mrvPt) : m.mrvPt}
+                                  {tr(m.mrvPt, m.mrvEn ?? m.mrvPt, m.mrvPt)}
                                 </p>
                               </div>
                             )}
@@ -156,7 +185,11 @@ const Methodologies = () => {
                               <div>
                                 <span className="font-semibold text-primary text-xs uppercase tracking-wider">{t("meth.additionality")}</span>
                                 <p className="text-muted-foreground mt-1.5 leading-relaxed">
-                                  {isEn ? (m.additionalityEn ?? m.additionalityPt) : m.additionalityPt}
+                                  {tr(
+                                    m.additionalityPt,
+                                    m.additionalityEn ?? m.additionalityPt,
+                                    m.additionalityPt,
+                                  )}
                                 </p>
                               </div>
                             )}
@@ -179,9 +212,11 @@ const Methodologies = () => {
 
           {response?.meta && (
             <p className="text-xs text-muted-foreground text-center mt-6">
-              {isEn
-                ? `Showing ${methodologies.length} of ${response.meta.total} methodologies`
-                : `Exibindo ${methodologies.length} de ${response.meta.total} metodologias`}
+              {tr(
+                `Exibindo ${methodologies.length} de ${response.meta.total} metodologias`,
+                `Showing ${methodologies.length} of ${response.meta.total} methodologies`,
+                `Mostrando ${methodologies.length} de ${response.meta.total} metodologías`,
+              )}
             </p>
           )}
         </div>

@@ -728,8 +728,7 @@ const ProjectDetail = () => {
                   "Este proyecto está en consulta pública. Su contribución nos ayuda a mejorar continuamente.",
                 )}
               </p>
-              {/* ConsultationForm still uses a boolean isEn prop; pass it derived from locale. */}
-              <ConsultationForm consultation={p.consultation} isEn={lang === "en"} />
+              <ConsultationForm consultation={p.consultation} />
             </AnimatedSection>
           </div>
         </section>
